@@ -4,7 +4,7 @@ Zello SDK for React Native.
 
 Our React Native SDK offers itself as a thin wrapper around our native iOS and Android SDK’s. It is built with TypeScript, and communicates with the native SDK’s via [React Native’s native module support](https://reactnative.dev/docs/native-modules-intro).
 
-This repository contains both the React Native Bridge, as well as an example app.
+This repository contains both the React Native Bridge, as well as an example app to demonstrate usage.
 
 To see an example of the React Native SDK, check out [the example folder](https://github.com/zelloptt/react-native-zello-sdk/tree/master/example).
 
