@@ -2,7 +2,7 @@
 
 Zello SDK for React Native.
 
-Our React Native SDK offers itself as a thin wrapper around our native iOS and Android SDK’s. It is built with TypeScript, and communicates with the native SDK’s via React Native’s native module support.
+Our React Native SDK offers itself as a thin wrapper around our native iOS and Android SDK’s. It is built with TypeScript, and communicates with the native SDK’s via [React Native’s native module support](https://reactnative.dev/docs/native-modules-intro).
 
 ## Prerequisites
 A [React Native application and environment](https://reactnative.dev/docs/environment-setup).
