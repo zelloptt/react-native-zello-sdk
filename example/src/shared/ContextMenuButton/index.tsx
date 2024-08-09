@@ -1,0 +1,103 @@
+import { useContext } from 'react';
+import { View, StyleSheet } from 'react-native';
+import { Icon } from 'react-native-paper';
+import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+} from 'react-native-popup-menu';
+import { SdkContext } from '../../App';
+import { ZelloContact } from 'react-native-zello-sdk';
+
+interface ContextMenuButtonProps {
+  contact: ZelloContact;
+  showEmergencyOption?: boolean;
+  isInOutgoingEmergency?: boolean;
+  onSendTextItemSelected: () => void;
+  onSendAlertItemSelected: () => void;
+  onShowHistorySelected: () => void;
+}
+
+const ContextMenuButton = ({
+  contact,
+  showEmergencyOption = false,
+  isInOutgoingEmergency = false,
+  onSendTextItemSelected,
+  onSendAlertItemSelected,
+  onShowHistorySelected,
+}: ContextMenuButtonProps) => {
+  const sdk = useContext(SdkContext);
+
+  return (
+    <View style={styles.container}>
+      <Menu>
+        <MenuTrigger>
+          <Icon size={24} source="dots-horizontal" />
+        </MenuTrigger>
+        <MenuOptions>
+          <MenuOption
+            onSelect={async () => {
+              const response = await fetch(
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Yellow_Happy.jpg/1200px-Yellow_Happy.jpg'
+              );
+              const arrayBuffer = await response.arrayBuffer();
+              sdk.sendImage(contact, Array.from(new Uint8Array(arrayBuffer)));
+            }}
+            text="Send Image"
+          />
+          <MenuOption
+            onSelect={() => {
+              sdk.sendLocation(contact);
+            }}
+            text="Send Location"
+          />
+          <MenuOption
+            onSelect={() => onSendTextItemSelected()}
+            text="Send Text"
+          />
+          <MenuOption
+            onSelect={() => onSendAlertItemSelected()}
+            text="Send Alert"
+          />
+          <MenuOption
+            onSelect={() => {
+              contact.isMuted
+                ? sdk.unmuteContact(contact)
+                : sdk.muteContact(contact);
+            }}
+            text={contact.isMuted ? 'Unmute' : 'Mute'}
+          />
+          {showEmergencyOption && (
+            <MenuOption
+              onSelect={() => {
+                if (isInOutgoingEmergency) {
+                  sdk.stopEmergency();
+                } else {
+                  sdk.startEmergency();
+                }
+              }}
+              text={
+                isInOutgoingEmergency ? 'Stop Emergency' : 'Start Emergency'
+              }
+            />
+          )}
+          <MenuOption
+            onSelect={() => onShowHistorySelected()}
+            text="Show History"
+          />
+        </MenuOptions>
+      </Menu>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    padding: 8,
+  },
+});
+
+export default ContextMenuButton;
