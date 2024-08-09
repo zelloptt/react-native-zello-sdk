@@ -20,7 +20,7 @@ npm start
 
 ## Start the Application
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal. Run the following command to start your _Android_ or _iOS_ app:
+Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal. Run the following command to start the _Android_ or _iOS_ app:
 
 ### For Android
 
@@ -51,7 +51,7 @@ npm run ios
 yarn ios
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+If everything is set up _correctly_, you should see the new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
 
 This is one way to run the app — you can also run it directly from within Android Studio and Xcode respectively.
 
