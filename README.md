@@ -11,7 +11,7 @@ To see an example of the React Native SDK, check out [the example folder](https:
 The following instructions are for the SDK, not for the example app.
 
 ## Prerequisites
-A [React Native application and environment](https://reactnative.dev/docs/environment-setup).
+A React Native application and environment.
 
 
 ## Installation
