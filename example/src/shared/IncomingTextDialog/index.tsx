@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { ZelloTextMessage } from 'react-native-zello-sdk';
+import { ZelloTextMessage } from '@zelloptt/react-native-zello-sdk';
 import { LastIncomingTextMessageContext } from '../../App';
 import useMessageTitle from '../hooks/useMessageTitle';
 

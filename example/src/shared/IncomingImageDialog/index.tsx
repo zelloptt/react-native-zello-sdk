@@ -7,7 +7,7 @@ import {
   View,
   Image,
 } from 'react-native';
-import { ZelloImageMessage } from 'react-native-zello-sdk';
+import { ZelloImageMessage } from '@zelloptt/react-native-zello-sdk';
 import { LastIncomingImageMessageContext } from '../../App';
 import useMessageTitle from '../hooks/useMessageTitle';
 

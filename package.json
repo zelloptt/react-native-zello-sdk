@@ -1,5 +1,5 @@
 {
-  "name": "react-native-zello-sdk",
+  "name": "@zelloptt/react-native-zello-sdk",
   "version": "0.1.0",
   "description": "Zello SDK for React Native",
   "source": "./src/index",
@@ -134,6 +134,7 @@
       "@react-native",
       "prettier"
     ],
+    "ignorePatterns": ["src/docs"],
     "rules": {
       "no-bitwise": "off",
       "react/react-in-jsx-scope": "off",

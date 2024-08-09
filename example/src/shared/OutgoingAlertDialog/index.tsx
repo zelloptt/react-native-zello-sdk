@@ -12,7 +12,7 @@ import {
   ZelloChannelAlertLevel,
   ZelloContact,
   ZelloContactType,
-} from 'react-native-zello-sdk';
+} from '@zelloptt/react-native-zello-sdk';
 import { SdkContext } from '../../App';
 
 export interface OutgoingAlertDialogProps {

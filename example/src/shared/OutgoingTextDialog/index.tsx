@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { ZelloContact } from 'react-native-zello-sdk';
+import { ZelloContact } from '@zelloptt/react-native-zello-sdk';
 import { SdkContext } from '../../App';
 
 export interface OutgoingTextDialogProps {

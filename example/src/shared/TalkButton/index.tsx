@@ -4,7 +4,7 @@ import {
   isSameContact,
   ZelloContact,
   ZelloOutgoingVoiceMessageState,
-} from 'react-native-zello-sdk';
+} from '@zelloptt/react-native-zello-sdk';
 import {
   IncomingVoiceMessageContext,
   OutgoingVoiceMessageContext,

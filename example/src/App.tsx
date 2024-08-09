@@ -30,7 +30,7 @@ import Zello, {
   ZelloConnectionError,
   ZelloOutgoingVoiceMessageError,
   ZelloEvent,
-} from 'react-native-zello-sdk';
+} from '@zelloptt/react-native-zello-sdk';
 // @ts-ignore
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MenuProvider } from 'react-native-popup-menu';

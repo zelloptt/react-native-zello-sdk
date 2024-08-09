@@ -2,7 +2,7 @@ import { useContext } from 'react';
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 import { AccountStatusContext } from '../../App';
-import { ZelloAccountStatus } from 'react-native-zello-sdk';
+import { ZelloAccountStatus } from '@zelloptt/react-native-zello-sdk';
 
 export type StatusDialogProps = {
   onDismiss: () => void;

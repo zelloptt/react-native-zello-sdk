@@ -16,7 +16,10 @@ import {
   SdkContext,
 } from '../App';
 import ConnectModal from '../shared/ConnectModal';
-import { ZelloAccountStatus, ZelloRecentEntry } from 'react-native-zello-sdk';
+import {
+  ZelloAccountStatus,
+  ZelloRecentEntry,
+} from '@zelloptt/react-native-zello-sdk';
 import StatusDialog from '../shared/StatusDialog';
 import useNavigationOptions from '../shared/hooks/useNavigationOptions';
 // @ts-ignore

@@ -8,7 +8,7 @@ import {
   MenuTrigger,
 } from 'react-native-popup-menu';
 import { SdkContext } from '../../App';
-import { ZelloContact } from 'react-native-zello-sdk';
+import { ZelloContact } from '@zelloptt/react-native-zello-sdk';
 
 interface ContextMenuButtonProps {
   contact: ZelloContact;

@@ -26,7 +26,7 @@ import {
   ZelloChannel,
   ZelloChannelConnectionStatus,
   ZelloHistoryMessage,
-} from 'react-native-zello-sdk';
+} from '@zelloptt/react-native-zello-sdk';
 import StatusDialog from '../shared/StatusDialog';
 import useNavigationOptions from '../shared/hooks/useNavigationOptions';
 import ContextMenuButton from '../shared/ContextMenuButton';
@@ -37,7 +37,7 @@ import IncomingTextDialog from '../shared/IncomingTextDialog';
 import OutgoingTextDialog from '../shared/OutgoingTextDialog';
 import OutgoingAlertDialog from '../shared/OutgoingAlertDialog';
 import HistoryDialog from '../shared/HistoryDialog';
-import { isSameContact } from 'react-native-zello-sdk';
+import { isSameContact } from '@zelloptt/react-native-zello-sdk';
 
 interface ChannelViewProps {
   channel: ZelloChannel;

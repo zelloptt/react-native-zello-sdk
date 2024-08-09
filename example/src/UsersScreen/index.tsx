@@ -25,7 +25,7 @@ import {
   ZelloHistoryMessage,
   ZelloUser,
   ZelloUserStatus,
-} from 'react-native-zello-sdk';
+} from '@zelloptt/react-native-zello-sdk';
 import StatusDialog from '../shared/StatusDialog';
 import useNavigationOptions from '../shared/hooks/useNavigationOptions';
 import ContextMenuButton from '../shared/ContextMenuButton';

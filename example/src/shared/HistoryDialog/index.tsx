@@ -24,7 +24,7 @@ import {
   ZelloHistoryMessage,
   ZelloHistoryTextMessage,
   ZelloHistoryVoiceMessage,
-} from 'react-native-zello-sdk';
+} from '@zelloptt/react-native-zello-sdk';
 
 const HistoryItem = ({ item }: { item: ZelloHistoryMessage }) => {
   const sdk = useContext(SdkContext);

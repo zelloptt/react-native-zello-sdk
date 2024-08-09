@@ -1,6 +1,6 @@
 import { useLayoutEffect, useContext } from 'react';
 import { ConnectionContext, SdkContext } from '../../App';
-import { isAndroid, isiOS } from 'react-native-zello-sdk';
+import { isAndroid, isiOS } from '@zelloptt/react-native-zello-sdk';
 import { AndroidNavigationBar } from '../AndroidNavigationBar';
 import IOSRightNavigationBar from '../IOSRightNavigationBar';
 import IOSLeftNavigationBar from '../IOSLeftNavigationBar';
