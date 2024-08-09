@@ -39,7 +39,7 @@ Install the dependencies:
 cd ios
 pod install
 
-# OR using NPM
+# OR using npm
 npx pod-install
 ```
 
