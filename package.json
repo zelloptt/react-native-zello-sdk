@@ -34,7 +34,8 @@
     "!**/__fixtures__",
     "!**/__mocks__",
     "!**/.*",
-    "!src/docs"
+    "!src/docs",
+    "!src/docs/**/*"
   ],
   "scripts": {
     "example": "yarn workspace react-native-zello-sdk-example",
