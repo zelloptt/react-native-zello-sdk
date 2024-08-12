@@ -1,6 +1,6 @@
 {
   "name": "@zelloptt/react-native-zello-sdk",
-  "version": "0.1.1",
+  "version": "0.3.0",
   "description": "Zello SDK for React Native",
   "source": "./src/index",
   "main": "./lib/commonjs/index.js",
