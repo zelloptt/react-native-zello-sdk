@@ -47,15 +47,15 @@ Then, add the following dependencies to your app's `build.gradle`:
 
 ```
 // Required Dependencies to use the Zello SDK
-implementation("com.zello:sdk:0.3.1")
-implementation("com.zello:zello:0.3.1")
-implementation("com.zello:core:0.3.1") {
+implementation("com.zello:sdk:{version}")
+implementation("com.zello:zello:{version}")
+implementation("com.zello:core:{version}") {
   exclude module: "unspecified"
 }
-implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
+implementation(platform("com.google.firebase:firebase-bom:{version}"))
 implementation("com.google.firebase:firebase-messaging")
-implementation("com.google.dagger:hilt-android:2.51")
-kapt("com.google.dagger:hilt-android-compiler:2.51")
+implementation("com.google.dagger:hilt-android:{version}")
+kapt("com.google.dagger:hilt-android-compiler:{version}")
 ```
 
 #### Linking
