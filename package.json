@@ -123,6 +123,7 @@
     "github": {
       "release": true
     },
+    "version": false,
     "plugins": {
       "@release-it/conventional-changelog": {
         "preset": "angular"
