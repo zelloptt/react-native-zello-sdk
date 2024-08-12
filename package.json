@@ -55,14 +55,14 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zelloptt/react-native-zello-sdk/react-native-zello-sdk.git"
+    "url": "git+https://github.com/zelloptt/react-native-zello-sdk.git"
   },
   "author": "Zello, Inc. <sdk@zello.com> (https://github.com/zelloptt/react-native-zello-sdk)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/zelloptt/react-native-zello-sdk/react-native-zello-sdk/issues"
   },
-  "homepage": "https://github.com/zelloptt/react-native-zello-sdk/react-native-zello-sdk#readme",
+  "homepage": "https://github.com/zelloptt/react-native-zello-sdk#readme",
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
