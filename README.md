@@ -63,6 +63,7 @@ kapt("com.google.dagger:hilt-android-compiler:{version}")
 Since the Zello Android SDK requires Hilt, and we must inject the `Zello` instance into the `ReactPackage`, the project does not work with autolinking.
 
 As such, you will need to create a `ReactPackage` wrapper like this:
+
 ```kotlin
 /// ZelloAndroidSdkPackage.kt
 
