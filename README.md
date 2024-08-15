@@ -43,21 +43,6 @@ repositories {
 }
 ```
 
-Then, add the following dependencies to your app's `build.gradle`:
-
-```
-// Required Dependencies to use the Zello SDK
-implementation("com.zello:sdk:{version}")
-implementation("com.zello:zello:{version}")
-implementation("com.zello:core:{version}") {
-  exclude module: "unspecified"
-}
-implementation(platform("com.google.firebase:firebase-bom:{version}"))
-implementation("com.google.firebase:firebase-messaging")
-implementation("com.google.dagger:hilt-android:{version}")
-kapt("com.google.dagger:hilt-android-compiler:{version}")
-```
-
 #### Linking
 
 Since the Zello Android SDK requires Hilt, and we must inject the `Zello` instance into the `ReactPackage`, the project does not work with autolinking.
