@@ -13,7 +13,7 @@ extension ZelloContact {
 
 extension ZelloChannel {
   var jsonDictionary: [AnyHashable: Any] {
-    return [
+    var body: [AnyHashable: Any] = [
       "name": name,
       "isChannel": true,
       "isMuted": isMuted,
@@ -27,8 +27,13 @@ extension ZelloChannel {
         "allowAlerts": channelOptions.allowAlerts,
         "allowTextMessages": channelOptions.allowTextMessages,
         "allowLocations": channelOptions.allowLocations
-      ]
+      ],
+      "isDispatchChannel": dispatchInfo != nil
     ]
+    if let currentCall = dispatchInfo?.currentCall {
+      body["currentCall"] = currentCall.jsonDictionary
+    }
+    return body
   }
 }
 

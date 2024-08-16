@@ -279,7 +279,43 @@ extension ZelloIOSSdkModule: Zello.Delegate {
     sendSdkEvent(withName: "onHistoryPlaybackStarted", body: message.jsonDictionary)
   }
 
-  func zello(_ zello: Zello, didStopHistoryPlayback message: ZelloHistoryVoiceMessage) {
+  func zello(_ zello: Zello, didFinishHistoryPlayback message: ZelloHistoryVoiceMessage) {
     sendSdkEvent(withName: "onHistoryPlaybackStopped", body: message.jsonDictionary)
+  }
+
+  func zello(_ zello: Zello, callDidBecomePending call: ZelloDispatchCall, on channel: ZelloChannel) {
+    let body: [AnyHashable: Any] = [
+      "call": call.jsonDictionary,
+      "channel": channel.jsonDictionary
+    ]
+    sendSdkEvent(withName: "onDispatchCallPending", body: body)
+  }
+
+  func zello(_ zello: Zello, callDidEnd call: ZelloDispatchCall, on channel: ZelloChannel) {
+    let body: [AnyHashable: Any] = [
+      "call": call.jsonDictionary,
+      "channel": channel.jsonDictionary
+    ]
+    sendSdkEvent(withName: "onDispatchCallEnded", body: body)
+  }
+
+  func zello(_ zello: Zello, callDidBecomeActive call: ZelloDispatchCall, on channel: ZelloChannel) {
+    let body: [AnyHashable: Any] = [
+      "call": call.jsonDictionary,
+      "channel": channel.jsonDictionary
+    ]
+    sendSdkEvent(withName: "onDispatchCallActive", body: body)
+  }
+
+  func zello(_ zello: Zello, callDidTransfer call: ZelloDispatchCall, on channel: ZelloChannel, toDispatcherNamed dispatcher: String) {
+    let body: [AnyHashable: Any] = [
+      "call": call.jsonDictionary,
+      "channel": channel.jsonDictionary
+    ]
+    sendSdkEvent(withName: "onDispatchCallTransferred", body: body)
+  }
+
+  func zello(_ zello: Zello, didUpdate consoleSettings: ZelloConsoleSettings) {
+    sendSdkEvent(withName: "onConsoleSettingsChanged", body: consoleSettings.jsonDictionary)
   }
 }
