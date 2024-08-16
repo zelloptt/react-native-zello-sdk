@@ -188,4 +188,8 @@ export enum ZelloEvent {
    * @param {@link types.ZelloHistoryVoiceMessage | ZelloHistoryVoiceMessage} voiceMessage The stopped history voice message.
    */
   HISTORY_PLAYBACK_STOPPED = 'onHistoryPlaybackStopped',
+  DISPATCH_CALL_PENDING = 'onDispatchCallPending',
+  DISPATCH_CALL_ACTIVE = 'onDispatchCallActive',
+  DISPATCH_CALL_TRANSFERRED = 'onDispatchCallTransferred',
+  DISPATCH_CALL_ENDED = 'onDispatchCallEnded',
 }

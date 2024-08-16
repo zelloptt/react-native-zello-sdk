@@ -7,7 +7,9 @@ import com.facebook.react.bridge.WritableMap
 import com.facebook.react.bridge.WritableNativeArray
 import com.facebook.react.bridge.WritableNativeMap
 import com.zello.sdk.ZelloChannel
+import com.zello.sdk.ZelloConsoleSettings
 import com.zello.sdk.ZelloContact
+import com.zello.sdk.ZelloDispatchChannel
 import com.zello.sdk.ZelloHistoryAlertMessage
 import com.zello.sdk.ZelloHistoryImageMessage
 import com.zello.sdk.ZelloHistoryLocationMessage
@@ -64,6 +66,12 @@ object ZelloAndroidSdkModuleHelper {
 					putBoolean("allowTextMessages", options.allowTextMessages)
 					putBoolean("allowLocations", options.allowLocations)
 				})
+				if (contact is ZelloDispatchChannel) {
+					putBoolean("isDispatchChannel", true)
+					contact.currentCall?.let { call ->
+						putMap("currentCall", callToWritableMap(call))
+					}
+				}
 			}
 
 			else -> WritableNativeMap()
@@ -193,6 +201,21 @@ object ZelloAndroidSdkModuleHelper {
 			putDouble("longitude", message.longitude)
 			putDouble("accuracy", message.accuracy)
 			putString("address", message.address)
+		}
+	}
+
+	fun consoleSettingsToWritableMap(settings: ZelloConsoleSettings): WritableMap {
+		return Arguments.createMap().apply {
+			putBoolean("allowNonDispatchersToEndCalls", settings.allowNonDispatchersToEndCalls)
+		}
+	}
+
+	fun callToWritableMap(call: ZelloDispatchChannel.Call): WritableMap {
+		return Arguments.createMap().apply {
+			putInt("id", call.id.toInt())
+			putString("status", call.status.toString())
+			putString("dispatcher", call.dispatcher)
+			putString("timestamp", call.timestamp.toString())
 		}
 	}
 }

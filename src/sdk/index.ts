@@ -1,9 +1,11 @@
+// noinspection JSUnusedGlobalSymbols
+
 import {
   EmitterSubscription,
   NativeEventEmitter,
   NativeModules,
 } from 'react-native';
-import { isAndroid } from '../utils';
+import { bridgeCallToSdkCall, isAndroid } from '../utils';
 import {
   ZelloAccountStatus,
   ZelloAlertMessage,
@@ -16,6 +18,7 @@ import {
   ZelloContact,
   ZelloContactType,
   ZelloCredentials,
+  ZelloDispatchChannel,
   ZelloHistoryImageMessage,
   ZelloHistoryMessage,
   ZelloHistoryVoiceMessage,
@@ -526,6 +529,7 @@ export class Zello extends EventEmitter {
   private setupEventListener(eventEmitter: NativeEventEmitter) {
     this.eventListener = eventEmitter.addListener('zellosdk', (event) => {
       const eventName = event.eventName;
+      // @ts-ignore
       switch (eventName) {
         case 'onConnectFailed': {
           this.state = ZelloConnectionState.Disconnected;
@@ -1016,6 +1020,36 @@ export class Zello extends EventEmitter {
             ZelloEvent.HISTORY_PLAYBACK_STOPPED,
             this.historyVoiceMessage
           );
+          break;
+        }
+        // Dispatch commands
+        case 'onDispatchCallTransferred':
+        case 'onDispatchCallEnded':
+        case 'onDispatchCallActive':
+        case 'onDispatchCallPending': {
+          const channel = bridgeContactToSdkContact(
+            event.channel
+          ) as ZelloDispatchChannel;
+          const call = bridgeCallToSdkCall(event.call);
+          if (!channel || !call) {
+            break;
+          }
+          switch (eventName) {
+            case 'onDispatchCallTransferred':
+              this.emit(ZelloEvent.DISPATCH_CALL_TRANSFERRED, channel, call);
+              break;
+            case 'onDispatchCallEnded':
+              this.emit(ZelloEvent.DISPATCH_CALL_ENDED, channel, call);
+              break;
+            case 'onDispatchCallActive':
+              this.emit(ZelloEvent.DISPATCH_CALL_ACTIVE, channel, call);
+              break;
+            case 'onDispatchCallPending':
+              this.emit(ZelloEvent.DISPATCH_CALL_PENDING, channel, call);
+              break;
+            default:
+              break;
+          }
           break;
         }
         default:

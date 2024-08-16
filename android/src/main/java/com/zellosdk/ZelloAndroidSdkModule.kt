@@ -17,6 +17,7 @@ import com.zello.sdk.ZelloAlertMessage
 import com.zello.sdk.ZelloConnectionError
 import com.zello.sdk.ZelloContact
 import com.zello.sdk.ZelloCredentials
+import com.zello.sdk.ZelloDispatchChannel
 import com.zello.sdk.ZelloHistoryImageMessage
 import com.zello.sdk.ZelloHistoryVoiceMessage
 import com.zello.sdk.ZelloImageMessage
@@ -26,6 +27,8 @@ import com.zello.sdk.ZelloLocationMessage
 import com.zello.sdk.ZelloOutgoingEmergency
 import com.zello.sdk.ZelloOutgoingVoiceMessage
 import com.zello.sdk.ZelloRecentEntry
+import com.zello.sdk.ZelloConsoleSettings
+import com.zello.sdk.ZelloState
 import com.zello.sdk.ZelloTextMessage
 import javax.inject.Inject
 
@@ -175,6 +178,9 @@ class ZelloAndroidSdkModule @Inject constructor(
     zello.loadBitmapForHistoryImageMessage(message) {
       callback.invoke(ZelloAndroidSdkModuleHelper.bitmapToBase64String(it))
     }
+  }
+
+  override fun onStateChanged(sdk: Zello, state: ZelloState) {
   }
 
   override fun onConnectFailed(zello: Zello, error: ZelloConnectionError) {
@@ -427,6 +433,38 @@ class ZelloAndroidSdkModule @Inject constructor(
 
   override fun onHistoryUpdated(zello: Zello) {
     sendEvent(reactApplicationContext, "onHistoryUpdated", null)
+  }
+
+  override fun onConsoleSettingsChanged(zello: Zello, settings: ZelloConsoleSettings) {
+    sendEvent(reactApplicationContext, "onConsoleSettingsChanged", ZelloAndroidSdkModuleHelper.consoleSettingsToWritableMap(settings))
+  }
+
+  override fun onDispatchCallPending(zello: Zello, channel: ZelloDispatchChannel, call: ZelloDispatchChannel.Call) {
+    sendEvent(reactApplicationContext, "onDispatchCallPending", Arguments.createMap().apply {
+      putMap("call", ZelloAndroidSdkModuleHelper.callToWritableMap(call))
+      putMap("channel", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(channel))
+    })
+  }
+
+  override fun onDispatchCallActive(zello: Zello, channel: ZelloDispatchChannel, call: ZelloDispatchChannel.Call) {
+    sendEvent(reactApplicationContext, "onDispatchCallActive", Arguments.createMap().apply {
+      putMap("call", ZelloAndroidSdkModuleHelper.callToWritableMap(call))
+      putMap("channel", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(channel))
+    })
+  }
+
+  override fun onDispatchCallTransferred(zello: Zello, channel: ZelloDispatchChannel, call: ZelloDispatchChannel.Call) {
+    sendEvent(reactApplicationContext, "onDispatchCallTransferred", Arguments.createMap().apply {
+      putMap("call", ZelloAndroidSdkModuleHelper.callToWritableMap(call))
+      putMap("channel", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(channel))
+    })
+  }
+
+  override fun onDispatchCallEnded(zello: Zello, channel: ZelloDispatchChannel, call: ZelloDispatchChannel.Call) {
+    sendEvent(reactApplicationContext, "onDispatchCallEnded", Arguments.createMap().apply {
+      putMap("call", ZelloAndroidSdkModuleHelper.callToWritableMap(call))
+      putMap("channel", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(channel))
+    })
   }
 
   private fun sendEvent(reactContext: ReactContext, name: String, params: WritableMap?) {

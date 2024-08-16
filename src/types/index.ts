@@ -128,6 +128,39 @@ export class ZelloChannel implements ZelloContact {
   }
 }
 
+export class ZelloDispatchChannel extends ZelloChannel {
+  public readonly currentCall: ZelloDispatchCall | undefined;
+
+  constructor(
+    name: string,
+    isMuted: boolean,
+    connectionStatus: ZelloChannelConnectionStatus,
+    usersOnline: number,
+    options: ZelloChannelOptions,
+    currentCall: ZelloDispatchCall | undefined
+  ) {
+    super(name, isMuted, connectionStatus, usersOnline, options);
+    this.currentCall = currentCall;
+  }
+}
+
+export class ZelloDispatchCall {
+  public readonly status: ZelloDispatchCallStatus;
+  public readonly dispatcher: string | undefined;
+
+  constructor(status: ZelloDispatchCallStatus, dispatcher: string | undefined) {
+    this.status = status;
+    this.dispatcher = dispatcher;
+  }
+}
+
+export enum ZelloDispatchCallStatus {
+  Pending = 'pending',
+  Active = 'active',
+  Ended = 'ended',
+  Disconnected = 'disconnected',
+}
+
 /**
  * The connection status of a {@link ZelloChannel}.
  */
@@ -816,3 +849,11 @@ export type ZelloConfig = {
     isDebugBuild: boolean;
   };
 };
+
+export class ZelloConsoleSettings {
+  public readonly allowNonDispatchersToEndCalls: boolean;
+
+  constructor(allowNonDispatchersToEndCalls: boolean) {
+    this.allowNonDispatchersToEndCalls = allowNonDispatchersToEndCalls;
+  }
+}
