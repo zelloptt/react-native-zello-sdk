@@ -6,7 +6,7 @@ buildscript {
     google()
     mavenCentral()
     maven {
-      url = uri("file:///Users/nadehz/repo")
+      url = uri("https://zello-sdk.s3.amazonaws.com/android/latest")
     }
   }
 
@@ -96,7 +96,7 @@ repositories {
   mavenCentral()
   google()
   maven {
-    url = uri("file:///Users/nadehz/repo")
+    url = uri("https://zello-sdk.s3.amazonaws.com/android/latest")
   }
 }
 
