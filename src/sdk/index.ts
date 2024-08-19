@@ -1047,35 +1047,39 @@ export class Zello extends EventEmitter {
         case 'onDispatchCallEnded':
         case 'onDispatchCallActive':
         case 'onDispatchCallPending': {
-          const channel = bridgeContactToSdkContact(
-            event.channel
-          ) as ZelloDispatchChannel;
-          const call = bridgeCallToSdkCall(event.call);
-          if (!channel || !call) {
-            break;
-          }
-          switch (eventName) {
-            case 'onDispatchCallTransferred':
-              this.emit(ZelloEvent.DISPATCH_CALL_TRANSFERRED, channel, call);
-              break;
-            case 'onDispatchCallEnded':
-              this.emit(ZelloEvent.DISPATCH_CALL_ENDED, channel, call);
-              break;
-            case 'onDispatchCallActive':
-              this.emit(ZelloEvent.DISPATCH_CALL_ACTIVE, channel, call);
-              break;
-            case 'onDispatchCallPending':
-              this.emit(ZelloEvent.DISPATCH_CALL_PENDING, channel, call);
-              break;
-            default:
-              break;
-          }
+          this.processDispatchCallEvent(event);
           break;
         }
         default:
           break;
       }
     });
+  }
+
+  private processDispatchCallEvent(event: any) {
+    const channel = bridgeContactToSdkContact(
+      event.channel
+    ) as ZelloDispatchChannel;
+    const call = bridgeCallToSdkCall(event.call);
+    if (!channel || !call) {
+      return;
+    }
+    switch (event.name) {
+      case 'onDispatchCallTransferred':
+        this.emit(ZelloEvent.DISPATCH_CALL_TRANSFERRED, channel, call);
+        break;
+      case 'onDispatchCallEnded':
+        this.emit(ZelloEvent.DISPATCH_CALL_ENDED, channel, call);
+        break;
+      case 'onDispatchCallActive':
+        this.emit(ZelloEvent.DISPATCH_CALL_ACTIVE, channel, call);
+        break;
+      case 'onDispatchCallPending':
+        this.emit(ZelloEvent.DISPATCH_CALL_PENDING, channel, call);
+        break;
+      default:
+        break;
+    }
   }
 
   private clearContactList() {
