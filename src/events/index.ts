@@ -192,4 +192,5 @@ export enum ZelloEvent {
   DISPATCH_CALL_ACTIVE = 'onDispatchCallActive',
   DISPATCH_CALL_TRANSFERRED = 'onDispatchCallTransferred',
   DISPATCH_CALL_ENDED = 'onDispatchCallEnded',
+  CONSOLE_SETTINGS_CHANGED = 'onConsoleSettingsChanged',
 }

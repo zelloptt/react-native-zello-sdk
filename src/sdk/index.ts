@@ -5,7 +5,11 @@ import {
   NativeEventEmitter,
   NativeModules,
 } from 'react-native';
-import { bridgeCallToSdkCall, isAndroid } from '../utils';
+import {
+  bridgeCallToSdkCall,
+  bridgeConsoleSettingsToSdkConsoleSettings,
+  isAndroid,
+} from '../utils';
 import {
   ZelloAccountStatus,
   ZelloAlertMessage,
@@ -15,6 +19,7 @@ import {
   ZelloConfig,
   ZelloConnectionError,
   ZelloConnectionState,
+  ZelloConsoleSettings,
   ZelloContact,
   ZelloContactType,
   ZelloCredentials,
@@ -115,6 +120,8 @@ export class Zello extends EventEmitter {
    * The currently playing history voice message.
    */
   public historyVoiceMessage: ZelloHistoryVoiceMessage | undefined;
+
+  public consoleSettings: ZelloConsoleSettings | undefined;
 
   private eventListener: EmitterSubscription | undefined;
 
@@ -1022,7 +1029,12 @@ export class Zello extends EventEmitter {
           );
           break;
         }
-        // Dispatch commands
+        case 'onConsoleSettingsChanged': {
+          this.consoleSettings =
+            bridgeConsoleSettingsToSdkConsoleSettings(event);
+          this.emit(ZelloEvent.CONSOLE_SETTINGS_CHANGED, this.consoleSettings);
+          break;
+        }
         case 'onDispatchCallTransferred':
         case 'onDispatchCallEnded':
         case 'onDispatchCallActive':

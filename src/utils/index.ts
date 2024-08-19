@@ -2,6 +2,7 @@ import {
   ZelloChannel,
   ZelloChannelConnectionStatus,
   ZelloChannelUser,
+  ZelloConsoleSettings,
   ZelloContact,
   ZelloDispatchCall,
   ZelloDispatchCallStatus,
@@ -182,4 +183,13 @@ export function bridgeCallToSdkCall(call: any): ZelloDispatchCall | undefined {
     return undefined;
   }
   return new ZelloDispatchCall(statusValue, call.dispatcher);
+}
+
+export function bridgeConsoleSettingsToSdkConsoleSettings(
+  settings: any
+): ZelloConsoleSettings | undefined {
+  if (!settings) {
+    return undefined;
+  }
+  return new ZelloConsoleSettings(settings.allowNonDispatchersToEndCalls);
 }
