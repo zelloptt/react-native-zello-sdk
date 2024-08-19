@@ -189,6 +189,16 @@ import ZelloSDK
     }
     callback([base64String])
   }
+
+  @objc func endDispatchCall(_ channelName: String) {
+    guard 
+      let dispatchChannel = zello.channel(named: channelName),
+      let call = dispatchChannel.dispatchInfo?.currentCall
+    else {
+      return
+    }
+    zello.end(call, on: dispatchChannel)
+  }
 }
 
 extension ZelloIOSSdkModule {

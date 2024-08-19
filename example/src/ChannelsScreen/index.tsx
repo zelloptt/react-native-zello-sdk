@@ -25,6 +25,8 @@ import {
   ZelloAccountStatus,
   ZelloChannel,
   ZelloChannelConnectionStatus,
+  ZelloDispatchChannel,
+  ZelloDispatchCallStatus,
   ZelloHistoryMessage,
 } from '@zelloptt/react-native-zello-sdk';
 import StatusDialog from '../shared/StatusDialog';
@@ -93,6 +95,48 @@ const ChannelView = ({
     return isSameContact(emergency.outgoingEmergency.channel, channel);
   }, [emergency, channel]);
 
+  const getCall = useCallback(() => {
+    if (!(channel instanceof ZelloDispatchChannel)) {
+      return null;
+    }
+    return channel.currentCall;
+  }, [channel]);
+
+  const canEndCall = useCallback(() => {
+    if (!(channel instanceof ZelloDispatchChannel)) {
+      return false;
+    }
+    const consoleSettings = sdk.consoleSettings;
+    if (!consoleSettings) {
+      return false;
+    }
+    return (
+      consoleSettings.allowNonDispatchersToEndCalls &&
+      channel.currentCall?.status === ZelloDispatchCallStatus.Active
+    );
+  }, [channel, sdk.consoleSettings]);
+
+  const endCall = useCallback(() => {
+    if (!(channel instanceof ZelloDispatchChannel)) {
+      return;
+    }
+    sdk.endDispatchCall(channel);
+  }, [channel, sdk]);
+
+  const getDispatchCallStatus = useCallback(() => {
+    if (!(channel instanceof ZelloDispatchChannel)) {
+      return null;
+    }
+    let status = channel.currentCall?.status;
+    if (!status) {
+      return null;
+    }
+    if (status === ZelloDispatchCallStatus.Active) {
+      return status + ' with ' + channel.currentCall?.dispatcher;
+    }
+    return status;
+  }, [channel]);
+
   const isConnected =
     channel.connectionStatus === ZelloChannelConnectionStatus.Connected;
 
@@ -129,15 +173,18 @@ const ChannelView = ({
           }`}</Text>
         )}
         {isOutgoingEmergency() && <Text>ACTIVE OUTGOING EMERGENCY</Text>}
+        {getCall() && <Text>{`Call Status: ${getDispatchCallStatus()}`}</Text>}
       </View>
       <View style={styles.trailingButtons}>
         <ContextMenuButton
           contact={channel}
           showEmergencyOption={isEmergencyChannel()}
           isInOutgoingEmergency={isOutgoingEmergency()}
-          onSendTextItemSelected={() => openSendTextDialog(channel)}
-          onSendAlertItemSelected={() => openSendAlertDialog(channel)}
+          showEndCallOption={canEndCall()}
+          onSendTextSelected={() => openSendTextDialog(channel)}
+          onSendAlertSelected={() => openSendAlertDialog(channel)}
           onShowHistorySelected={() => openHistoryDialog(channel)}
+          onEndCallSelected={() => endCall()}
         />
         <Switch
           value={isConnected}

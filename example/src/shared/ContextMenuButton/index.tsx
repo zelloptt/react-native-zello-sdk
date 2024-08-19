@@ -13,19 +13,23 @@ import { ZelloContact } from '@zelloptt/react-native-zello-sdk';
 interface ContextMenuButtonProps {
   contact: ZelloContact;
   showEmergencyOption?: boolean;
+  showEndCallOption?: boolean;
   isInOutgoingEmergency?: boolean;
-  onSendTextItemSelected: () => void;
-  onSendAlertItemSelected: () => void;
+  onSendTextSelected: () => void;
+  onSendAlertSelected: () => void;
   onShowHistorySelected: () => void;
+  onEndCallSelected?: () => void;
 }
 
 const ContextMenuButton = ({
   contact,
   showEmergencyOption = false,
+  showEndCallOption = false,
   isInOutgoingEmergency = false,
-  onSendTextItemSelected,
-  onSendAlertItemSelected,
+  onSendTextSelected,
+  onSendAlertSelected,
   onShowHistorySelected,
+  onEndCallSelected,
 }: ContextMenuButtonProps) => {
   const sdk = useContext(SdkContext);
 
@@ -52,12 +56,9 @@ const ContextMenuButton = ({
             }}
             text="Send Location"
           />
+          <MenuOption onSelect={() => onSendTextSelected()} text="Send Text" />
           <MenuOption
-            onSelect={() => onSendTextItemSelected()}
-            text="Send Text"
-          />
-          <MenuOption
-            onSelect={() => onSendAlertItemSelected()}
+            onSelect={() => onSendAlertSelected()}
             text="Send Alert"
           />
           <MenuOption
@@ -80,6 +81,12 @@ const ContextMenuButton = ({
               text={
                 isInOutgoingEmergency ? 'Stop Emergency' : 'Start Emergency'
               }
+            />
+          )}
+          {showEndCallOption && (
+            <MenuOption
+              onSelect={() => onEndCallSelected?.()}
+              text="End Call"
             />
           )}
           <MenuOption

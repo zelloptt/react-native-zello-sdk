@@ -87,8 +87,8 @@ const UserView = ({
       <View style={styles.trailingButtons}>
         <ContextMenuButton
           contact={user}
-          onSendTextItemSelected={() => openSendTextDialog(user)}
-          onSendAlertItemSelected={() => openSendAlertDialog(user)}
+          onSendTextSelected={() => openSendTextDialog(user)}
+          onSendAlertSelected={() => openSendAlertDialog(user)}
           onShowHistorySelected={() => openHistoryDialog(user)}
         />
         <TalkButton contact={user} disabled={false} />

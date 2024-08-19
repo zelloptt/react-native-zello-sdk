@@ -41,4 +41,6 @@ RCT_EXTERN_METHOD(stopHistoryMessagePlayback)
 
 RCT_EXTERN_METHOD(getHistoryImageData:(NSString *)historyId contactName:(NSString *)contactName isChannel:(BOOL)isChannel callback:(RCTResponseSenderBlock)callback)
 
+RCT_EXTERN_METHOD(endDispatchCall:(NSString *)channelName)
+
 @end
