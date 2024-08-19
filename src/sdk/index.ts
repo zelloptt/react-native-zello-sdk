@@ -121,6 +121,10 @@ export class Zello extends EventEmitter {
    */
   public historyVoiceMessage: ZelloHistoryVoiceMessage | undefined;
 
+  /**
+   * The console settings for the network.
+   * This is only expected to be valid when {@link state} is {@link ZelloConnectionState.Connected}.
+   */
   public consoleSettings: ZelloConsoleSettings | undefined;
 
   private eventListener: EmitterSubscription | undefined;

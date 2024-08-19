@@ -128,7 +128,13 @@ export class ZelloChannel implements ZelloContact {
   }
 }
 
+/**
+ * A Zello dispatch channel. A dispatch channel is a special type of channel that has calls between a user and a dispatcher.
+ */
 export class ZelloDispatchChannel extends ZelloChannel {
+  /**
+   * The current call on the dispatch channel, if any.
+   */
   public readonly currentCall: ZelloDispatchCall | undefined;
 
   constructor(
@@ -144,8 +150,17 @@ export class ZelloDispatchChannel extends ZelloChannel {
   }
 }
 
+/**
+ * A Zello dispatch call. A dispatch call is a call between a user and a dispatcher.
+ */
 export class ZelloDispatchCall {
+  /**
+   * The status of the call.
+   */
   public readonly status: ZelloDispatchCallStatus;
+  /**
+   * The name of the dispatcher who accepted the call. Null if the call is in the {@link ZelloDispatchCallStatus.Pending} state.
+   */
   public readonly dispatcher: string | undefined;
 
   constructor(status: ZelloDispatchCallStatus, dispatcher: string | undefined) {
@@ -154,6 +169,9 @@ export class ZelloDispatchCall {
   }
 }
 
+/**
+ * The status of a {@link ZelloDispatchCall}.
+ */
 export enum ZelloDispatchCallStatus {
   Pending = 'pending',
   Active = 'active',
@@ -850,7 +868,13 @@ export type ZelloConfig = {
   };
 };
 
+/**
+ * Settings for the network. These are configured via the Zello Work Administrative Console.
+ */
 export class ZelloConsoleSettings {
+  /**
+   * Allow non-dispatchers to end calls. When this is false, you should not show any UI to allow non-dispatchers to end calls.
+   */
   public readonly allowNonDispatchersToEndCalls: boolean;
 
   constructor(allowNonDispatchersToEndCalls: boolean) {

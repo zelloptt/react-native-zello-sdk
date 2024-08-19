@@ -32,7 +32,7 @@ export enum ZelloEvent {
   RECONNECTING = 'onWillReconnect',
   /**
    * The contact list has been updated.
-   * {@link sdk.Zello.users | Zello.users} and @{link sdk.Zello.channels | Zello.channels} will be updated.
+   * {@link sdk.Zello.users | Zello.users} and {@link sdk.Zello.channels | Zello.channels} will be updated.
    * @param {@link types.ZelloUser | ZelloUser[]} users The list of users.
    * @param {@link types.ZelloChannel | ZelloChannel[]} channels The list of channels.
    */
@@ -188,9 +188,30 @@ export enum ZelloEvent {
    * @param {@link types.ZelloHistoryVoiceMessage | ZelloHistoryVoiceMessage} voiceMessage The stopped history voice message.
    */
   HISTORY_PLAYBACK_STOPPED = 'onHistoryPlaybackStopped',
+  /**
+   * A dispatch call has been received by the server and is pending acceptance by a dispatcher.
+   * @param {@link types.ZelloDispatchCall | ZelloDispatchCall} call The pending dispatch call.
+   */
   DISPATCH_CALL_PENDING = 'onDispatchCallPending',
+  /**
+   * A dispatch call has been accepted by a dispatcher.
+   * @param {@link types.ZelloDispatchCall | ZelloDispatchCall} call The accepted dispatch call.
+   */
   DISPATCH_CALL_ACTIVE = 'onDispatchCallActive',
+  /**
+   * A dispatch call has been transferred to another dispatcher.
+   * @param {@link types.ZelloDispatchCall | ZelloDispatchCall} call The transferred dispatch call.
+   */
   DISPATCH_CALL_TRANSFERRED = 'onDispatchCallTransferred',
+  /**
+   * A dispatch call has ended.
+   * @param {@link types.ZelloDispatchCall | ZelloDispatchCall} call The ended dispatch call.
+   */
   DISPATCH_CALL_ENDED = 'onDispatchCallEnded',
+  /**
+   * The console settings have changed.
+   * {@link sdk.Zello.consoleSettings | Zello.consoleSettings} will contain the updated console settings.
+   * @param {@link types.ZelloConsoleSettings | ZelloConsoleSettings} settings The updated console settings.
+   */
   CONSOLE_SETTINGS_CHANGED = 'onConsoleSettingsChanged',
 }
