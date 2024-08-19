@@ -544,7 +544,6 @@ export class Zello extends EventEmitter {
   private setupEventListener(eventEmitter: NativeEventEmitter) {
     this.eventListener = eventEmitter.addListener('zellosdk', (event) => {
       const eventName = event.eventName;
-      // @ts-ignore
       switch (eventName) {
         case 'onConnectFailed': {
           this.state = ZelloConnectionState.Disconnected;
