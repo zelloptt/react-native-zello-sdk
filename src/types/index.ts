@@ -865,6 +865,10 @@ export type ZelloConfig = {
      * Whether your application is being run in a debug or release build.
      */
     isDebugBuild: boolean;
+    /**
+     * The app group for shared data. This is required for the Notification Service Extension to work properly.
+     */
+    appGroup: string;
   };
 };
 

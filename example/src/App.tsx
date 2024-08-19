@@ -175,6 +175,7 @@ export default function App() {
       },
       ios: {
         isDebugBuild: true,
+        appGroup: 'group.com.companyname.ZelloSDKReactNativeSampleApp.shared',
       },
     });
 

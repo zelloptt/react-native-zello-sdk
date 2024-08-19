@@ -2,7 +2,7 @@
 
 @interface RCT_EXTERN_MODULE(ZelloIOSSdkModule, NSObject)
 
-RCT_EXTERN_METHOD(configure:(BOOL)isDebugBuild)
+RCT_EXTERN_METHOD(configure:(BOOL)isDebugBuild appGroup:(NSString *)appGroup)
 
 RCT_EXTERN_METHOD(connect:(NSString *)network username:(NSString *)username password:(NSString *)password)
 RCT_EXTERN_METHOD(disconnect)
