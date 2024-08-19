@@ -95,9 +95,33 @@ const ChannelView = ({
     return isSameContact(emergency.outgoingEmergency.channel, channel);
   }, [emergency, channel]);
 
-  const hasCall = useCallback(() => {
-    return channel instanceof ZelloDispatchChannel && channel.currentCall;
+  const getCall = useCallback(() => {
+    if (!(channel instanceof ZelloDispatchChannel)) {
+      return null;
+    }
+    return channel.currentCall;
   }, [channel]);
+
+  const canEndCall = useCallback(() => {
+    if (!(channel instanceof ZelloDispatchChannel)) {
+      return false;
+    }
+    const consoleSettings = sdk.consoleSettings;
+    if (!consoleSettings) {
+      return false;
+    }
+    return (
+      consoleSettings.allowNonDispatchersToEndCalls &&
+      channel.currentCall?.status === ZelloDispatchCallStatus.Active
+    );
+  }, [channel, sdk.consoleSettings]);
+
+  const endCall = useCallback(() => {
+    if (!(channel instanceof ZelloDispatchChannel)) {
+      return;
+    }
+    sdk.endDispatchCall(channel);
+  }, [channel, sdk]);
 
   const getDispatchCallStatus = useCallback(() => {
     if (!(channel instanceof ZelloDispatchChannel)) {
@@ -149,16 +173,18 @@ const ChannelView = ({
           }`}</Text>
         )}
         {isOutgoingEmergency() && <Text>ACTIVE OUTGOING EMERGENCY</Text>}
-        {hasCall() && <Text>{`Call Status: ${getDispatchCallStatus()}`}</Text>}
+        {getCall() && <Text>{`Call Status: ${getDispatchCallStatus()}`}</Text>}
       </View>
       <View style={styles.trailingButtons}>
         <ContextMenuButton
           contact={channel}
           showEmergencyOption={isEmergencyChannel()}
           isInOutgoingEmergency={isOutgoingEmergency()}
-          onSendTextItemSelected={() => openSendTextDialog(channel)}
-          onSendAlertItemSelected={() => openSendAlertDialog(channel)}
+          showEndCallOption={canEndCall()}
+          onSendTextSelected={() => openSendTextDialog(channel)}
+          onSendAlertSelected={() => openSendAlertDialog(channel)}
           onShowHistorySelected={() => openHistoryDialog(channel)}
+          onEndCallSelected={() => endCall()}
         />
         <Switch
           value={isConnected}

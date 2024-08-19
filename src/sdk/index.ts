@@ -533,6 +533,14 @@ export class Zello extends EventEmitter {
     });
   }
 
+  public endDispatchCall(channel: ZelloDispatchChannel) {
+    if (isAndroid) {
+      ZelloAndroidSdkModule.endDispatchCall(channel.name);
+    } else {
+      ZelloIOSSdkModule.endDispatchCall(channel.name);
+    }
+  }
+
   private setupEventListener(eventEmitter: NativeEventEmitter) {
     this.eventListener = eventEmitter.addListener('zellosdk', (event) => {
       const eventName = event.eventName;

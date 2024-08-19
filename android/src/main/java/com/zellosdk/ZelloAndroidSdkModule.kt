@@ -180,6 +180,13 @@ class ZelloAndroidSdkModule @Inject constructor(
     }
   }
 
+  @ReactMethod
+  fun endDispatchCall(channelName: String) {
+    val dispatchChannel = zello.getChannel(channelName) as? ZelloDispatchChannel ?: return
+    val call = dispatchChannel.currentCall ?: return
+    zello.endDispatchCall(call, dispatchChannel)
+  }
+
   override fun onStateChanged(sdk: Zello, state: ZelloState) {
   }
 
