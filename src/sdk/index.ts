@@ -537,6 +537,14 @@ export class Zello extends EventEmitter {
     });
   }
 
+  /**
+   * Ends the dispatch call for the given dispatch channel.
+   * This will trigger the {@link ZelloEvent.DISPATCH_CALL_ENDED} event.
+   *
+   * If {@link consoleSettings | ZelloConsoleSettings.allowNonDispatchersToEndCalls} is false, this method will do nothing.
+   *
+   * @param channel The dispatch channel to end the call for.
+   */
   public endDispatchCall(channel: ZelloDispatchChannel) {
     if (isAndroid) {
       ZelloAndroidSdkModule.endDispatchCall(channel.name);
