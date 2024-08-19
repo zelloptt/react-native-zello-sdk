@@ -42,13 +42,13 @@ export function bridgeContactToSdkContact(
       const options = eventContact.options;
       if (eventContact.isDispatchChannel) {
         let call: ZelloDispatchCall | undefined;
-        if (eventContact.call) {
+        if (eventContact.currentCall) {
           const statusValue =
-            eventContact.call.status.toLowerCase() as ZelloDispatchCallStatus;
+            eventContact.currentCall.status.toLowerCase() as ZelloDispatchCallStatus;
           if (Object.values(ZelloDispatchCallStatus).includes(statusValue)) {
             call = new ZelloDispatchCall(
               statusValue,
-              eventContact.call.dispatcher
+              eventContact.currentCall.dispatcher
             );
           }
         }

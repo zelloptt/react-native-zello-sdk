@@ -25,6 +25,8 @@ import {
   ZelloAccountStatus,
   ZelloChannel,
   ZelloChannelConnectionStatus,
+  ZelloDispatchChannel,
+  ZelloDispatchCallStatus,
   ZelloHistoryMessage,
 } from '@zelloptt/react-native-zello-sdk';
 import StatusDialog from '../shared/StatusDialog';
@@ -93,6 +95,24 @@ const ChannelView = ({
     return isSameContact(emergency.outgoingEmergency.channel, channel);
   }, [emergency, channel]);
 
+  const hasCall = useCallback(() => {
+    return channel instanceof ZelloDispatchChannel && channel.currentCall;
+  }, [channel]);
+
+  const getDispatchCallStatus = useCallback(() => {
+    if (!(channel instanceof ZelloDispatchChannel)) {
+      return null;
+    }
+    let status = channel.currentCall?.status;
+    if (!status) {
+      return null;
+    }
+    if (status === ZelloDispatchCallStatus.Active) {
+      return status + ' with ' + channel.currentCall?.dispatcher;
+    }
+    return status;
+  }, [channel]);
+
   const isConnected =
     channel.connectionStatus === ZelloChannelConnectionStatus.Connected;
 
@@ -129,6 +149,7 @@ const ChannelView = ({
           }`}</Text>
         )}
         {isOutgoingEmergency() && <Text>ACTIVE OUTGOING EMERGENCY</Text>}
+        {hasCall() && <Text>{`Call Status: ${getDispatchCallStatus()}`}</Text>}
       </View>
       <View style={styles.trailingButtons}>
         <ContextMenuButton
