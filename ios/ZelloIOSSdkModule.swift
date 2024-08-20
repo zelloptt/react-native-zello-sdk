@@ -12,8 +12,12 @@ import ZelloSDK
     zello.delegate = self
   }
 
-  @objc func configure(_ isDebugBuild: Bool) {
-    zello.configure(isDebugBuild: isDebugBuild)
+  @objc func configure(_ isDebugBuild: Bool, appGroup: String) {
+    var group: String? = appGroup
+    if appGroup.isEmpty {
+      group = nil
+    }
+    zello.configure(isDebugBuild: isDebugBuild, appGroup: group)
   }
 
   @objc func connect(_ network: String, username: String, password: String) {

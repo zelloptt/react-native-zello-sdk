@@ -157,7 +157,7 @@ export class Zello extends EventEmitter {
         config.android.enableForegroundService
       );
     } else {
-      ZelloIOSSdkModule.configure(config.ios.isDebugBuild);
+      ZelloIOSSdkModule.configure(config.ios.isDebugBuild, config.ios.appGroup);
     }
   }
 
