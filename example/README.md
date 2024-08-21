@@ -4,8 +4,11 @@
 
 ## Install Dependencies
 ```
+# Navigate to the project root
 cd ..
-yarn install
+npm install
+# OR using Yarn
+# yarn install
 cd example
 npm install
 ```
