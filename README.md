@@ -23,7 +23,20 @@ npm install @zelloptt/react-native-zello-sdk
 
 ### iOS
 
-Please reference the iOS Installation Guide.
+Before getting started, please reference the iOS Installation Guide.
+
+#### Troubleshooting
+
+While setting up your Notification Service Extension, you may receive an error:
+
+```
+Cycle inside YourApp; building could produce unreliable results.
+Cycle details:
+→ Target ‘YourApp’
+○ That command depends on command in Target ‘YourApp’: script phase “[CP-User] [RNFB] Core Configuration”
+```
+
+If you receive the above error, you should move the `Build Phases` phase named `Embed Foundation Extensions` to higher up in the order.
 
 ### Android
 
