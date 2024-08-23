@@ -17,7 +17,8 @@ import ZelloSDK
     if appGroup.isEmpty {
       group = nil
     }
-    zello.configure(isDebugBuild: isDebugBuild, appGroup: group)
+    var configuration = ZelloConfiguration(appGroup: group)
+    configuration.pushNotificationEnvironment = isDebugBuild ? .development : .production
   }
 
   @objc func connect(_ network: String, username: String, password: String) {
