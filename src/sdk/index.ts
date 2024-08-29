@@ -1170,6 +1170,86 @@ export class Zello extends EventEmitter {
           this.processDispatchCallEvent(event);
           break;
         }
+        case 'onGroupConversationLeft': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          this.emit(ZelloEvent.GROUP_CONVERSATION_LEFT, groupConversation);
+          break;
+        }
+        case 'onGroupConversationInvite': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          this.emit(ZelloEvent.GROUP_CONVERSATION_INVITE, groupConversation);
+          break;
+        }
+        case 'onGroupConversationCreated': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          this.emit(ZelloEvent.GROUP_CONVERSATION_CREATED, groupConversation);
+          break;
+        }
+        case 'onGroupConversationRenamed': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          this.emit(ZelloEvent.GROUP_CONVERSATION_RENAMED, groupConversation);
+          break;
+        }
+        case 'onGroupConversationUsersAdded': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          const users = event.users.map((user: any) =>
+            bridgeChannelUserToSdkChannelUser(user)
+          );
+          if (!users || users.length === 0) {
+            return;
+          }
+          this.emit(
+            ZelloEvent.GROUP_CONVERSATION_USERS_ADDED,
+            groupConversation,
+            users
+          );
+          break;
+        }
+        case 'onGroupConversationUsersLeft': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          const users = event.users.map((user: any) =>
+            bridgeChannelUserToSdkChannelUser(user)
+          );
+          if (!users || users.length === 0) {
+            return;
+          }
+          this.emit(
+            ZelloEvent.GROUP_CONVERSATION_USERS_LEFT,
+            groupConversation,
+            users
+          );
+          break;
+        }
         default:
           break;
       }

@@ -23,7 +23,7 @@ import com.zello.sdk.ZelloUser
 import java.io.ByteArrayOutputStream
 
 object ZelloAndroidSdkModuleHelper {
-	fun contactListToWritableMap(users: List<ZelloUser>, channels: List<ZelloChannel>): WritableMap {
+	fun contactListToWritableMap(users: List<ZelloUser>, channels: List<ZelloChannel>, groupConversation: List<ZelloGroupConversation>): WritableMap {
 		return Arguments.createMap().apply {
 			putArray("users", WritableNativeArray().apply {
 				users.forEach { user ->
@@ -33,6 +33,11 @@ object ZelloAndroidSdkModuleHelper {
 			putArray("channels", WritableNativeArray().apply {
 				channels.forEach { channel ->
 					pushMap(sdkContactToWritableMap(channel))
+				}
+			})
+			putArray("groupConversations", WritableNativeArray().apply {
+				groupConversation.forEach { conversation ->
+					pushMap(sdkContactToWritableMap(conversation))
 				}
 			})
 		}
@@ -241,6 +246,14 @@ object ZelloAndroidSdkModuleHelper {
 		return Arguments.createMap().apply {
 			putString("name", channelUser.name)
 			putString("displayName", channelUser.displayName)
+		}
+	}
+
+	fun channelUsersToWritableArray(channelUsers: List<ZelloChannel.User>): WritableNativeArray {
+		return WritableNativeArray().apply {
+			channelUsers.forEach {
+				pushMap(channelUserToWritableMap(it))
+			}
 		}
 	}
 }

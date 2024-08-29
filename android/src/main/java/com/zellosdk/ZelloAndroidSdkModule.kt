@@ -14,6 +14,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule
 import com.zello.sdk.Zello
 import com.zello.sdk.ZelloAccountStatus
 import com.zello.sdk.ZelloAlertMessage
+import com.zello.sdk.ZelloChannel
 import com.zello.sdk.ZelloConnectionError
 import com.zello.sdk.ZelloContact
 import com.zello.sdk.ZelloCredentials
@@ -28,6 +29,7 @@ import com.zello.sdk.ZelloOutgoingEmergency
 import com.zello.sdk.ZelloOutgoingVoiceMessage
 import com.zello.sdk.ZelloRecentEntry
 import com.zello.sdk.ZelloConsoleSettings
+import com.zello.sdk.ZelloGroupConversation
 import com.zello.sdk.ZelloState
 import com.zello.sdk.ZelloTextMessage
 import javax.inject.Inject
@@ -205,7 +207,7 @@ class ZelloAndroidSdkModule @Inject constructor(
   }
 
   override fun onContactListUpdated(zello: Zello) {
-    val map = ZelloAndroidSdkModuleHelper.contactListToWritableMap(this.zello.users, this.zello.channels)
+    val map = ZelloAndroidSdkModuleHelper.contactListToWritableMap(this.zello.users, this.zello.channels, this.zello.groupConversations)
     this.zello.emergencyChannel?.let {
       map.putMap("emergencyChannel", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(it))
     }
@@ -471,6 +473,44 @@ class ZelloAndroidSdkModule @Inject constructor(
     sendEvent(reactApplicationContext, "onDispatchCallEnded", Arguments.createMap().apply {
       putMap("call", ZelloAndroidSdkModuleHelper.callToWritableMap(call))
       putMap("channel", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(channel))
+    })
+  }
+
+  override fun onGroupConversationLeft(sdk: Zello, conversation: ZelloGroupConversation) {
+    sendEvent(reactApplicationContext, "onGroupConversationLeft", Arguments.createMap().apply {
+      putMap("conversation", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(conversation))
+    })
+  }
+
+  override fun onGroupConversationInvite(sdk: Zello, conversation: ZelloGroupConversation) {
+    sendEvent(reactApplicationContext, "onGroupConversationInvite", Arguments.createMap().apply {
+      putMap("conversation", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(conversation))
+    })
+  }
+
+  override fun onGroupConversationCreated(sdk: Zello, conversation: ZelloGroupConversation) {
+    sendEvent(reactApplicationContext, "onGroupConversationCreated", Arguments.createMap().apply {
+      putMap("conversation", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(conversation))
+    })
+  }
+
+  override fun onGroupConversationRenamed(sdk: Zello, conversation: ZelloGroupConversation) {
+    sendEvent(reactApplicationContext, "onGroupConversationRenamed", Arguments.createMap().apply {
+      putMap("conversation", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(conversation))
+    })
+  }
+
+  override fun onGroupConversationUsersAdded(sdk: Zello, conversation: ZelloGroupConversation, users: List<ZelloChannel.User>) {
+    sendEvent(reactApplicationContext, "onGroupConversationUsersAdded", Arguments.createMap().apply {
+      putMap("conversation", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(conversation))
+      putArray("users", ZelloAndroidSdkModuleHelper.channelUsersToWritableArray(users))
+    })
+  }
+
+  override fun onGroupConversationUsersLeft(sdk: Zello, conversation: ZelloGroupConversation, users: List<ZelloChannel.User>) {
+    sendEvent(reactApplicationContext, "onGroupConversationUsersLeft", Arguments.createMap().apply {
+      putMap("conversation", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(conversation))
+      putArray("users", ZelloAndroidSdkModuleHelper.channelUsersToWritableArray(users))
     })
   }
 
