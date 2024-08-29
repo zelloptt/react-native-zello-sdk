@@ -566,6 +566,94 @@ export class Zello extends EventEmitter {
     }
   }
 
+  /**
+   * Creates a new group conversation with the given users.
+   * This will trigger the {@link ZelloEvent.GROUP_CONVERSATION_CREATED} and {@link ZelloEvent.CONTACT_LIST_UPDATED} events.
+   * @param users The users to create the group conversation with.
+   * @param name Optional; The name of the group conversation. The conversation can be renamed later by using {@link renameGroupConversation}.
+   */
+  public createGroupConversation(users: ZelloUser[], name: string) {
+    if (!this.consoleSettings?.allowGroupConversations) {
+      return;
+    }
+    if (isAndroid) {
+      ZelloAndroidSdkModule.createGroupConversation(
+        users.map((user) => user.name),
+        name
+      );
+    } else {
+      ZelloIOSSdkModule.createGroupConversation(
+        users.map((user) => user.name),
+        name
+      );
+    }
+  }
+
+  /**
+   * Adds users to the given group conversation.
+   * This will trigger the {@link ZelloEvent.GROUP_CONVERSATION_USERS_ADDED} and {@link ZelloEvent.CONTACT_LIST_UPDATED} events.
+   * @param groupConversation The group conversation to add users to.
+   * @param users The users to add to the group conversation.
+   */
+  public addUsersToGroupConversation(
+    groupConversation: ZelloGroupConversation,
+    users: ZelloUser[]
+  ) {
+    if (!this.consoleSettings?.allowGroupConversations) {
+      return;
+    }
+    if (isAndroid) {
+      ZelloAndroidSdkModule.addUsersToGroupConversation(
+        groupConversation.name,
+        users.map((user) => user.name)
+      );
+    } else {
+      ZelloIOSSdkModule.addUsersToGroupConversation(
+        groupConversation.name,
+        users.map((user) => user.name)
+      );
+    }
+  }
+
+  /**
+   * Removes the user from the group conversation.
+   * This will trigger the {@link ZelloEvent.GROUP_CONVERSATION_LEFT} and {@link ZelloEvent.CONTACT_LIST_UPDATED} events.
+   * @param groupConversation The group conversation to leave.
+   */
+  public leaveGroupConversation(groupConversation: ZelloGroupConversation) {
+    if (!this.consoleSettings?.allowGroupConversations) {
+      return;
+    }
+    if (isAndroid) {
+      ZelloAndroidSdkModule.leaveGroupConversation(groupConversation.name);
+    } else {
+      ZelloIOSSdkModule.leaveGroupConversation(groupConversation.name);
+    }
+  }
+
+  /**
+   * Renames the group conversation.
+   * This will trigger the {@link ZelloEvent.GROUP_CONVERSATION_RENAMED} and {@link ZelloEvent.CONTACT_LIST_UPDATED} events.
+   * @param groupConversation The group conversation to rename.
+   * @param name The new name for the group conversation.
+   */
+  public renameGroupConversation(
+    groupConversation: ZelloGroupConversation,
+    name: string
+  ) {
+    if (!this.consoleSettings?.allowGroupConversations) {
+      return;
+    }
+    if (isAndroid) {
+      ZelloAndroidSdkModule.renameGroupConversation(
+        groupConversation.name,
+        name
+      );
+    } else {
+      ZelloIOSSdkModule.renameGroupConversation(groupConversation.name, name);
+    }
+  }
+
   private setupEventListener(eventEmitter: NativeEventEmitter) {
     this.eventListener = eventEmitter.addListener('zellosdk', (event) => {
       const eventName = event.eventName;

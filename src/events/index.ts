@@ -215,4 +215,40 @@ export enum ZelloEvent {
    * @param {@link types.ZelloConsoleSettings | ZelloConsoleSettings} settings The updated console settings.
    */
   CONSOLE_SETTINGS_CHANGED = 'onConsoleSettingsChanged',
+  /**
+   * A group conversation has been created.
+   * {@link sdk.Zello.groupConversations | Zello.groupConversations} will be updated.
+   * @param {@link types.ZelloGroupConversation | ZelloGroupConversation} groupConversation The created group conversation.
+   */
+  GROUP_CONVERSATION_CREATED = 'onGroupConversationCreated',
+  /**
+   * The user has been invited to a group conversation.
+   * {@link sdk.Zello.groupConversations | Zello.groupConversations} will be updated.
+   * @param {@link types.ZelloGroupConversation | ZelloGroupConversation} groupConversation The group conversation.
+   */
+  GROUP_CONVERSATION_INVITE = 'onGroupConversationInvite',
+  /**
+   * A group conversation has new users added.
+   * {@link sdk.Zello.groupConversations | Zello.groupConversations} will be updated.
+   * @param {@link types.ZelloGroupConversation | ZelloGroupConversation} groupConversation The group conversation.
+   */
+  GROUP_CONVERSATION_USERS_ADDED = 'onGroupConversationUsersAdded',
+  /**
+   * Users left a group conversation.
+   * {@link sdk.Zello.groupConversations | Zello.groupConversations} will be updated.
+   * @param {@link types.ZelloGroupConversation | ZelloGroupConversation} groupConversation The group conversation.
+   */
+  GROUP_CONVERSATION_USERS_LEFT = 'onGroupConversationUsersLeft',
+  /**
+   * The user has left a group conversation.
+   * {@link sdk.Zello.groupConversations | Zello.groupConversations} will be updated.
+   * @param {@link types.ZelloGroupConversation | ZelloGroupConversation} groupConversation The group conversation.
+   */
+  GROUP_CONVERSATION_LEFT = 'onGroupConversationLeft',
+  /**
+   * A group conversation has been renamed.
+   * {@link sdk.Zello.groupConversations | Zello.groupConversations} will be updated.
+   * @param {@link types.ZelloGroupConversation | ZelloGroupConversation} groupConversation The group conversation.
+   */
+  GROUP_CONVERSATION_RENAMED = 'onGroupConversationRenamed',
 }
