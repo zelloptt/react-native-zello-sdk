@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import {
   bridgeCallToSdkCall,
+  bridgeChannelUserToSdkChannelUser,
   bridgeConsoleSettingsToSdkConsoleSettings,
   isAndroid,
 } from '../utils';
@@ -15,7 +16,6 @@ import {
   ZelloAlertMessage,
   ZelloChannel,
   ZelloChannelAlertLevel,
-  ZelloChannelUser,
   ZelloConfig,
   ZelloConnectionError,
   ZelloConnectionState,
@@ -632,7 +632,7 @@ export class Zello extends EventEmitter {
           }
           this.incomingVoiceMessage = new ZelloIncomingVoiceMessage(
             contact,
-            new ZelloChannelUser(event.channelUserName),
+            bridgeChannelUserToSdkChannelUser(event.channelUser),
             parseInt(event.timestamp, 10)
           );
           this.emit(
@@ -651,7 +651,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_VOICE_MESSAGE_STOPPED,
             new ZelloIncomingVoiceMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               parseInt(event.timestamp, 10)
             )
           );
@@ -724,7 +724,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_IMAGE_MESSAGE_RECEIVED,
             new ZelloImageMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               true,
               parseInt(event.timestamp, 10),
               event.thumbnail,
@@ -778,7 +778,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_ALERT_MESSAGE_RECEIVED,
             new ZelloAlertMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               true,
               parseInt(event.timestamp, 10),
               event.text
@@ -829,7 +829,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_TEXT_MESSAGE_RECEIVED,
             new ZelloTextMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               true,
               parseInt(event.timestamp, 10),
               event.text
@@ -880,7 +880,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_LOCATION_MESSAGE_RECEIVED,
             new ZelloLocationMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               true,
               parseInt(event.timestamp, 10),
               event.latitude,
@@ -1009,12 +1009,9 @@ export class Zello extends EventEmitter {
               if (!contact) {
                 return undefined;
               }
-              const channelUser = recent.channelUser
-                ? new ZelloChannelUser(recent.channelUser)
-                : undefined;
               return new ZelloRecentEntry(
                 contact,
-                channelUser,
+                bridgeChannelUserToSdkChannelUser(event.channelUser),
                 parseInt(recent.timestamp, 10),
                 recent.type.toLowerCase(),
                 recent.incoming

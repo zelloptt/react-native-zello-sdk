@@ -225,13 +225,15 @@ export type ZelloChannelOptions = {
 };
 
 /**
- * A user in a {@link ZelloChannel}. A {@link ZelloChannelUser} may or may not not be part of your contact list.
+ * A user in a {@link ZelloChannel}. A {@link ZelloChannelUser} may or may not be part of your contact list.
  */
 export class ZelloChannelUser {
   public name: string;
+  public displayName: string;
 
-  constructor(name: string) {
+  constructor(name: string, displayName: string) {
     this.name = name;
+    this.displayName = displayName;
   }
 }
 

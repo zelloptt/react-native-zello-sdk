@@ -239,7 +239,7 @@ class ZelloAndroidSdkModule @Inject constructor(
   override fun onIncomingAlertMessage(zello: Zello, message: ZelloAlertMessage) {
     sendEvent(reactApplicationContext, "onIncomingAlertMessage", Arguments.createMap().apply {
       putMap("contact", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(contact = message.contact))
-      putString("channelUserName", message.channelUser?.name)
+      putMap("channelUser", ZelloAndroidSdkModuleHelper.channelUserToWritableMap(message.channelUser))
       putString("timestamp", message.timestamp.toString())
       putString("text", message.text)
     })
@@ -264,7 +264,7 @@ class ZelloAndroidSdkModule @Inject constructor(
   override fun onIncomingImageMessage(message: ZelloImageMessage) {
     sendEvent(reactApplicationContext, "onIncomingImageMessage", Arguments.createMap().apply {
       putMap("contact", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(contact = message.contact))
-      putString("channelUserName", message.channelUser?.name)
+      putMap("channelUser", ZelloAndroidSdkModuleHelper.channelUserToWritableMap(message.channelUser))
       putString("timestamp", message.timestamp.toString())
       putString("thumbnail", ZelloAndroidSdkModuleHelper.bitmapToBase64String(message.thumbnail))
       putString("image", ZelloAndroidSdkModuleHelper.bitmapToBase64String(message.image))
@@ -274,7 +274,7 @@ class ZelloAndroidSdkModule @Inject constructor(
   override fun onIncomingLocationMessage(zello: Zello, message: ZelloLocationMessage) {
     sendEvent(reactApplicationContext, "onIncomingLocationMessage", Arguments.createMap().apply {
       putMap("contact", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(contact = message.contact))
-      putString("channelUserName", message.channelUser?.name)
+      putMap("channelUser", ZelloAndroidSdkModuleHelper.channelUserToWritableMap(message.channelUser))
       putString("timestamp", message.timestamp.toString())
       putString("address", message.address)
       putDouble("latitude", message.latitude)
@@ -324,7 +324,7 @@ class ZelloAndroidSdkModule @Inject constructor(
   override fun onIncomingTextMessage(message: ZelloTextMessage) {
     sendEvent(reactApplicationContext, "onIncomingTextMessage", Arguments.createMap().apply {
       putMap("contact", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(contact = message.contact))
-      putString("channelUserName", message.channelUser?.name)
+      putMap("channelUser", ZelloAndroidSdkModuleHelper.channelUserToWritableMap(message.channelUser))
       putString("timestamp", message.timestamp.toString())
       putString("text", message.text)
     })
@@ -333,7 +333,7 @@ class ZelloAndroidSdkModule @Inject constructor(
   override fun onIncomingVoiceMessageStarted(zello: Zello, message: ZelloIncomingVoiceMessage) {
     sendEvent(reactApplicationContext, "onIncomingVoiceMessageStarted", Arguments.createMap().apply {
       putMap("contact", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(contact = message.contact))
-      putString("channelUserName", message.channelUser?.name)
+      putMap("channelUser", ZelloAndroidSdkModuleHelper.channelUserToWritableMap(message.channelUser))
       putString("timestamp", message.timestamp.toString())
     })
   }
@@ -341,7 +341,7 @@ class ZelloAndroidSdkModule @Inject constructor(
   override fun onIncomingVoiceMessageStopped(zello: Zello, message: ZelloIncomingVoiceMessage) {
     sendEvent(reactApplicationContext, "onIncomingVoiceMessageStopped", Arguments.createMap().apply {
       putMap("contact", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(contact = message.contact))
-      putString("channelUserName", message.channelUser?.name)
+      putMap("channelUser", ZelloAndroidSdkModuleHelper.channelUserToWritableMap(message.channelUser))
       putString("timestamp", message.timestamp.toString())
     })
   }

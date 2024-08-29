@@ -30,7 +30,10 @@ const HistoryItem = ({ item }: { item: ZelloHistoryMessage }) => {
   const sdk = useContext(SdkContext);
   const historyVoiceMessage = useContext(HistoryVoiceMessageContext);
 
-  const title = useMessageTitle(item.contact.name, item.channelUser?.name);
+  const title = useMessageTitle(
+    item.contact.name,
+    item.channelUser?.displayName
+  );
   const timestamp = useCallback(() => {
     return new Date(item.timestamp).toLocaleString();
   }, [item.timestamp]);

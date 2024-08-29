@@ -13,7 +13,7 @@ const IncomingTextDialog = ({ message }: IncomingTextDialogProps) => {
 
   const title = useMessageTitle(
     message.contact.name,
-    message.channelUser?.name
+    message.channelUser?.displayName
   );
 
   const onClose = useCallback(() => {

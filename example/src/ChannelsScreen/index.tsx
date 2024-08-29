@@ -165,11 +165,11 @@ const ChannelView = ({
               : 'Disconnected'}
         </Text>
         {isReceiving() && (
-          <Text>{`Talking: ${incomingVoiceMessage?.channelUser?.name}`}</Text>
+          <Text>{`Talking: ${incomingVoiceMessage?.channelUser?.displayName}`}</Text>
         )}
         {getIncomingEmergency() && (
           <Text>{`ACTIVE INCOMING EMERGENCY : ${
-            getIncomingEmergency()?.channelUser.name
+            getIncomingEmergency()?.channelUser.displayName
           }`}</Text>
         )}
         {isOutgoingEmergency() && <Text>ACTIVE OUTGOING EMERGENCY</Text>}
