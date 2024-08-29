@@ -73,6 +73,10 @@ export class ZelloUser implements ZelloContact {
    * This can be used for displaying a smaller version of the profile picture (such as in a list).
    */
   public profilePictureThumbnailUrl: string | undefined;
+  /**
+   * The supported features of the user.
+   */
+  public supportedFeatures: ZelloUserSupportedFeatures;
 
   constructor(
     name: string,
@@ -80,7 +84,8 @@ export class ZelloUser implements ZelloContact {
     isMuted: boolean,
     status: ZelloUserStatus,
     profilePictureUrl: string | undefined,
-    profilePictureThumbnailUrl: string | undefined
+    profilePictureThumbnailUrl: string | undefined,
+    supportedFeatures: ZelloUserSupportedFeatures
   ) {
     this.name = name;
     this.type = ZelloContactType.User;
@@ -89,6 +94,21 @@ export class ZelloUser implements ZelloContact {
     this.status = status;
     this.profilePictureUrl = profilePictureUrl;
     this.profilePictureThumbnailUrl = profilePictureThumbnailUrl;
+    this.supportedFeatures = supportedFeatures;
+  }
+}
+
+/**
+ * The supported features of a {@link ZelloUser}.
+ */
+export class ZelloUserSupportedFeatures {
+  /**
+   * Whether the user supports group conversations.
+   */
+  public readonly groupConversations: boolean;
+
+  constructor(groupConversations: boolean) {
+    this.groupConversations = groupConversations;
   }
 }
 

@@ -17,6 +17,7 @@ import {
   ZelloIncomingEmergency,
   ZelloUser,
   ZelloUserStatus,
+  ZelloUserSupportedFeatures,
 } from '../types';
 import { Platform } from 'react-native';
 
@@ -97,7 +98,10 @@ export function bridgeContactToSdkContact(
         eventContact.isMuted,
         userStatus,
         eventContact.profilePictureUrl,
-        eventContact.profilePictureThumbnailUrl
+        eventContact.profilePictureThumbnailUrl,
+        new ZelloUserSupportedFeatures(
+          eventContact.supportedFeatures.groupConversations
+        )
       );
     }
   }

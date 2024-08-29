@@ -54,6 +54,9 @@ object ZelloAndroidSdkModuleHelper {
 				putString("customStatusText", contact.customStatusText)
 				putString("profilePictureUrl", contact.profilePictureUrl)
 				putString("profilePictureThumbnailUrl", contact.profilePictureThumbnailUrl)
+				putMap("supportedFeatures", WritableNativeMap().apply {
+					putBoolean("groupConversations", contact.supportedFeatures.groupConversations)
+				})
 			}
 
 			is ZelloChannel -> WritableNativeMap().apply {
