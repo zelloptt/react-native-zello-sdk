@@ -7,6 +7,7 @@ import {
   ZelloDispatchCall,
   ZelloDispatchCallStatus,
   ZelloDispatchChannel,
+  ZelloGroupConversation,
   ZelloHistoryAlertMessage,
   ZelloHistoryImageMessage,
   ZelloHistoryLocationMessage,
@@ -59,6 +60,21 @@ export function bridgeContactToSdkContact(
           usersOnline,
           options,
           call
+        );
+      } else if (eventContact.isGroupConversation) {
+        contact = new ZelloGroupConversation(
+          contactName,
+          isMuted,
+          connectionStatus,
+          usersOnline,
+          options,
+          eventContact.displayName,
+          eventContact.users.map((user: any) =>
+            bridgeChannelUserToSdkChannelUser(user)
+          ),
+          eventContact.onlineUsers.map((user: any) =>
+            bridgeChannelUserToSdkChannelUser(user)
+          )
         );
       } else {
         contact = new ZelloChannel(
@@ -182,7 +198,10 @@ export function bridgeConsoleSettingsToSdkConsoleSettings(
   if (!settings) {
     return undefined;
   }
-  return new ZelloConsoleSettings(settings.allowNonDispatchersToEndCalls);
+  return new ZelloConsoleSettings(
+    settings.allowNonDispatchersToEndCalls,
+    settings.allowGroupConversations
+  );
 }
 
 export function bridgeChannelUserToSdkChannelUser(

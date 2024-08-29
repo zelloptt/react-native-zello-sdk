@@ -180,6 +180,42 @@ export enum ZelloDispatchCallStatus {
 }
 
 /**
+ * A ad-hoc group conversation in Zello. A {@link ZelloGroupConversation} is a type of {@link ZelloChannel}, but the provisioning is done by the end user instead of through the Zello Work Administrative Console.
+ *
+ * {@link ZelloGroupConversation}s are only possible when {@link ZelloConsoleSettings.allowGroupConversations} is true.
+ */
+export class ZelloGroupConversation extends ZelloChannel {
+  /**
+   * The display name of the group conversation. This should be used in the UI instead of {@link ZelloChannel#name}, as the {@link ZelloChannel#name} will be a uniquely hashed value starting with c##.
+   */
+  public readonly displayName: string;
+  /**
+   * The users in the group conversation.
+   */
+  public readonly users: ZelloChannelUser[];
+  /**
+   * The users in the group conversation that are currently online.
+   */
+  public readonly onlineUsers: ZelloChannelUser[];
+
+  constructor(
+    name: string,
+    isMuted: boolean,
+    connectionStatus: ZelloChannelConnectionStatus,
+    usersOnline: number,
+    options: ZelloChannelOptions,
+    displayName: string,
+    users: ZelloChannelUser[],
+    onlineUsers: ZelloChannelUser[]
+  ) {
+    super(name, isMuted, connectionStatus, usersOnline, options);
+    this.displayName = displayName;
+    this.users = users;
+    this.onlineUsers = onlineUsers;
+  }
+}
+
+/**
  * The connection status of a {@link ZelloChannel}.
  */
 export enum ZelloChannelConnectionStatus {
@@ -882,8 +918,16 @@ export class ZelloConsoleSettings {
    * Allow non-dispatchers to end calls. When this is false, you should not show any UI to allow non-dispatchers to end calls.
    */
   public readonly allowNonDispatchersToEndCalls: boolean;
+  /**
+   * Allow group conversations. When this is false, you should not show any UI to allow users to create group conversations.
+   */
+  public readonly allowGroupConversations: boolean;
 
-  constructor(allowNonDispatchersToEndCalls: boolean) {
+  constructor(
+    allowNonDispatchersToEndCalls: boolean,
+    allowGroupConversations: boolean
+  ) {
     this.allowNonDispatchersToEndCalls = allowNonDispatchersToEndCalls;
+    this.allowGroupConversations = allowGroupConversations;
   }
 }

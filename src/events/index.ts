@@ -35,6 +35,7 @@ export enum ZelloEvent {
    * {@link sdk.Zello.users | Zello.users} and {@link sdk.Zello.channels | Zello.channels} will be updated.
    * @param {@link types.ZelloUser | ZelloUser[]} users The list of users.
    * @param {@link types.ZelloChannel | ZelloChannel[]} channels The list of channels.
+   * @param {@link types.ZelloGroupConversation | ZelloGroupConversation[]} groupConversations The list of group conversations.
    */
   CONTACT_LIST_UPDATED = 'onContactListUpdated',
   /**

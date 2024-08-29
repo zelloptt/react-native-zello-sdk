@@ -221,6 +221,7 @@ object ZelloAndroidSdkModuleHelper {
 	fun consoleSettingsToWritableMap(settings: ZelloConsoleSettings): WritableMap {
 		return Arguments.createMap().apply {
 			putBoolean("allowNonDispatchersToEndCalls", settings.allowNonDispatchersToEndCalls)
+			putBoolean("allowGroupConversations", settings.allowGroupConversations)
 		}
 	}
 

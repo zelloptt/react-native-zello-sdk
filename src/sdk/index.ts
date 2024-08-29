@@ -24,6 +24,7 @@ import {
   ZelloContactType,
   ZelloCredentials,
   ZelloDispatchChannel,
+  ZelloGroupConversation,
   ZelloHistoryImageMessage,
   ZelloHistoryMessage,
   ZelloHistoryVoiceMessage,
@@ -82,6 +83,10 @@ export class Zello extends EventEmitter {
    * The list of {@link ZelloChannel} in the contact list. Sorted by name, ascending.
    */
   public channels: ZelloChannel[] = [];
+  /**
+   * The list of {@link ZelloGroupConversation} in the contact list. Sorted by name, ascending.
+   */
+  public groupConversations: ZelloGroupConversation[] = [];
 
   /**
    * The current account status. undefined when {@link state} is not {@link ZelloConnectionState.Connected}.
@@ -145,9 +150,6 @@ export class Zello extends EventEmitter {
 
   /**
    * Sets configuration variables for the SDK.
-   *
-   * At the moment, this is only functional on Android.
-   *
    * @param config The configuration to set.
    */
   public configure(config: ZelloConfig) {
@@ -220,6 +222,12 @@ export class Zello extends EventEmitter {
    */
   public getChannel(name: string): ZelloChannel | undefined {
     return sortedArrayFind(this.channels, name, compareNameAscending);
+  }
+
+  public getGroupConversation(
+    name: string
+  ): ZelloGroupConversation | undefined {
+    return sortedArrayFind(this.groupConversations, name, compareNameAscending);
   }
 
   /**
@@ -598,13 +606,24 @@ export class Zello extends EventEmitter {
           );
           this.channels.sort(compareNameAscending);
 
+          this.groupConversations = event.groupConversations.map(
+            (groupConversation: any) =>
+              bridgeContactToSdkContact(groupConversation)
+          );
+          this.groupConversations.sort(compareNameAscending);
+
           if (event.emergencyChannel) {
             this.emergencyChannel = bridgeContactToSdkContact(
               event.emergencyChannel
             ) as ZelloChannel;
           }
 
-          this.emit(ZelloEvent.CONTACT_LIST_UPDATED, this.users, this.channels);
+          this.emit(
+            ZelloEvent.CONTACT_LIST_UPDATED,
+            this.users,
+            this.channels,
+            this.groupConversations
+          );
           break;
         }
         case 'onSelectedContactChanged': {
@@ -1093,6 +1112,7 @@ export class Zello extends EventEmitter {
   private clearContactList() {
     this.users = [];
     this.channels = [];
+    this.groupConversations = [];
   }
 
   private static getSdk() {
