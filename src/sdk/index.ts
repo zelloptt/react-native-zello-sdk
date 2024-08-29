@@ -224,6 +224,11 @@ export class Zello extends EventEmitter {
     return sortedArrayFind(this.channels, name, compareNameAscending);
   }
 
+  /**
+   * Returns the group conversation with the given name. Case-insensitive.
+   * @param name The name of the group conversation to search for.
+   * @return The group conversation with the given name, or null if no group conversation with that name exists.
+   */
   public getGroupConversation(
     name: string
   ): ZelloGroupConversation | undefined {
