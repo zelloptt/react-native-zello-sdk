@@ -43,4 +43,12 @@ RCT_EXTERN_METHOD(getHistoryImageData:(NSString *)historyId contactName:(NSStrin
 
 RCT_EXTERN_METHOD(endDispatchCall:(NSString *)channelName)
 
+RCT_EXTERN_METHOD(createGroupConversation:(NSArray *)usernames name:(NSString *)name)
+
+RCT_EXTERN_METHOD(addUsersToGroupConversation:(NSString *)conversationName usernames:(NSArray *)usernames)
+
+RCT_EXTERN_METHOD(leaveGroupConversation:(NSString *)conversationName)
+
+RCT_EXTERN_METHOD(renameGroupConversation:(NSString *)conversationName newName:(NSString *)newName)
+
 @end

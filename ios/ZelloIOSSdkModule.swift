@@ -204,6 +204,33 @@ import ZelloSDK
     }
     zello.end(call, on: dispatchChannel)
   }
+
+  @objc func createGroupConversation(_ usernames: [Any], name: String?) {
+      let users = usernames.compactMap { username in zello.user(named: username as? String ?? "") }
+      zello.createGroupConversation(users: users, name: name)
+  }
+
+  @objc func addUsersToGroupConversation(_ conversationName: String, usernames: [Any]) {
+    guard let conversation = zello.conversation(named: conversationName) else {
+      return
+    }
+    let users = usernames.compactMap { username in zello.user(named: username as? String ?? "") }
+    zello.addUsersToGroupConversation(conversation: conversation, users: users)
+  }
+
+  @objc func leaveGroupConversation(_ conversationName: String) {
+    guard let conversation = zello.conversation(named: conversationName) else {
+      return
+    }
+    zello.leaveGroupConversation(conversation: conversation)
+  }
+
+  @objc func renameGroupConversation(_ conversationName: String, newName: String) {
+    guard let conversation = zello.conversation(named: conversationName) else {
+      return
+    }
+    zello.renameGroupConversation(conversation: conversation, name: newName)
+  }
 }
 
 extension ZelloIOSSdkModule {
