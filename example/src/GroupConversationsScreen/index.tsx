@@ -37,6 +37,7 @@ import OutgoingTextDialog from '../shared/OutgoingTextDialog';
 import OutgoingAlertDialog from '../shared/OutgoingAlertDialog';
 import HistoryDialog from '../shared/HistoryDialog';
 import { isSameContact } from '@zelloptt/react-native-zello-sdk';
+import CreateGroupConversationDialog from './CreateGroupConversationDialog';
 
 interface GroupConversationViewProps {
   conversation: ZelloGroupConversation;
@@ -153,6 +154,10 @@ const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
     conversation: undefined as ZelloGroupConversation | undefined,
   });
   const [historyDialogVisible, setHistoryDialogVisible] = useState(false);
+  const [
+    createGroupConversationDialogVisible,
+    setCreateGroupConversationDialogVisible,
+  ] = useState(false);
 
   useNavigationOptions(
     navigation,
@@ -249,6 +254,23 @@ const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
       {historyDialogVisible && (
         <HistoryDialog onClose={() => setHistoryDialogVisible(false)} />
       )}
+      {createGroupConversationDialogVisible && (
+        <CreateGroupConversationDialog
+          users={sdk.users}
+          onCreate={(selectedUsers) => {
+            sdk.createGroupConversation(selectedUsers);
+          }}
+          onClose={() => setCreateGroupConversationDialogVisible(false)}
+        />
+      )}
+      <TouchableOpacity
+        style={styles.fab}
+        onPress={() => {
+          setCreateGroupConversationDialogVisible(true);
+        }}
+      >
+        <Text style={styles.fabIcon}>+</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -282,6 +304,22 @@ const styles = StyleSheet.create({
   },
   connectionSwitch: {
     marginHorizontal: 8,
+  },
+  fab: {
+    position: 'absolute',
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#3f51b5',
+    justifyContent: 'center',
+    alignItems: 'center',
+    bottom: 16,
+    right: 16,
+    elevation: 8,
+  },
+  fabIcon: {
+    fontSize: 24,
+    color: 'white',
   },
 });
 

@@ -189,6 +189,31 @@ class ZelloAndroidSdkModule @Inject constructor(
     zello.endDispatchCall(call, dispatchChannel)
   }
 
+  @ReactMethod
+  fun createGroupConversation(usernames: ReadableArray, name: String?) {
+    val users = usernames.toArrayList().mapNotNull { zello.getUser(it as String) }
+    zello.createGroupConversation(users, name)
+  }
+
+  @ReactMethod
+  fun addUsersToGroupConversation(conversationName: String, usernames: ReadableArray) {
+    val conversation = zello.getGroupConversation(conversationName) ?: return
+    val users = usernames.toArrayList().mapNotNull { zello.getUser(it as String) }
+    zello.addUsersToGroupConversation(conversation, users)
+  }
+
+  @ReactMethod
+  fun leaveGroupConversation(conversationName: String) {
+    val conversation = zello.getGroupConversation(conversationName) ?: return
+    zello.leaveGroupConversation(conversation)
+  }
+
+  @ReactMethod
+  fun renameGroupConversation(conversationName: String, newName: String) {
+    val conversation = zello.getGroupConversation(conversationName) ?: return
+    zello.renameGroupConversation(conversation, newName)
+  }
+
   override fun onStateChanged(sdk: Zello, state: ZelloState) {
   }
 

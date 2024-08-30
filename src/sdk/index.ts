@@ -572,7 +572,7 @@ export class Zello extends EventEmitter {
    * @param users The users to create the group conversation with.
    * @param name Optional; The name of the group conversation. The conversation can be renamed later by using {@link renameGroupConversation}.
    */
-  public createGroupConversation(users: ZelloUser[], name: string) {
+  public createGroupConversation(users: ZelloUser[], name?: string) {
     if (!this.consoleSettings?.allowGroupConversations) {
       return;
     }
