@@ -52,6 +52,55 @@ extension ZelloUser {
     if let url = profilePictureThumbnailURL?.absoluteString {
       body["profilePictureThumbnailUrl"] = url
     }
+    body["supportedFeatures"] = [
+      "groupConversations": supportedFeatures.groupConversations
+    ]
+    return body
+  }
+}
+
+extension ZelloGroupConversation {
+  var jsonDictionary: [AnyHashable: Any] {
+    var body: [AnyHashable: Any] = [
+      "name": name,
+      "isChannel": true,
+      "isMuted": isMuted,
+      "isConnected": status == .connected,
+      "isConnecting": status == .connecting,
+      "usersOnline": onlineUsers.count,
+      "options": [
+        "noDisconnect": false,
+        "hidePowerButton": false,
+        "listenOnly": false,
+        "allowAlerts": true,
+        "allowTextMessages": true,
+        "allowLocations": true
+      ],
+      "isGroupConversation": true,
+      "displayName": displayName,
+      "users": users.map { user in user.jsonDictionary },
+      "onlineUsers": onlineUsers.map { user in user.jsonDictionary }
+    ]
+    return body
+  }
+}
+
+extension ZelloGroupConversationUser {
+  var jsonDictionary: [AnyHashable: Any] {
+    var body: [AnyHashable: Any] = [
+      "name": name,
+      "displayName": displayName
+    ]
+    return body
+  }
+}
+
+extension ZelloChannel.User {
+  var jsonDictionary: [AnyHashable: Any] {
+    var body: [AnyHashable: Any] = [
+      "name": name,
+      "displayName": displayName
+    ]
     return body
   }
 }
