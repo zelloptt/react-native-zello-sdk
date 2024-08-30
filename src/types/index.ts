@@ -26,6 +26,8 @@ export type ZelloContact = {
 export enum ZelloContactType {
   User = 'user',
   Channel = 'channel',
+  DispatchChannel = 'dispatchChannel',
+  GroupConversation = 'groupConversation',
 }
 
 /**
@@ -166,6 +168,7 @@ export class ZelloDispatchChannel extends ZelloChannel {
     currentCall: ZelloDispatchCall | undefined
   ) {
     super(name, isMuted, connectionStatus, usersOnline, options);
+    this.type = ZelloContactType.DispatchChannel;
     this.currentCall = currentCall;
   }
 }
@@ -229,6 +232,7 @@ export class ZelloGroupConversation extends ZelloChannel {
     onlineUsers: ZelloChannelUser[]
   ) {
     super(name, isMuted, connectionStatus, usersOnline, options);
+    this.type = ZelloContactType.GroupConversation;
     this.displayName = displayName;
     this.users = users;
     this.onlineUsers = onlineUsers;
