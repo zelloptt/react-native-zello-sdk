@@ -352,5 +352,4 @@ extension ZelloIOSSdkModule: Zello.Delegate {
     ]
     sendSdkEvent(withName: "onGroupConversationUsersLeft", body: body)
   }
-
 }
