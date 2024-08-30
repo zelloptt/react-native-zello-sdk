@@ -9,20 +9,28 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Checkbox } from 'react-native-paper';
-import { ZelloUser } from '@zelloptt/react-native-zello-sdk';
+import {
+  ZelloUser,
+  ZelloGroupConversation,
+} from '@zelloptt/react-native-zello-sdk';
 
-interface CreateGroupConversationDialogProps {
+interface AddUsersToGroupConversationDialogProps {
   onClose: () => void;
-  onCreate: (selectedUsers: ZelloUser[]) => void;
-  users: ZelloUser[];
+  onAddUsers: (
+    conversation: ZelloGroupConversation,
+    selectedUsers: ZelloUser[]
+  ) => void;
+  groupConversation: ZelloGroupConversation;
+  availableUsers: ZelloUser[]; // List of all users to filter against
 }
 
-const CreateGroupConversationDialog: React.FC<
-  CreateGroupConversationDialogProps
-> = ({ onClose, onCreate, users }) => {
-  const filteredUsers = users.filter(
+const AddUsersToGroupConversationDialog: React.FC<
+  AddUsersToGroupConversationDialogProps
+> = ({ onClose, onAddUsers, groupConversation, availableUsers }) => {
+  const filteredUsers = availableUsers.filter(
     (user) => user.supportedFeatures.groupConversations
   );
+
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
 
   const toggleUserSelection = (userId: string) => {
@@ -33,13 +41,22 @@ const CreateGroupConversationDialog: React.FC<
     );
   };
 
-  const handleCreate = () => {
-    const selectedUsers = users.filter((user) =>
+  const handleAddUsers = () => {
+    const selectedUsers = filteredUsers.filter((user) =>
       selectedUserIds.includes(user.name)
     );
-    onCreate(selectedUsers);
+    onAddUsers(groupConversation, selectedUsers);
     onClose();
   };
+
+  // Filter available users to show only those not already in the conversation
+  const usersNotInConversation = filteredUsers.filter(
+    (user) =>
+      !groupConversation.users.some(
+        (channelUser) =>
+          channelUser.name.toLowerCase() === user.name.toLowerCase()
+      )
+  );
 
   return (
     <Modal
@@ -50,9 +67,9 @@ const CreateGroupConversationDialog: React.FC<
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Select Users</Text>
+          <Text style={styles.modalText}>Add Users to Conversation</Text>
           <FlatList
-            data={filteredUsers}
+            data={usersNotInConversation}
             keyExtractor={(item) => item.name}
             renderItem={({ item }) => (
               <TouchableOpacity
@@ -73,7 +90,7 @@ const CreateGroupConversationDialog: React.FC<
           />
           <View style={styles.buttonContainer}>
             <Button title="Close" onPress={onClose} />
-            <Button title="Create" onPress={handleCreate} />
+            <Button title="Add Users" onPress={handleAddUsers} />
           </View>
         </View>
       </View>
@@ -120,4 +137,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CreateGroupConversationDialog;
+export default AddUsersToGroupConversationDialog;

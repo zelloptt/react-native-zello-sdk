@@ -38,6 +38,8 @@ import OutgoingAlertDialog from '../shared/OutgoingAlertDialog';
 import HistoryDialog from '../shared/HistoryDialog';
 import { isSameContact } from '@zelloptt/react-native-zello-sdk';
 import CreateGroupConversationDialog from './CreateGroupConversationDialog';
+import AddUsersToGroupConversationDialog from './AddUsersToGroupConversationDialog';
+import RenameGroupConversationDialog from './RenameGroupConversationDialog';
 
 interface GroupConversationViewProps {
   conversation: ZelloGroupConversation;
@@ -45,6 +47,8 @@ interface GroupConversationViewProps {
   openSendTextDialog: (contact: ZelloGroupConversation) => void;
   openSendAlertDialog: (contact: ZelloGroupConversation) => void;
   openHistoryDialog: (contact: ZelloGroupConversation) => void;
+  openAddUsersDialog: (contact: ZelloGroupConversation) => void;
+  openRenameDialog: (contact: ZelloGroupConversation) => void;
 }
 
 const GroupConversationView = ({
@@ -53,6 +57,8 @@ const GroupConversationView = ({
   openSendTextDialog,
   openSendAlertDialog,
   openHistoryDialog,
+  openAddUsersDialog,
+  openRenameDialog,
 }: GroupConversationViewProps) => {
   const sdk = useContext(SdkContext);
   const incomingVoiceMessage = useContext(IncomingVoiceMessageContext);
@@ -108,9 +114,21 @@ const GroupConversationView = ({
       <View style={styles.trailingButtons}>
         <ContextMenuButton
           contact={conversation}
+          showAddUsersToGroupConversationOption={true}
+          showLeaveGroupConversationOption={true}
+          showRenameGroupConversationOption={true}
           onSendTextSelected={() => openSendTextDialog(conversation)}
           onSendAlertSelected={() => openSendAlertDialog(conversation)}
           onShowHistorySelected={() => openHistoryDialog(conversation)}
+          onAddUsersToGroupConversationSelected={() =>
+            openAddUsersDialog(conversation)
+          }
+          onRenameGroupConversationSelected={() =>
+            openRenameDialog(conversation)
+          }
+          onLeaveGroupConversationSelected={() =>
+            sdk.leaveGroupConversation(conversation)
+          }
         />
         <Switch
           value={isConnected}
@@ -158,6 +176,20 @@ const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
     createGroupConversationDialogVisible,
     setCreateGroupConversationDialogVisible,
   ] = useState(false);
+  const [
+    addUsersToGroupConversationDialogVisible,
+    setAddUsersToGroupConversationDialogVisible,
+  ] = useState({
+    visible: false,
+    conversation: undefined as ZelloGroupConversation | undefined,
+  });
+  const [
+    renameGroupConversationDialogVisible,
+    setRenameGroupConversationDialogVisible,
+  ] = useState({
+    visible: false,
+    conversation: undefined as ZelloGroupConversation | undefined,
+  });
 
   useNavigationOptions(
     navigation,
@@ -196,6 +228,18 @@ const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
                   setHistoryDialogVisible(true);
                 });
             }}
+            openAddUsersDialog={(contact: ZelloGroupConversation) =>
+              setAddUsersToGroupConversationDialogVisible({
+                visible: true,
+                conversation: contact,
+              })
+            }
+            openRenameDialog={(contact: ZelloGroupConversation) =>
+              setRenameGroupConversationDialogVisible({
+                visible: true,
+                conversation: contact,
+              })
+            }
           />
         )}
       />
@@ -263,6 +307,41 @@ const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
           onClose={() => setCreateGroupConversationDialogVisible(false)}
         />
       )}
+      {addUsersToGroupConversationDialogVisible.visible &&
+        addUsersToGroupConversationDialogVisible.conversation && (
+          <AddUsersToGroupConversationDialog
+            onClose={() =>
+              setAddUsersToGroupConversationDialogVisible({
+                visible: false,
+                conversation: undefined,
+              })
+            }
+            onAddUsers={(conversation, selectedUsers) => {
+              sdk.addUsersToGroupConversation(conversation, selectedUsers);
+            }}
+            groupConversation={
+              addUsersToGroupConversationDialogVisible.conversation
+            }
+            availableUsers={sdk.users}
+          />
+        )}
+      {renameGroupConversationDialogVisible.visible &&
+        renameGroupConversationDialogVisible.conversation && (
+          <RenameGroupConversationDialog
+            onClose={() =>
+              setRenameGroupConversationDialogVisible({
+                visible: false,
+                conversation: undefined,
+              })
+            }
+            onRename={(conversation, newName) => {
+              sdk.renameGroupConversation(conversation, newName);
+            }}
+            groupConversation={
+              renameGroupConversationDialogVisible.conversation
+            }
+          />
+        )}
       <TouchableOpacity
         style={styles.fab}
         onPress={() => {
