@@ -25,6 +25,9 @@ RCT_EXTERN_METHOD(sendAlert:(NSString *)name isChannel:(BOOL)isChannel text:(NSS
 RCT_EXTERN_METHOD(connectChannel:(NSString *)name)
 RCT_EXTERN_METHOD(disconnectChannel:(NSString *)name)
 
+RCT_EXTERN_METHOD(connectGroupConversation:(NSString *)name)
+RCT_EXTERN_METHOD(disconnectGroupConversation:(NSString *)name)
+
 RCT_EXTERN_METHOD(submitProblemReport)
 
 RCT_EXTERN_METHOD(muteContact:(NSString *)name isChannel:(BOOL)isChannel)

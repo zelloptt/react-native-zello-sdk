@@ -20,7 +20,10 @@ extension ZelloIOSSdkModule: Zello.Delegate {
   func zelloDidUpdateContactList(_ zello: Zello) {
     let users = zello.users.map { ZelloContact.user($0).jsonDictionary }
     let channels = zello.channels.map { ZelloContact.channel($0).jsonDictionary }
-    let groupConversations = zello.groupConversations.map { ZelloContact.conversation($0).jsonDictionary }
+    // TODO It's not clear the asZelloGroupConversation is necessary - without it, the ZelloContact.jsonDictionary impl is used
+    let groupConversations = zello.groupConversations.compactMap {
+      ZelloContact.conversation($0).asZelloGroupConversation()?.jsonDictionary
+    }
     var body: [AnyHashable: Any] = [
       "users": users,
       "channels": channels,

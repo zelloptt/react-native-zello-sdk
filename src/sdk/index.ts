@@ -273,7 +273,11 @@ export class Zello extends EventEmitter {
     if (isAndroid) {
       ZelloAndroidSdkModule.connectChannel(channel.name);
     } else {
-      ZelloIOSSdkModule.connectChannel(channel.name);
+      if (channel.type === ZelloContactType.GroupConversation) {
+        ZelloIOSSdkModule.connectGroupConversation(channel.name);
+      } else {
+        ZelloIOSSdkModule.connectChannel(channel.name);
+      }
     }
   }
 
@@ -287,7 +291,11 @@ export class Zello extends EventEmitter {
     if (isAndroid) {
       ZelloAndroidSdkModule.disconnectChannel(channel.name);
     } else {
-      ZelloIOSSdkModule.disconnectChannel(channel.name);
+      if (channel.type === ZelloContactType.GroupConversation) {
+        ZelloIOSSdkModule.disconnectGroupConversation(channel.name);
+      } else {
+        ZelloIOSSdkModule.disconnectChannel(channel.name);
+      }
     }
   }
 

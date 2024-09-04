@@ -118,6 +118,20 @@ import ZelloSDK
     zello.disconnectChannel(channel: channel)
   }
 
+  @objc func connectGroupConversation(_ name: String) {
+    guard let conversation = zello.conversation(named: name) else {
+      return
+    }
+    zello.connectConversation(conversation: conversation)
+  }
+
+  @objc func disconnectGroupConversation(_ name: String) {
+    guard let conversation = zello.conversation(named: name) else {
+      return
+    }
+    zello.disconnectConversation(conversation: conversation)
+  }
+
   @objc func submitProblemReport() {
     zello.submitReport()
   }

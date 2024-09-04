@@ -61,7 +61,7 @@ extension ZelloUser {
 
 extension ZelloGroupConversation {
   var jsonDictionary: [AnyHashable: Any] {
-    var body: [AnyHashable: Any] = [
+    let body: [AnyHashable: Any] = [
       "name": name,
       "isChannel": true,
       "isMuted": isMuted,
@@ -87,7 +87,7 @@ extension ZelloGroupConversation {
 
 extension ZelloGroupConversationUser {
   var jsonDictionary: [AnyHashable: Any] {
-    var body: [AnyHashable: Any] = [
+    let body: [AnyHashable: Any] = [
       "name": name,
       "displayName": displayName
     ]
@@ -97,7 +97,7 @@ extension ZelloGroupConversationUser {
 
 extension ZelloChannel.User {
   var jsonDictionary: [AnyHashable: Any] {
-    var body: [AnyHashable: Any] = [
+    let body: [AnyHashable: Any] = [
       "name": name,
       "displayName": displayName
     ]
