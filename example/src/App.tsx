@@ -36,6 +36,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MenuProvider } from 'react-native-popup-menu';
 import RecentsScreen from './RecentsScreen';
 import Toast from 'react-native-toast-message';
+import { ZelloConsoleSettings } from 'react-native-zello-sdk';
 
 const Tab = createBottomTabNavigator();
 
@@ -100,6 +101,10 @@ export const HistoryVoiceMessageContext = createContext<
   ZelloHistoryVoiceMessage | undefined
 >(undefined);
 
+export const ConsoleSettingsContext = createContext<
+  ZelloConsoleSettings | undefined
+>(undefined);
+
 export default function App() {
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -142,6 +147,9 @@ export default function App() {
   >(undefined);
   const [historyVoiceMessage, setHistoryVoiceMessage] = useState<
     ZelloHistoryVoiceMessage | undefined
+  >(undefined);
+  const [consoleSettings, setConsoleSettings] = useState<
+    ZelloConsoleSettings | undefined
   >(undefined);
 
   const showToast = (text: string) => {
@@ -299,6 +307,9 @@ export default function App() {
     sdk.addListener(ZelloEvent.HISTORY_PLAYBACK_STOPPED, () => {
       setHistoryVoiceMessage(sdk.historyVoiceMessage);
     });
+    sdk.addListener(ZelloEvent.CONSOLE_SETTINGS_CHANGED, () => {
+      setConsoleSettings(sdk.consoleSettings);
+    });
 
     // Removes the listener once unmounted
     return () => {
@@ -397,49 +408,58 @@ export default function App() {
                                       <HistoryVoiceMessageContext.Provider
                                         value={historyVoiceMessage}
                                       >
-                                        <NavigationContainer>
-                                          <Tab.Navigator
-                                            screenOptions={({ route }) => ({
-                                              // eslint-disable-next-line react/no-unstable-nested-components
-                                              tabBarIcon: ({ color, size }) => {
-                                                let iconName;
-                                                if (route.name === 'Recents') {
-                                                  iconName = 'time-outline';
-                                                } else if (
-                                                  route.name === 'Users'
-                                                ) {
-                                                  iconName = 'person';
-                                                } else if (
-                                                  route.name === 'Channels'
-                                                ) {
-                                                  iconName = 'people';
-                                                }
-                                                return (
-                                                  <Ionicons
-                                                    name={iconName}
-                                                    size={size}
-                                                    color={color}
-                                                  />
-                                                );
-                                              },
-                                              tabBarActiveTintColor: 'tomato',
-                                              tabBarInactiveTintColor: 'gray',
-                                            })}
-                                          >
-                                            <Tab.Screen
-                                              name="Recents"
-                                              component={RecentsScreen}
-                                            />
-                                            <Tab.Screen
-                                              name="Users"
-                                              component={UsersScreen}
-                                            />
-                                            <Tab.Screen
-                                              name="Channels"
-                                              component={ChannelsScreen}
-                                            />
-                                          </Tab.Navigator>
-                                        </NavigationContainer>
+                                        <ConsoleSettingsContext.Provider
+                                          value={consoleSettings}
+                                        >
+                                          <NavigationContainer>
+                                            <Tab.Navigator
+                                              screenOptions={({ route }) => ({
+                                                // eslint-disable-next-line react/no-unstable-nested-components
+                                                tabBarIcon: ({
+                                                  color,
+                                                  size,
+                                                }) => {
+                                                  let iconName;
+                                                  if (
+                                                    route.name === 'Recents'
+                                                  ) {
+                                                    iconName = 'time-outline';
+                                                  } else if (
+                                                    route.name === 'Users'
+                                                  ) {
+                                                    iconName = 'person';
+                                                  } else if (
+                                                    route.name === 'Channels'
+                                                  ) {
+                                                    iconName = 'people';
+                                                  }
+                                                  return (
+                                                    <Ionicons
+                                                      name={iconName}
+                                                      size={size}
+                                                      color={color}
+                                                    />
+                                                  );
+                                                },
+                                                tabBarActiveTintColor: 'tomato',
+                                                tabBarInactiveTintColor: 'gray',
+                                              })}
+                                            >
+                                              <Tab.Screen
+                                                name="Recents"
+                                                component={RecentsScreen}
+                                              />
+                                              <Tab.Screen
+                                                name="Users"
+                                                component={UsersScreen}
+                                              />
+                                              <Tab.Screen
+                                                name="Channels"
+                                                component={ChannelsScreen}
+                                              />
+                                            </Tab.Navigator>
+                                          </NavigationContainer>
+                                        </ConsoleSettingsContext.Provider>
                                       </HistoryVoiceMessageContext.Provider>
                                     </HistoryContext.Provider>
                                   </RecentsContext.Provider>

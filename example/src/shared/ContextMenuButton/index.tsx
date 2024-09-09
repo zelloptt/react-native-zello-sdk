@@ -12,6 +12,10 @@ import { ZelloContact } from '@zelloptt/react-native-zello-sdk';
 
 interface ContextMenuButtonProps {
   contact: ZelloContact;
+  showSendImageOption?: boolean;
+  showSendLocationOption?: boolean;
+  showSendTextOption?: boolean;
+  showSendAlertOption?: boolean;
   showEmergencyOption?: boolean;
   showEndCallOption?: boolean;
   isInOutgoingEmergency?: boolean;
@@ -23,6 +27,10 @@ interface ContextMenuButtonProps {
 
 const ContextMenuButton = ({
   contact,
+  showSendImageOption = true,
+  showSendLocationOption = true,
+  showSendTextOption = true,
+  showSendAlertOption = true,
   showEmergencyOption = false,
   showEndCallOption = false,
   isInOutgoingEmergency = false,
@@ -40,27 +48,38 @@ const ContextMenuButton = ({
           <Icon size={24} source="dots-horizontal" />
         </MenuTrigger>
         <MenuOptions>
-          <MenuOption
-            onSelect={async () => {
-              const response = await fetch(
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Yellow_Happy.jpg/1200px-Yellow_Happy.jpg'
-              );
-              const arrayBuffer = await response.arrayBuffer();
-              sdk.sendImage(contact, Array.from(new Uint8Array(arrayBuffer)));
-            }}
-            text="Send Image"
-          />
-          <MenuOption
-            onSelect={() => {
-              sdk.sendLocation(contact);
-            }}
-            text="Send Location"
-          />
-          <MenuOption onSelect={() => onSendTextSelected()} text="Send Text" />
-          <MenuOption
-            onSelect={() => onSendAlertSelected()}
-            text="Send Alert"
-          />
+          {showSendImageOption && (
+            <MenuOption
+              onSelect={async () => {
+                const response = await fetch(
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Yellow_Happy.jpg/1200px-Yellow_Happy.jpg'
+                );
+                const arrayBuffer = await response.arrayBuffer();
+                sdk.sendImage(contact, Array.from(new Uint8Array(arrayBuffer)));
+              }}
+              text="Send Image"
+            />
+          )}
+          {showSendLocationOption && (
+            <MenuOption
+              onSelect={() => {
+                sdk.sendLocation(contact);
+              }}
+              text="Send Location"
+            />
+          )}
+          {showSendTextOption && (
+            <MenuOption
+              onSelect={() => onSendTextSelected()}
+              text="Send Text"
+            />
+          )}
+          {showSendAlertOption && (
+            <MenuOption
+              onSelect={() => onSendAlertSelected()}
+              text="Send Alert"
+            />
+          )}
           <MenuOption
             onSelect={() => {
               contact.isMuted
