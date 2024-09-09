@@ -2,7 +2,11 @@ import {
   ZelloChannel,
   ZelloChannelConnectionStatus,
   ZelloChannelUser,
+  ZelloConsoleSettings,
   ZelloContact,
+  ZelloDispatchCall,
+  ZelloDispatchCallStatus,
+  ZelloDispatchChannel,
   ZelloHistoryAlertMessage,
   ZelloHistoryImageMessage,
   ZelloHistoryLocationMessage,
@@ -28,17 +32,43 @@ export function bridgeContactToSdkContact(
   const contactName = eventContact.name;
   if (contactName) {
     if (eventContact.isChannel) {
-      contact = new ZelloChannel(
-        contactName,
-        eventContact.isMuted,
-        eventContact.isConnected
-          ? ZelloChannelConnectionStatus.Connected
-          : eventContact.isConnecting
-            ? ZelloChannelConnectionStatus.Connecting
-            : ZelloChannelConnectionStatus.Disconnected,
-        eventContact.usersOnline,
-        eventContact.options
-      );
+      const isMuted = eventContact.isMuted;
+      const connectionStatus = eventContact.isConnected
+        ? ZelloChannelConnectionStatus.Connected
+        : eventContact.isConnecting
+          ? ZelloChannelConnectionStatus.Connecting
+          : ZelloChannelConnectionStatus.Disconnected;
+      const usersOnline = eventContact.usersOnline;
+      const options = eventContact.options;
+      if (eventContact.isDispatchChannel) {
+        let call: ZelloDispatchCall | undefined;
+        if (eventContact.currentCall) {
+          const statusValue =
+            eventContact.currentCall.status.toLowerCase() as ZelloDispatchCallStatus;
+          if (Object.values(ZelloDispatchCallStatus).includes(statusValue)) {
+            call = new ZelloDispatchCall(
+              statusValue,
+              eventContact.currentCall.dispatcher
+            );
+          }
+        }
+        contact = new ZelloDispatchChannel(
+          contactName,
+          isMuted,
+          connectionStatus,
+          usersOnline,
+          options,
+          call
+        );
+      } else {
+        contact = new ZelloChannel(
+          contactName,
+          isMuted,
+          connectionStatus,
+          usersOnline,
+          options
+        );
+      }
     } else {
       const statusValue = eventContact.status.toLowerCase() as ZelloUserStatus;
       let userStatus = ZelloUserStatus.Offline;
@@ -142,4 +172,24 @@ export function bridgeHistoryMessageToSdkHistoryMessage(
     default:
       return undefined;
   }
+}
+
+export function bridgeCallToSdkCall(call: any): ZelloDispatchCall | undefined {
+  if (!call) {
+    return undefined;
+  }
+  const statusValue = call.status.toLowerCase() as ZelloDispatchCallStatus;
+  if (!Object.values(ZelloDispatchCallStatus).includes(statusValue)) {
+    return undefined;
+  }
+  return new ZelloDispatchCall(statusValue, call.dispatcher);
+}
+
+export function bridgeConsoleSettingsToSdkConsoleSettings(
+  settings: any
+): ZelloConsoleSettings | undefined {
+  if (!settings) {
+    return undefined;
+  }
+  return new ZelloConsoleSettings(settings.allowNonDispatchersToEndCalls);
 }

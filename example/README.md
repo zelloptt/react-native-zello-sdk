@@ -4,8 +4,11 @@
 
 ## Install Dependencies
 ```
+# Navigate to the project root
 cd ..
-yarn install
+npm install
+# OR using Yarn
+# yarn install
 cd example
 npm install
 ```
@@ -42,6 +45,10 @@ pod install
 # OR using npm
 npx pod-install
 ```
+
+You will need to change the Code Signing team to your own team. Additionally, you may need to setup your own App Groups + Keychain Sharing values.
+
+Please note that if you want the example app to work in the background, you will need to setup an APNS key, and email us at sdk@zello.com. Lastly, you'll need to modify the App Group value in [this file](https://github.com/zelloptt/react-native-zello-sdk/blob/develop/example/ios/NotificationServiceExtension/NotificationService.swift).
 
 ```bash
 # using npm

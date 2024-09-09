@@ -1,9 +1,15 @@
+// noinspection JSUnusedGlobalSymbols
+
 import {
   EmitterSubscription,
   NativeEventEmitter,
   NativeModules,
 } from 'react-native';
-import { isAndroid } from '../utils';
+import {
+  bridgeCallToSdkCall,
+  bridgeConsoleSettingsToSdkConsoleSettings,
+  isAndroid,
+} from '../utils';
 import {
   ZelloAccountStatus,
   ZelloAlertMessage,
@@ -13,9 +19,11 @@ import {
   ZelloConfig,
   ZelloConnectionError,
   ZelloConnectionState,
+  ZelloConsoleSettings,
   ZelloContact,
   ZelloContactType,
   ZelloCredentials,
+  ZelloDispatchChannel,
   ZelloHistoryImageMessage,
   ZelloHistoryMessage,
   ZelloHistoryVoiceMessage,
@@ -113,6 +121,12 @@ export class Zello extends EventEmitter {
    */
   public historyVoiceMessage: ZelloHistoryVoiceMessage | undefined;
 
+  /**
+   * The console settings for the network.
+   * This is only expected to be valid when {@link state} is {@link ZelloConnectionState.Connected}.
+   */
+  public consoleSettings: ZelloConsoleSettings | undefined;
+
   private eventListener: EmitterSubscription | undefined;
 
   private constructor() {
@@ -143,7 +157,7 @@ export class Zello extends EventEmitter {
         config.android.enableForegroundService
       );
     } else {
-      ZelloIOSSdkModule.configure(config.ios.isDebugBuild);
+      ZelloIOSSdkModule.configure(config.ios.isDebugBuild, config.ios.appGroup);
     }
   }
 
@@ -521,6 +535,22 @@ export class Zello extends EventEmitter {
         );
       }
     });
+  }
+
+  /**
+   * Ends the dispatch call for the given dispatch channel.
+   * This will trigger the {@link ZelloEvent.DISPATCH_CALL_ENDED} event.
+   *
+   * If {@link consoleSettings | ZelloConsoleSettings.allowNonDispatchersToEndCalls} is false, this method will do nothing.
+   *
+   * @param channel The dispatch channel to end the call for.
+   */
+  public endDispatchCall(channel: ZelloDispatchChannel) {
+    if (isAndroid) {
+      ZelloAndroidSdkModule.endDispatchCall(channel.name);
+    } else {
+      ZelloIOSSdkModule.endDispatchCall(channel.name);
+    }
   }
 
   private setupEventListener(eventEmitter: NativeEventEmitter) {
@@ -1018,10 +1048,49 @@ export class Zello extends EventEmitter {
           );
           break;
         }
+        case 'onConsoleSettingsChanged': {
+          this.consoleSettings =
+            bridgeConsoleSettingsToSdkConsoleSettings(event);
+          this.emit(ZelloEvent.CONSOLE_SETTINGS_CHANGED, this.consoleSettings);
+          break;
+        }
+        case 'onDispatchCallTransferred':
+        case 'onDispatchCallEnded':
+        case 'onDispatchCallActive':
+        case 'onDispatchCallPending': {
+          this.processDispatchCallEvent(event);
+          break;
+        }
         default:
           break;
       }
     });
+  }
+
+  private processDispatchCallEvent(event: any) {
+    const channel = bridgeContactToSdkContact(
+      event.channel
+    ) as ZelloDispatchChannel;
+    const call = bridgeCallToSdkCall(event.call);
+    if (!channel || !call) {
+      return;
+    }
+    switch (event.name) {
+      case 'onDispatchCallTransferred':
+        this.emit(ZelloEvent.DISPATCH_CALL_TRANSFERRED, channel, call);
+        break;
+      case 'onDispatchCallEnded':
+        this.emit(ZelloEvent.DISPATCH_CALL_ENDED, channel, call);
+        break;
+      case 'onDispatchCallActive':
+        this.emit(ZelloEvent.DISPATCH_CALL_ACTIVE, channel, call);
+        break;
+      case 'onDispatchCallPending':
+        this.emit(ZelloEvent.DISPATCH_CALL_PENDING, channel, call);
+        break;
+      default:
+        break;
+    }
   }
 
   private clearContactList() {

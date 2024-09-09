@@ -129,6 +129,57 @@ export class ZelloChannel implements ZelloContact {
 }
 
 /**
+ * A Zello dispatch channel. A dispatch channel is a special type of channel that has calls between a user and a dispatcher.
+ */
+export class ZelloDispatchChannel extends ZelloChannel {
+  /**
+   * The current call on the dispatch channel, if any.
+   */
+  public readonly currentCall: ZelloDispatchCall | undefined;
+
+  constructor(
+    name: string,
+    isMuted: boolean,
+    connectionStatus: ZelloChannelConnectionStatus,
+    usersOnline: number,
+    options: ZelloChannelOptions,
+    currentCall: ZelloDispatchCall | undefined
+  ) {
+    super(name, isMuted, connectionStatus, usersOnline, options);
+    this.currentCall = currentCall;
+  }
+}
+
+/**
+ * A Zello dispatch call. A dispatch call is a call between a user and a dispatcher.
+ */
+export class ZelloDispatchCall {
+  /**
+   * The status of the call.
+   */
+  public readonly status: ZelloDispatchCallStatus;
+  /**
+   * The name of the dispatcher who accepted the call. Null if the call is in the {@link ZelloDispatchCallStatus.Pending} state.
+   */
+  public readonly dispatcher: string | undefined;
+
+  constructor(status: ZelloDispatchCallStatus, dispatcher: string | undefined) {
+    this.status = status;
+    this.dispatcher = dispatcher;
+  }
+}
+
+/**
+ * The status of a {@link ZelloDispatchCall}.
+ */
+export enum ZelloDispatchCallStatus {
+  Pending = 'pending',
+  Active = 'active',
+  Ended = 'ended',
+  Disconnected = 'disconnected',
+}
+
+/**
  * The connection status of a {@link ZelloChannel}.
  */
 export enum ZelloChannelConnectionStatus {
@@ -814,5 +865,23 @@ export type ZelloConfig = {
      * Whether your application is being run in a debug or release build.
      */
     isDebugBuild: boolean;
+    /**
+     * The app group for shared data. This is required for the Notification Service Extension to work properly.
+     */
+    appGroup: string;
   };
 };
+
+/**
+ * Settings for the network. These are configured via the Zello Work Administrative Console.
+ */
+export class ZelloConsoleSettings {
+  /**
+   * Allow non-dispatchers to end calls. When this is false, you should not show any UI to allow non-dispatchers to end calls.
+   */
+  public readonly allowNonDispatchersToEndCalls: boolean;
+
+  constructor(allowNonDispatchersToEndCalls: boolean) {
+    this.allowNonDispatchersToEndCalls = allowNonDispatchersToEndCalls;
+  }
+}

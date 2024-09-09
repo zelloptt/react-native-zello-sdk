@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import "ZelloSdkExample-Swift.h"
 
 #import <React/RCTBundleURLProvider.h>
 
@@ -12,6 +13,10 @@
   self.initialProps = @{};
 
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+  [self registerForRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

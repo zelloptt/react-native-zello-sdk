@@ -102,6 +102,8 @@ repositories {
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
+def zelloSdkVersion = "0.4.0"
+
 dependencies {
   // For < 0.71, this will be from the local maven repo
   // For > 0.71, this will be replaced by `com.facebook.react:react-android:$version` by react gradle plugin
@@ -110,9 +112,9 @@ dependencies {
   implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
   // Required Dependencies to use the Zello SDK
-  api("com.zello:sdk:0.3.1")
-  api("com.zello:zello:0.3.1")
-  api("com.zello:core:0.3.1") {
+  api("com.zello:sdk:$zelloSdkVersion")
+  api("com.zello:zello:$zelloSdkVersion")
+  api("com.zello:core:$zelloSdkVersion") {
     exclude module: "unspecified"
   }
   implementation(platform("com.google.firebase:firebase-bom:33.1.2"))

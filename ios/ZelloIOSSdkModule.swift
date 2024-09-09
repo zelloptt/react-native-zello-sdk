@@ -12,8 +12,13 @@ import ZelloSDK
     zello.delegate = self
   }
 
-  @objc func configure(_ isDebugBuild: Bool) {
-    zello.configure(isDebugBuild: isDebugBuild)
+  @objc func configure(_ isDebugBuild: Bool, appGroup: String) {
+    var group: String? = appGroup
+    if appGroup.isEmpty {
+      group = nil
+    }
+    var configuration = ZelloConfiguration(appGroup: group)
+    configuration.pushNotificationEnvironment = isDebugBuild ? .development : .production
   }
 
   @objc func connect(_ network: String, username: String, password: String) {
@@ -188,6 +193,16 @@ import ZelloSDK
       return
     }
     callback([base64String])
+  }
+
+  @objc func endDispatchCall(_ channelName: String) {
+    guard 
+      let dispatchChannel = zello.channel(named: channelName),
+      let call = dispatchChannel.dispatchInfo?.currentCall
+    else {
+      return
+    }
+    zello.end(call, on: dispatchChannel)
   }
 }
 
