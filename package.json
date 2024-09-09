@@ -1,10 +1,11 @@
 {
   "name": "@zelloptt/react-native-zello-sdk",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Zello SDK for React Native",
   "source": "./src/index",
   "main": "./lib/commonjs/index.js",
   "module": "./lib/module/index.js",
+  "types": "./lib/typescript/module/src/index.d.ts",
   "exports": {
     ".": {
       "import": {
