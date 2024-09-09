@@ -1111,9 +1111,6 @@
 "@humanwhocodes/object-schema@^2.0.2":
   version "2.0.3"
 
-"@hutson/parse-repository-url@^3.0.0":
-  version "3.0.2"
-
 "@iarna/toml@2.2.5":
   version "2.2.5"
 
@@ -1811,14 +1808,6 @@
   dependencies:
     nanoid "^3.1.23"
 
-"@release-it/conventional-changelog@^5.0.0":
-  version "5.1.1"
-  dependencies:
-    concat-stream "^2.0.0"
-    conventional-changelog "^3.1.25"
-    conventional-recommended-bump "^6.1.0"
-    semver "7.3.8"
-
 "@rnx-kit/chromium-edge-launcher@^1.0.0":
   version "1.0.0"
   dependencies:
@@ -2087,7 +2076,7 @@
   version "1.2.0"
 
 "@zelloptt/react-native-zello-sdk@file:..":
-  version "0.3.2"
+  version "0.4.0"
   resolved "file:"
 
 abort-controller@^3.0.0:
@@ -2111,9 +2100,6 @@ acorn-walk@^8.1.1, acorn-walk@^8.2.0:
 
 "acorn@^6.0.0 || ^7.0.0 || ^8.0.0", acorn@^8.11.0, acorn@^8.4.1, acorn@^8.7.0, acorn@^8.8.2, acorn@^8.9.0:
   version "8.12.1"
-
-add-stream@^1.0.0:
-  version "1.0.0"
 
 agent-base@^7.0.2, agent-base@^7.1.0, agent-base@^7.1.1:
   version "7.1.1"
@@ -2781,14 +2767,6 @@ compression@^1.7.1:
 concat-map@0.0.1:
   version "0.0.1"
 
-concat-stream@^2.0.0:
-  version "2.0.0"
-  dependencies:
-    buffer-from "^1.0.0"
-    inherits "^2.0.3"
-    readable-stream "^3.0.2"
-    typedarray "^0.0.6"
-
 config-chain@^1.1.11:
   version "1.1.13"
   dependencies:
@@ -2812,129 +2790,15 @@ connect@^3.6.5:
     parseurl "~1.3.3"
     utils-merge "1.0.1"
 
-conventional-changelog-angular@^5.0.12:
-  version "5.0.13"
-  dependencies:
-    compare-func "^2.0.0"
-    q "^1.5.1"
-
 conventional-changelog-angular@^6.0.0:
   version "6.0.0"
   dependencies:
     compare-func "^2.0.0"
 
-conventional-changelog-atom@^2.0.8:
-  version "2.0.8"
-  dependencies:
-    q "^1.5.1"
-
-conventional-changelog-codemirror@^2.0.8:
-  version "2.0.8"
-  dependencies:
-    q "^1.5.1"
-
-conventional-changelog-conventionalcommits@^4.5.0:
-  version "4.6.3"
-  dependencies:
-    compare-func "^2.0.0"
-    lodash "^4.17.15"
-    q "^1.5.1"
-
 conventional-changelog-conventionalcommits@^6.1.0:
   version "6.1.0"
   dependencies:
     compare-func "^2.0.0"
-
-conventional-changelog-core@^4.2.1:
-  version "4.2.4"
-  dependencies:
-    add-stream "^1.0.0"
-    conventional-changelog-writer "^5.0.0"
-    conventional-commits-parser "^3.2.0"
-    dateformat "^3.0.0"
-    get-pkg-repo "^4.0.0"
-    git-raw-commits "^2.0.8"
-    git-remote-origin-url "^2.0.0"
-    git-semver-tags "^4.1.1"
-    lodash "^4.17.15"
-    normalize-package-data "^3.0.0"
-    q "^1.5.1"
-    read-pkg "^3.0.0"
-    read-pkg-up "^3.0.0"
-    through2 "^4.0.0"
-
-conventional-changelog-ember@^2.0.9:
-  version "2.0.9"
-  dependencies:
-    q "^1.5.1"
-
-conventional-changelog-eslint@^3.0.9:
-  version "3.0.9"
-  dependencies:
-    q "^1.5.1"
-
-conventional-changelog-express@^2.0.6:
-  version "2.0.6"
-  dependencies:
-    q "^1.5.1"
-
-conventional-changelog-jquery@^3.0.11:
-  version "3.0.11"
-  dependencies:
-    q "^1.5.1"
-
-conventional-changelog-jshint@^2.0.9:
-  version "2.0.9"
-  dependencies:
-    compare-func "^2.0.0"
-    q "^1.5.1"
-
-conventional-changelog-preset-loader@^2.3.4:
-  version "2.3.4"
-
-conventional-changelog-writer@^5.0.0:
-  version "5.0.1"
-  dependencies:
-    conventional-commits-filter "^2.0.7"
-    dateformat "^3.0.0"
-    handlebars "^4.7.7"
-    json-stringify-safe "^5.0.1"
-    lodash "^4.17.15"
-    meow "^8.0.0"
-    semver "^6.0.0"
-    split "^1.0.0"
-    through2 "^4.0.0"
-
-conventional-changelog@^3.1.25:
-  version "3.1.25"
-  dependencies:
-    conventional-changelog-angular "^5.0.12"
-    conventional-changelog-atom "^2.0.8"
-    conventional-changelog-codemirror "^2.0.8"
-    conventional-changelog-conventionalcommits "^4.5.0"
-    conventional-changelog-core "^4.2.1"
-    conventional-changelog-ember "^2.0.9"
-    conventional-changelog-eslint "^3.0.9"
-    conventional-changelog-express "^2.0.6"
-    conventional-changelog-jquery "^3.0.11"
-    conventional-changelog-jshint "^2.0.9"
-    conventional-changelog-preset-loader "^2.3.4"
-
-conventional-commits-filter@^2.0.7:
-  version "2.0.7"
-  dependencies:
-    lodash.ismatch "^4.4.0"
-    modify-values "^1.0.0"
-
-conventional-commits-parser@^3.2.0:
-  version "3.2.4"
-  dependencies:
-    is-text-path "^1.0.1"
-    JSONStream "^1.0.4"
-    lodash "^4.17.15"
-    meow "^8.0.0"
-    split2 "^3.0.0"
-    through2 "^4.0.0"
 
 conventional-commits-parser@^4.0.0:
   version "4.0.0"
@@ -2943,18 +2807,6 @@ conventional-commits-parser@^4.0.0:
     JSONStream "^1.3.5"
     meow "^8.1.2"
     split2 "^3.2.2"
-
-conventional-recommended-bump@^6.1.0:
-  version "6.1.0"
-  dependencies:
-    concat-stream "^2.0.0"
-    conventional-changelog-preset-loader "^2.3.4"
-    conventional-commits-filter "^2.0.7"
-    conventional-commits-parser "^3.2.0"
-    git-raw-commits "^2.0.8"
-    git-semver-tags "^4.1.1"
-    meow "^8.0.0"
-    q "^1.5.1"
 
 convert-source-map@^2.0.0:
   version "2.0.0"
@@ -3060,9 +2912,6 @@ data-view-byte-offset@^1.0.0:
     call-bind "^1.0.6"
     es-errors "^1.3.0"
     is-data-view "^1.0.1"
-
-dateformat@^3.0.0:
-  version "3.0.3"
 
 dayjs@^1.8.15:
   version "1.11.12"
@@ -3778,11 +3627,6 @@ find-cache-dir@^2.0.0:
     make-dir "^2.0.0"
     pkg-dir "^3.0.0"
 
-find-up@^2.0.0:
-  version "2.1.0"
-  dependencies:
-    locate-path "^2.0.0"
-
 find-up@^3.0.0:
   version "3.0.0"
   dependencies:
@@ -3902,14 +3746,6 @@ get-intrinsic@^1.1.3, get-intrinsic@^1.2.1, get-intrinsic@^1.2.3, get-intrinsic@
 get-package-type@^0.1.0:
   version "0.1.0"
 
-get-pkg-repo@^4.0.0:
-  version "4.2.1"
-  dependencies:
-    "@hutson/parse-repository-url" "^3.0.0"
-    hosted-git-info "^4.0.0"
-    through2 "^2.0.0"
-    yargs "^16.2.0"
-
 get-stream@^5.0.0:
   version "5.2.0"
   dependencies:
@@ -3933,7 +3769,7 @@ get-uri@^6.0.1:
     debug "^4.3.4"
     fs-extra "^11.2.0"
 
-git-raw-commits@^2.0.11, git-raw-commits@^2.0.8:
+git-raw-commits@^2.0.11:
   version "2.0.11"
   dependencies:
     dargs "^7.0.0"
@@ -3941,18 +3777,6 @@ git-raw-commits@^2.0.11, git-raw-commits@^2.0.8:
     meow "^8.0.0"
     split2 "^3.0.0"
     through2 "^4.0.0"
-
-git-remote-origin-url@^2.0.0:
-  version "2.0.0"
-  dependencies:
-    gitconfiglocal "^1.0.0"
-    pify "^2.3.0"
-
-git-semver-tags@^4.1.1:
-  version "4.1.1"
-  dependencies:
-    meow "^8.0.0"
-    semver "^6.0.0"
 
 git-up@^7.0.0:
   version "7.0.0"
@@ -3964,11 +3788,6 @@ git-url-parse@13.1.0:
   version "13.1.0"
   dependencies:
     git-up "^7.0.0"
-
-gitconfiglocal@^1.0.0:
-  version "1.0.0"
-  dependencies:
-    ini "^1.3.2"
 
 glob-parent@^5.1.2:
   version "5.1.2"
@@ -4079,7 +3898,7 @@ got@^12.1.0, got@12.6.1:
     p-cancelable "^3.0.0"
     responselike "^3.0.0"
 
-graceful-fs@^4.1.11, graceful-fs@^4.1.2, graceful-fs@^4.1.3, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.10, graceful-fs@^4.2.4, graceful-fs@^4.2.6, graceful-fs@^4.2.9:
+graceful-fs@^4.1.11, graceful-fs@^4.1.3, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.10, graceful-fs@^4.2.4, graceful-fs@^4.2.6, graceful-fs@^4.2.9:
   version "4.2.11"
 
 graceful-fs@4.2.10:
@@ -4087,16 +3906,6 @@ graceful-fs@4.2.10:
 
 graphemer@^1.4.0:
   version "1.4.0"
-
-handlebars@^4.7.7:
-  version "4.7.8"
-  dependencies:
-    minimist "^1.2.5"
-    neo-async "^2.6.2"
-    source-map "^0.6.1"
-    wordwrap "^1.0.0"
-  optionalDependencies:
-    uglify-js "^3.1.4"
 
 hard-rejection@^2.1.0:
   version "2.1.0"
@@ -4163,7 +3972,7 @@ hoist-non-react-statics@^3.3.0:
 hosted-git-info@^2.1.4:
   version "2.8.9"
 
-hosted-git-info@^4.0.0, hosted-git-info@^4.0.1:
+hosted-git-info@^4.0.1:
   version "4.1.0"
   dependencies:
     lru-cache "^6.0.0"
@@ -4270,7 +4079,7 @@ inflight@^1.0.4:
 inherits@^2.0.3, inherits@^2.0.4, inherits@~2.0.3, inherits@2, inherits@2.0.4:
   version "2.0.4"
 
-ini@^1.3.2, ini@^1.3.4, ini@~1.3.0:
+ini@^1.3.4, ini@~1.3.0:
   version "1.3.8"
 
 ini@2.0.0:
@@ -5058,9 +4867,6 @@ json-schema-traverse@^1.0.0:
 json-stable-stringify-without-jsonify@^1.0.1:
   version "1.0.1"
 
-json-stringify-safe@^5.0.1:
-  version "5.0.1"
-
 json5@^2.2.1, json5@^2.2.3:
   version "2.2.3"
 
@@ -5079,7 +4885,7 @@ jsonfile@^6.0.1:
 jsonparse@^1.2.0:
   version "1.3.1"
 
-JSONStream@^1.0.4, JSONStream@^1.3.5:
+JSONStream@^1.3.5:
   version "1.3.5"
   dependencies:
     jsonparse "^1.2.0"
@@ -5139,20 +4945,6 @@ lighthouse-logger@^1.0.0:
 lines-and-columns@^1.1.6:
   version "1.2.4"
 
-load-json-file@^4.0.0:
-  version "4.0.0"
-  dependencies:
-    graceful-fs "^4.1.2"
-    parse-json "^4.0.0"
-    pify "^3.0.0"
-    strip-bom "^3.0.0"
-
-locate-path@^2.0.0:
-  version "2.0.0"
-  dependencies:
-    p-locate "^2.0.0"
-    path-exists "^3.0.0"
-
 locate-path@^3.0.0:
   version "3.0.0"
   dependencies:
@@ -5183,9 +4975,6 @@ lodash.escaperegexp@^4.1.2:
 
 lodash.isfunction@^3.0.9:
   version "3.0.9"
-
-lodash.ismatch@^4.4.0:
-  version "4.4.0"
 
 lodash.isplainobject@^4.0.6:
   version "4.0.6"
@@ -5570,7 +5359,7 @@ minimist-options@4.1.0:
     is-plain-obj "^1.1.0"
     kind-of "^6.0.3"
 
-minimist@^1.2.0, minimist@^1.2.5, minimist@^1.2.6:
+minimist@^1.2.0, minimist@^1.2.6:
   version "1.2.8"
 
 minipass@^4.2.4:
@@ -5592,9 +5381,6 @@ mkdirp@^0.5.1:
 
 mkdirp@^1.0.4:
   version "1.0.4"
-
-modify-values@^1.0.0:
-  version "1.0.1"
 
 ms@2.0.0:
   version "2.0.0"
@@ -5620,7 +5406,7 @@ natural-compare@^1.4.0:
 negotiator@0.6.3:
   version "0.6.3"
 
-neo-async@^2.5.0, neo-async@^2.6.2:
+neo-async@^2.5.0:
   version "2.6.2"
 
 netmask@^2.0.2:
@@ -5668,14 +5454,6 @@ node-releases@^2.0.18:
 
 node-stream-zip@^1.9.1:
   version "1.15.0"
-
-normalize-package-data@^2.3.2:
-  version "2.5.0"
-  dependencies:
-    hosted-git-info "^2.1.4"
-    resolve "^1.10.0"
-    semver "2 || 3 || 4 || 5"
-    validate-npm-package-license "^3.0.1"
 
 normalize-package-data@^2.5.0:
   version "2.5.0"
@@ -5864,11 +5642,6 @@ os-tmpdir@~1.0.2:
 p-cancelable@^3.0.0:
   version "3.0.0"
 
-p-limit@^1.1.0:
-  version "1.3.0"
-  dependencies:
-    p-try "^1.0.0"
-
 p-limit@^2.0.0:
   version "2.3.0"
   dependencies:
@@ -5883,11 +5656,6 @@ p-limit@^3.0.2, p-limit@^3.1.0:
   version "3.1.0"
   dependencies:
     yocto-queue "^0.1.0"
-
-p-locate@^2.0.0:
-  version "2.0.0"
-  dependencies:
-    p-limit "^1.1.0"
 
 p-locate@^3.0.0:
   version "3.0.0"
@@ -5913,9 +5681,6 @@ p-map@^5.5.0:
   version "5.5.0"
   dependencies:
     aggregate-error "^4.0.0"
-
-p-try@^1.0.0:
-  version "1.0.0"
 
 p-try@^2.0.0:
   version "2.2.0"
@@ -6002,11 +5767,6 @@ path-scurry@^1.6.1:
     lru-cache "^10.2.0"
     minipass "^5.0.0 || ^6.0.2 || ^7.0.0"
 
-path-type@^3.0.0:
-  version "3.0.0"
-  dependencies:
-    pify "^3.0.0"
-
 path-type@^4.0.0:
   version "4.0.0"
 
@@ -6015,12 +5775,6 @@ picocolors@^1.0.0, picocolors@^1.0.1:
 
 picomatch@^2.0.4, picomatch@^2.2.3, picomatch@^2.3.1:
   version "2.3.1"
-
-pify@^2.3.0:
-  version "2.3.0"
-
-pify@^3.0.0:
-  version "3.0.0"
 
 pify@^4.0.1:
   version "4.0.1"
@@ -6154,9 +5908,6 @@ pupa@^3.1.0:
 
 pure-rand@^6.0.0:
   version "6.1.0"
-
-q@^1.5.1:
-  version "1.5.1"
 
 query-string@^7.1.3:
   version "7.1.3"
@@ -6361,12 +6112,6 @@ react@*, "react@^16.0.0 || ^17.0.0 || ^18.0.0", react@^18.2.0, react@>=16.3.0, r
   dependencies:
     loose-envify "^1.1.0"
 
-read-pkg-up@^3.0.0:
-  version "3.0.0"
-  dependencies:
-    find-up "^2.0.0"
-    read-pkg "^3.0.0"
-
 read-pkg-up@^7.0.1:
   version "7.0.1"
   dependencies:
@@ -6380,13 +6125,6 @@ read-pkg-up@^8.0.0:
     find-up "^5.0.0"
     read-pkg "^6.0.0"
     type-fest "^1.0.1"
-
-read-pkg@^3.0.0:
-  version "3.0.0"
-  dependencies:
-    load-json-file "^4.0.0"
-    normalize-package-data "^2.3.2"
-    path-type "^3.0.0"
 
 read-pkg@^5.2.0:
   version "5.2.0"
@@ -6410,7 +6148,7 @@ read-yaml-file@^2.1.0:
     js-yaml "^4.0.0"
     strip-bom "^4.0.0"
 
-readable-stream@^3.0.0, readable-stream@^3.0.2, readable-stream@^3.4.0, readable-stream@3:
+readable-stream@^3.0.0, readable-stream@^3.4.0, readable-stream@3:
   version "3.6.2"
   dependencies:
     inherits "^2.0.3"
@@ -6519,7 +6257,7 @@ regjsparser@^0.9.1:
   dependencies:
     jsesc "~0.5.0"
 
-release-it@^15.0.0, release-it@^15.4.1:
+release-it@^15.0.0:
   version "15.11.0"
   dependencies:
     "@iarna/toml" "2.2.5"
@@ -6700,9 +6438,6 @@ semver-diff@^4.0.0:
 semver@^5.6.0:
   version "5.7.2"
 
-semver@^6.0.0:
-  version "6.3.1"
-
 semver@^6.3.0:
   version "6.3.1"
 
@@ -6714,11 +6449,6 @@ semver@^7.3.4, semver@^7.3.5, semver@^7.3.7, semver@^7.5.2, semver@^7.5.3, semve
 
 "semver@2 || 3 || 4 || 5":
   version "5.7.2"
-
-semver@7.3.8:
-  version "7.3.8"
-  dependencies:
-    lru-cache "^6.0.0"
 
 semver@7.5.1:
   version "7.5.1"
@@ -6902,11 +6632,6 @@ spdx-license-ids@^3.0.0:
 split-on-first@^1.0.0:
   version "1.1.0"
 
-split@^1.0.0:
-  version "1.0.1"
-  dependencies:
-    through "2"
-
 split2@^3.0.0, split2@^3.2.2:
   version "3.2.2"
   dependencies:
@@ -7047,9 +6772,6 @@ strip-ansi@^7.0.1:
   dependencies:
     ansi-regex "^6.0.1"
 
-strip-bom@^3.0.0:
-  version "3.0.0"
-
 strip-bom@^4.0.0:
   version "4.0.0"
 
@@ -7143,14 +6865,8 @@ text-table@^0.2.0:
 throat@^5.0.0:
   version "5.0.0"
 
-through@^2.3.6, "through@>=2.2.7 <3", through@2:
+through@^2.3.6, "through@>=2.2.7 <3":
   version "2.3.8"
-
-through2@^2.0.0:
-  version "2.0.5"
-  dependencies:
-    readable-stream "~2.3.6"
-    xtend "~4.0.1"
 
 through2@^2.0.1:
   version "2.0.5"
@@ -7316,17 +7032,11 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typedarray@^0.0.6:
-  version "0.0.6"
-
 "typescript@^4.6.4 || ^5.2.2", typescript@^5.2.2, typescript@>=2.7, "typescript@>=2.8.0 || >= 3.2.0-dev || >= 3.3.0-dev || >= 3.4.0-dev || >= 3.5.0-dev || >= 3.6.0-dev || >= 3.6.0-beta || >= 3.7.0-dev || >= 3.7.0-beta", typescript@>=4, typescript@>=4.9.5:
   version "5.5.4"
 
 typescript@5.0.4:
   version "5.0.4"
-
-uglify-js@^3.1.4:
-  version "3.19.1"
 
 unbox-primitive@^1.0.2:
   version "1.0.2"
@@ -7546,9 +7256,6 @@ windows-release@^5.0.1:
 word-wrap@^1.2.5, word-wrap@~1.2.3:
   version "1.2.5"
 
-wordwrap@^1.0.0:
-  version "1.0.0"
-
 wrap-ansi@^6.0.1:
   version "6.2.0"
   dependencies:
@@ -7639,7 +7346,10 @@ yargs-parser@^18.1.2:
     camelcase "^5.0.0"
     decamelize "^1.2.0"
 
-yargs-parser@^20.2.2, yargs-parser@^20.2.3, yargs-parser@^20.2.9:
+yargs-parser@^20.2.2:
+  version "20.2.9"
+
+yargs-parser@^20.2.3, yargs-parser@^20.2.9:
   version "20.2.9"
 
 yargs-parser@^21.1.1:
@@ -7664,17 +7374,6 @@ yargs@^15.1.0:
     yargs-parser "^18.1.2"
 
 yargs@^16.1.1:
-  version "16.2.0"
-  dependencies:
-    cliui "^7.0.2"
-    escalade "^3.1.1"
-    get-caller-file "^2.0.5"
-    require-directory "^2.1.1"
-    string-width "^4.2.0"
-    y18n "^5.0.5"
-    yargs-parser "^20.2.2"
-
-yargs@^16.2.0:
   version "16.2.0"
   dependencies:
     cliui "^7.0.2"
