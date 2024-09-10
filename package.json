@@ -47,7 +47,7 @@
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "release": "release-it",
-    "docs": "npx typedoc --out src/docs --entryPointStrategy expand src --exclude \"src/docs/**/*\" --exclude \"src/utils/**/*\""
+    "docs": "npx typedoc --plugin typedoc-plugin-markdown --out src/docs --entryPointStrategy expand src --exclude \"src/docs/**/*\" --exclude \"src/utils/**/*\""
   },
   "keywords": [
     "react-native",
@@ -87,6 +87,8 @@
     "react-native-builder-bob": "^0.29.0",
     "release-it": "^15.0.0",
     "turbo": "^1.10.7",
+    "typedoc": "^0.26.7",
+    "typedoc-plugin-markdown": "^4.2.7",
     "typescript": "^5.2.2"
   },
   "resolutions": {
