@@ -1,4 +1,4 @@
-## react-native-zello-sdk
+# react-native-zello-sdk
 
 Zello SDK for React Native.
 
@@ -10,22 +10,22 @@ To see an example of the React Native SDK, check out [the example folder](https:
 
 The following instructions are for the SDK, not for the example app.
 
-### Prerequisites
+## Prerequisites
 A React Native application and environment.
 
 
-### Installation
+## Installation
 
 Install the package via NPM:
 ```sh
 npm install @zelloptt/react-native-zello-sdk
 ```
 
-#### iOS
+### iOS
 
 Before getting started, please reference the iOS Installation Guide.
 
-##### Troubleshooting
+#### Troubleshooting
 
 While setting up your Notification Service Extension, you may receive an error:
 
@@ -38,11 +38,11 @@ Cycle details:
 
 If you receive the above error, you should move the `Build Phases` phase named `Embed Foundation Extensions` to higher up in the order.
 
-#### Android
+### Android
 
 Before getting started, please reference the Android Installation Guide.
 
-##### Dependencies
+#### Dependencies
 
 Add the repositories to your app's `build.gradle`:
 
@@ -56,7 +56,7 @@ repositories {
 }
 ```
 
-##### Linking
+#### Linking
 
 Since the Zello Android SDK requires Hilt, and we must inject the `Zello` instance into the `ReactPackage`, the project does not work with autolinking.
 
@@ -118,11 +118,11 @@ class MainApplication : Application(), ReactApplication {
 }
 ```
 
-### Contributing
+## Contributing
 
 See the [contributing guide](https://github.com/zelloptt/react-native-zello-sdk/blob/master/CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
-### License
+## License
 
 MIT
 
