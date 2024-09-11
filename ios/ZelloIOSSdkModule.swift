@@ -108,28 +108,28 @@ import ZelloSDK
     guard let channel = zello.channel(named: name) else {
       return
     }
-    zello.connectChannel(channel: channel)
+    zello.connect(to: channel)
   }
 
   @objc func disconnectChannel(_ name: String) {
     guard let channel = zello.channel(named: name) else {
       return
     }
-    zello.disconnectChannel(channel: channel)
+    zello.disconnect(from: channel)
   }
 
   @objc func connectGroupConversation(_ name: String) {
     guard let conversation = zello.conversation(named: name) else {
       return
     }
-    zello.connectConversation(conversation: conversation)
+    zello.connect(to: conversation)
   }
 
   @objc func disconnectGroupConversation(_ name: String) {
     guard let conversation = zello.conversation(named: name) else {
       return
     }
-    zello.disconnectConversation(conversation: conversation)
+    zello.disconnect(from: conversation)
   }
 
   @objc func submitProblemReport() {
@@ -229,21 +229,21 @@ import ZelloSDK
       return
     }
     let users = usernames.compactMap { username in zello.user(named: username as? String ?? "") }
-    zello.addUsersToGroupConversation(conversation: conversation, users: users)
+    zello.add(users, to: conversation)
   }
 
   @objc func leaveGroupConversation(_ conversationName: String) {
     guard let conversation = zello.conversation(named: conversationName) else {
       return
     }
-    zello.leaveGroupConversation(conversation: conversation)
+    zello.leave(conversation)
   }
 
   @objc func renameGroupConversation(_ conversationName: String, newName: String) {
     guard let conversation = zello.conversation(named: conversationName) else {
       return
     }
-    zello.renameGroupConversation(conversation: conversation, name: newName)
+    zello.rename(conversation, to: newName)
   }
 }
 
