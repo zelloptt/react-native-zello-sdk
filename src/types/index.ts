@@ -26,6 +26,8 @@ export type ZelloContact = {
 export enum ZelloContactType {
   User = 'user',
   Channel = 'channel',
+  DispatchChannel = 'dispatchChannel',
+  GroupConversation = 'groupConversation',
 }
 
 /**
@@ -73,6 +75,10 @@ export class ZelloUser implements ZelloContact {
    * This can be used for displaying a smaller version of the profile picture (such as in a list).
    */
   public profilePictureThumbnailUrl: string | undefined;
+  /**
+   * The supported features of the user.
+   */
+  public supportedFeatures: ZelloUserSupportedFeatures;
 
   constructor(
     name: string,
@@ -80,7 +86,8 @@ export class ZelloUser implements ZelloContact {
     isMuted: boolean,
     status: ZelloUserStatus,
     profilePictureUrl: string | undefined,
-    profilePictureThumbnailUrl: string | undefined
+    profilePictureThumbnailUrl: string | undefined,
+    supportedFeatures: ZelloUserSupportedFeatures
   ) {
     this.name = name;
     this.type = ZelloContactType.User;
@@ -89,6 +96,21 @@ export class ZelloUser implements ZelloContact {
     this.status = status;
     this.profilePictureUrl = profilePictureUrl;
     this.profilePictureThumbnailUrl = profilePictureThumbnailUrl;
+    this.supportedFeatures = supportedFeatures;
+  }
+}
+
+/**
+ * The supported features of a {@link ZelloUser}.
+ */
+export class ZelloUserSupportedFeatures {
+  /**
+   * Whether the user supports group conversations.
+   */
+  public readonly groupConversations: boolean;
+
+  constructor(groupConversations: boolean) {
+    this.groupConversations = groupConversations;
   }
 }
 
@@ -146,6 +168,7 @@ export class ZelloDispatchChannel extends ZelloChannel {
     currentCall: ZelloDispatchCall | undefined
   ) {
     super(name, isMuted, connectionStatus, usersOnline, options);
+    this.type = ZelloContactType.DispatchChannel;
     this.currentCall = currentCall;
   }
 }
@@ -177,6 +200,43 @@ export enum ZelloDispatchCallStatus {
   Active = 'active',
   Ended = 'ended',
   Disconnected = 'disconnected',
+}
+
+/**
+ * A ad-hoc group conversation in Zello. A {@link ZelloGroupConversation} is a type of {@link ZelloChannel}, but the provisioning is done by the end user instead of through the Zello Work Administrative Console.
+ *
+ * {@link ZelloGroupConversation}s are only possible when {@link ZelloConsoleSettings.allowGroupConversations} is true.
+ */
+export class ZelloGroupConversation extends ZelloChannel {
+  /**
+   * The display name of the group conversation. This should be used in the UI instead of {@link ZelloChannel#name}, as the {@link ZelloChannel#name} will be a uniquely hashed value starting with c##.
+   */
+  public readonly displayName: string;
+  /**
+   * The users in the group conversation.
+   */
+  public readonly users: ZelloChannelUser[];
+  /**
+   * The users in the group conversation that are currently online.
+   */
+  public readonly onlineUsers: ZelloChannelUser[];
+
+  constructor(
+    name: string,
+    isMuted: boolean,
+    connectionStatus: ZelloChannelConnectionStatus,
+    usersOnline: number,
+    options: ZelloChannelOptions,
+    displayName: string,
+    users: ZelloChannelUser[],
+    onlineUsers: ZelloChannelUser[]
+  ) {
+    super(name, isMuted, connectionStatus, usersOnline, options);
+    this.type = ZelloContactType.GroupConversation;
+    this.displayName = displayName;
+    this.users = users;
+    this.onlineUsers = onlineUsers;
+  }
 }
 
 /**
@@ -225,13 +285,15 @@ export type ZelloChannelOptions = {
 };
 
 /**
- * A user in a {@link ZelloChannel}. A {@link ZelloChannelUser} may or may not not be part of your contact list.
+ * A user in a {@link ZelloChannel}. A {@link ZelloChannelUser} may or may not be part of your contact list.
  */
 export class ZelloChannelUser {
   public name: string;
+  public displayName: string;
 
-  constructor(name: string) {
+  constructor(name: string, displayName: string) {
     this.name = name;
+    this.displayName = displayName;
   }
 }
 
@@ -896,4 +958,8 @@ export type ZelloConsoleSettings = {
    * Allow text messages. When this is false, you should not show any UI to allow users to send text messages.
    */
   allowTextMessages: boolean;
+  /**
+   * Allow group conversations. When this is false, you should not show any UI to allow users to create group conversations.
+   */
+  allowGroupConversations: boolean;
 };

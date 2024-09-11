@@ -8,6 +8,7 @@ import {
   ZelloDispatchCall,
   ZelloDispatchCallStatus,
   ZelloDispatchChannel,
+  ZelloGroupConversation,
   ZelloHistoryAlertMessage,
   ZelloHistoryImageMessage,
   ZelloHistoryLocationMessage,
@@ -17,6 +18,7 @@ import {
   ZelloIncomingEmergency,
   ZelloUser,
   ZelloUserStatus,
+  ZelloUserSupportedFeatures,
 } from '../types';
 import { Platform } from 'react-native';
 
@@ -75,6 +77,21 @@ export function bridgeContactToSdkContact(
           options,
           call
         );
+      } else if (eventContact.isGroupConversation) {
+        contact = new ZelloGroupConversation(
+          contactName,
+          isMuted,
+          connectionStatus,
+          usersOnline,
+          options,
+          eventContact.displayName,
+          eventContact.users.map((user: any) =>
+            bridgeChannelUserToSdkChannelUser(user)
+          ),
+          eventContact.onlineUsers.map((user: any) =>
+            bridgeChannelUserToSdkChannelUser(user)
+          )
+        );
       } else {
         contact = new ZelloChannel(
           contactName,
@@ -96,7 +113,10 @@ export function bridgeContactToSdkContact(
         eventContact.isMuted,
         userStatus,
         eventContact.profilePictureUrl,
-        eventContact.profilePictureThumbnailUrl
+        eventContact.profilePictureThumbnailUrl,
+        new ZelloUserSupportedFeatures(
+          eventContact.supportedFeatures.groupConversations
+        )
       );
     }
   }
@@ -107,12 +127,13 @@ export function bridgeIncomingEmergencyToSdkIncomingEmergency(
   emergency: any
 ): ZelloIncomingEmergency | undefined {
   const channel = bridgeContactToSdkContact(emergency.channel) as ZelloChannel;
-  if (!channel) {
+  const channelUser = bridgeChannelUserToSdkChannelUser(emergency.channelUser);
+  if (!channel || !channelUser) {
     return undefined;
   }
   return new ZelloIncomingEmergency(
     channel,
-    new ZelloChannelUser(emergency.channelUserName),
+    channelUser,
     emergency.emergencyId,
     parseInt(emergency.startTimestamp, 10),
     parseInt(emergency.endTimestamp, 10)
@@ -130,9 +151,7 @@ export function bridgeHistoryMessageToSdkHistoryMessage(
     case 'voice':
       return new ZelloHistoryVoiceMessage(
         contact,
-        message.channelUserName
-          ? new ZelloChannelUser(message.channelUserName)
-          : undefined,
+        bridgeChannelUserToSdkChannelUser(message.channelUser),
         parseInt(message.timestamp, 10),
         message.historyId,
         message.incoming,
@@ -141,9 +160,7 @@ export function bridgeHistoryMessageToSdkHistoryMessage(
     case 'image':
       return new ZelloHistoryImageMessage(
         contact,
-        message.channelUserName
-          ? new ZelloChannelUser(message.channelUserName)
-          : undefined,
+        bridgeChannelUserToSdkChannelUser(message.channelUser),
         parseInt(message.timestamp, 10),
         message.historyId,
         message.incoming
@@ -151,9 +168,7 @@ export function bridgeHistoryMessageToSdkHistoryMessage(
     case 'location':
       return new ZelloHistoryLocationMessage(
         contact,
-        message.channelUserName
-          ? new ZelloChannelUser(message.channelUserName)
-          : undefined,
+        bridgeChannelUserToSdkChannelUser(message.channelUser),
         parseInt(message.timestamp, 10),
         message.historyId,
         message.incoming,
@@ -165,9 +180,7 @@ export function bridgeHistoryMessageToSdkHistoryMessage(
     case 'text':
       return new ZelloHistoryTextMessage(
         contact,
-        message.channelUserName
-          ? new ZelloChannelUser(message.channelUserName)
-          : undefined,
+        bridgeChannelUserToSdkChannelUser(message.channelUser),
         parseInt(message.timestamp, 10),
         message.historyId,
         message.incoming,
@@ -176,9 +189,7 @@ export function bridgeHistoryMessageToSdkHistoryMessage(
     case 'alert':
       return new ZelloHistoryAlertMessage(
         contact,
-        message.channelUserName
-          ? new ZelloChannelUser(message.channelUserName)
-          : undefined,
+        bridgeChannelUserToSdkChannelUser(message.channelUser),
         parseInt(message.timestamp, 10),
         message.historyId,
         message.incoming,
@@ -212,5 +223,18 @@ export function bridgeConsoleSettingsToSdkConsoleSettings(
     allowLocationMessages: settings.allowLocationMessages,
     allowTextMessages: settings.allowTextMessages,
     allowAlertMessages: settings.allowAlertMessages,
+    allowGroupConversations: settings.allowGroupConversations,
   };
+}
+
+export function bridgeChannelUserToSdkChannelUser(
+  channelUser: any
+): ZelloChannelUser | undefined {
+  if (!channelUser?.name) {
+    return undefined;
+  }
+  return new ZelloChannelUser(
+    channelUser.name,
+    channelUser.displayName ?? channelUser.name
+  );
 }

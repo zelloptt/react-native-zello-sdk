@@ -8,6 +8,7 @@ extension ZelloConsoleSettings {
       "allowLocationMessages": allowsLocationMessages,
       "allowTextMessages": allowsTextMessages,
       "allowAlertMessages": allowsAlertMessages,
+      "allowGroupConversations": allowsGroupConversations
     ]
   }
 }

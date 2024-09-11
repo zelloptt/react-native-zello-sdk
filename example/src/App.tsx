@@ -30,13 +30,15 @@ import Zello, {
   ZelloConnectionError,
   ZelloOutgoingVoiceMessageError,
   ZelloEvent,
+  ZelloGroupConversation,
+  ZelloConsoleSettings,
 } from '@zelloptt/react-native-zello-sdk';
 // @ts-ignore
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { MenuProvider } from 'react-native-popup-menu';
 import RecentsScreen from './RecentsScreen';
 import Toast from 'react-native-toast-message';
-import { ZelloConsoleSettings } from 'react-native-zello-sdk';
+import GroupConversationsScreen from './GroupConversationsScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,6 +50,9 @@ export const ConnectionContext = createContext({
 });
 export const UsersContext = createContext<ZelloUser[]>([]);
 export const ChannelsContext = createContext<ZelloChannel[]>([]);
+export const GroupConversationsContext = createContext<
+  ZelloGroupConversation[]
+>([]);
 export const SelectedContactContext = createContext<ZelloContact | undefined>(
   undefined
 );
@@ -110,6 +115,9 @@ export default function App() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [users, setUsers] = useState<ZelloUser[]>([]);
   const [channels, setChannels] = useState<ZelloChannel[]>([]);
+  const [groupConversations, setGroupConversations] = useState<
+    ZelloGroupConversation[]
+  >([]);
   const [selectedContact, setSelectedContact] = useState<
     ZelloContact | undefined
   >(undefined);
@@ -207,6 +215,7 @@ export default function App() {
     sdk.addListener(ZelloEvent.CONTACT_LIST_UPDATED, () => {
       setUsers(sdk.users);
       setChannels(sdk.channels);
+      setGroupConversations(sdk.groupConversations);
     });
     sdk.addListener(ZelloEvent.SELECTED_CONTACT_CHANGED, () => {
       setSelectedContact(sdk.selectedContact);
@@ -363,115 +372,130 @@ export default function App() {
           <ConnectionContext.Provider value={{ isConnected, isConnecting }}>
             <UsersContext.Provider value={users}>
               <ChannelsContext.Provider value={channels}>
-                <SelectedContactContext.Provider value={selectedContact}>
-                  <AccountStatusContext.Provider value={accountStatus}>
-                    <IncomingVoiceMessageContext.Provider
-                      value={incomingAudioMessage}
-                    >
-                      <OutgoingVoiceMessageContext.Provider
-                        value={outgoingAudioMessage}
+                <GroupConversationsContext.Provider value={groupConversations}>
+                  <SelectedContactContext.Provider value={selectedContact}>
+                    <AccountStatusContext.Provider value={accountStatus}>
+                      <IncomingVoiceMessageContext.Provider
+                        value={incomingAudioMessage}
                       >
-                        <LastIncomingImageMessageContext.Provider
-                          value={{
-                            message: lastIncomingImageMessage,
-                            clearMessage: clearLastIncomingImageMessage,
-                          }}
+                        <OutgoingVoiceMessageContext.Provider
+                          value={outgoingAudioMessage}
                         >
-                          <LastIncomingAlertMessageContext.Provider
+                          <LastIncomingImageMessageContext.Provider
                             value={{
-                              message: lastIncomingAlertMessage,
-                              clearMessage: clearLastIncomingAlertMessage,
+                              message: lastIncomingImageMessage,
+                              clearMessage: clearLastIncomingImageMessage,
                             }}
                           >
-                            <LastIncomingTextMessageContext.Provider
+                            <LastIncomingAlertMessageContext.Provider
                               value={{
-                                message: lastIncomingTextMessage,
-                                clearMessage: clearLastIncomingTextMessage,
+                                message: lastIncomingAlertMessage,
+                                clearMessage: clearLastIncomingAlertMessage,
                               }}
                             >
-                              <LastIncomingLocationMessageContext.Provider
+                              <LastIncomingTextMessageContext.Provider
                                 value={{
-                                  message: lastIncomingLocationMessage,
-                                  clearMessage:
-                                    clearLastIncomingLocationMessage,
+                                  message: lastIncomingTextMessage,
+                                  clearMessage: clearLastIncomingTextMessage,
                                 }}
                               >
-                                <EmergencyContext.Provider value={emergency}>
-                                  <RecentsContext.Provider value={recents}>
-                                    <HistoryContext.Provider
-                                      value={{
-                                        history: history,
-                                        clearHistory: clearHistory,
-                                        setHistory: addHistory,
-                                      }}
-                                    >
-                                      <HistoryVoiceMessageContext.Provider
-                                        value={historyVoiceMessage}
+                                <LastIncomingLocationMessageContext.Provider
+                                  value={{
+                                    message: lastIncomingLocationMessage,
+                                    clearMessage:
+                                      clearLastIncomingLocationMessage,
+                                  }}
+                                >
+                                  <EmergencyContext.Provider value={emergency}>
+                                    <RecentsContext.Provider value={recents}>
+                                      <HistoryContext.Provider
+                                        value={{
+                                          history: history,
+                                          clearHistory: clearHistory,
+                                          setHistory: addHistory,
+                                        }}
                                       >
-                                        <ConsoleSettingsContext.Provider
-                                          value={consoleSettings}
+                                        <HistoryVoiceMessageContext.Provider
+                                          value={historyVoiceMessage}
                                         >
-                                          <NavigationContainer>
-                                            <Tab.Navigator
-                                              screenOptions={({ route }) => ({
-                                                // eslint-disable-next-line react/no-unstable-nested-components
-                                                tabBarIcon: ({
-                                                  color,
-                                                  size,
-                                                }) => {
-                                                  let iconName;
-                                                  if (
-                                                    route.name === 'Recents'
-                                                  ) {
-                                                    iconName = 'time-outline';
-                                                  } else if (
-                                                    route.name === 'Users'
-                                                  ) {
-                                                    iconName = 'person';
-                                                  } else if (
-                                                    route.name === 'Channels'
-                                                  ) {
-                                                    iconName = 'people';
+                                          <ConsoleSettingsContext.Provider
+                                            value={consoleSettings}
+                                          >
+                                            <NavigationContainer>
+                                              <Tab.Navigator
+                                                screenOptions={({ route }) => ({
+                                                  // eslint-disable-next-line react/no-unstable-nested-components
+                                                  tabBarIcon: ({
+                                                    color,
+                                                    size,
+                                                  }) => {
+                                                    let iconName;
+                                                    if (
+                                                      route.name === 'Recents'
+                                                    ) {
+                                                      iconName = 'time-outline';
+                                                    } else if (
+                                                      route.name === 'Users'
+                                                    ) {
+                                                      iconName = 'person';
+                                                    } else if (
+                                                      route.name === 'Channels'
+                                                    ) {
+                                                      iconName = 'people';
+                                                    } else if (
+                                                      route.name ===
+                                                      'Group Conversations'
+                                                    ) {
+                                                      iconName = 'chatbubbles';
+                                                    }
+                                                    return (
+                                                      <Ionicons
+                                                        name={iconName}
+                                                        size={size}
+                                                        color={color}
+                                                      />
+                                                    );
+                                                  },
+                                                  tabBarActiveTintColor:
+                                                    'tomato',
+                                                  tabBarInactiveTintColor:
+                                                    'gray',
+                                                })}
+                                              >
+                                                <Tab.Screen
+                                                  name="Recents"
+                                                  component={RecentsScreen}
+                                                />
+                                                <Tab.Screen
+                                                  name="Users"
+                                                  component={UsersScreen}
+                                                />
+                                                <Tab.Screen
+                                                  name="Channels"
+                                                  component={ChannelsScreen}
+                                                />
+                                                <Tab.Screen
+                                                  name="Group Conversations"
+                                                  component={
+                                                    GroupConversationsScreen
                                                   }
-                                                  return (
-                                                    <Ionicons
-                                                      name={iconName}
-                                                      size={size}
-                                                      color={color}
-                                                    />
-                                                  );
-                                                },
-                                                tabBarActiveTintColor: 'tomato',
-                                                tabBarInactiveTintColor: 'gray',
-                                              })}
-                                            >
-                                              <Tab.Screen
-                                                name="Recents"
-                                                component={RecentsScreen}
-                                              />
-                                              <Tab.Screen
-                                                name="Users"
-                                                component={UsersScreen}
-                                              />
-                                              <Tab.Screen
-                                                name="Channels"
-                                                component={ChannelsScreen}
-                                              />
-                                            </Tab.Navigator>
-                                          </NavigationContainer>
-                                        </ConsoleSettingsContext.Provider>
-                                      </HistoryVoiceMessageContext.Provider>
-                                    </HistoryContext.Provider>
-                                  </RecentsContext.Provider>
-                                </EmergencyContext.Provider>
-                              </LastIncomingLocationMessageContext.Provider>
-                            </LastIncomingTextMessageContext.Provider>
-                          </LastIncomingAlertMessageContext.Provider>
-                        </LastIncomingImageMessageContext.Provider>
-                      </OutgoingVoiceMessageContext.Provider>
-                    </IncomingVoiceMessageContext.Provider>
-                  </AccountStatusContext.Provider>
-                </SelectedContactContext.Provider>
+                                                />
+                                              </Tab.Navigator>
+                                            </NavigationContainer>
+                                          </ConsoleSettingsContext.Provider>
+                                        </HistoryVoiceMessageContext.Provider>
+                                      </HistoryContext.Provider>
+                                    </RecentsContext.Provider>
+                                  </EmergencyContext.Provider>
+                                </LastIncomingLocationMessageContext.Provider>
+                              </LastIncomingTextMessageContext.Provider>
+                            </LastIncomingAlertMessageContext.Provider>
+                          </LastIncomingImageMessageContext.Provider>
+                        </OutgoingVoiceMessageContext.Provider>
+                      </IncomingVoiceMessageContext.Provider>
+                    </AccountStatusContext.Provider>
+                  </SelectedContactContext.Provider>
+                </GroupConversationsContext.Provider>
               </ChannelsContext.Provider>
             </UsersContext.Provider>
           </ConnectionContext.Provider>

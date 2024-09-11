@@ -20,9 +20,14 @@ extension ZelloIOSSdkModule: Zello.Delegate {
   func zelloDidUpdateContactList(_ zello: Zello) {
     let users = zello.users.map { ZelloContact.user($0).jsonDictionary }
     let channels = zello.channels.map { ZelloContact.channel($0).jsonDictionary }
+    // TODO It's not clear the asZelloGroupConversation is necessary - without it, the ZelloContact.jsonDictionary impl is used
+    let groupConversations = zello.groupConversations.compactMap {
+      ZelloContact.conversation($0).asZelloGroupConversation()?.jsonDictionary
+    }
     var body: [AnyHashable: Any] = [
       "users": users,
-      "channels": channels
+      "channels": channels,
+      "groupConversations": groupConversations
     ]
     if let emergencyChannel = zello.emergencyChannel {
       body["emergencyChannel"] = emergencyChannel.jsonDictionary
@@ -80,7 +85,7 @@ extension ZelloIOSSdkModule: Zello.Delegate {
       "timestamp": incomingVoiceMessage.timestamp.bridgeTimestamp
     ]
     if let channelUser = incomingVoiceMessage.channelUser {
-      body["channelUserName"] = channelUser.name
+      body["channelUser"] = channelUser.jsonDictionary
     }
     sendSdkEvent(withName: "onIncomingVoiceMessageStarted", body: body)
   }
@@ -91,7 +96,7 @@ extension ZelloIOSSdkModule: Zello.Delegate {
       "timestamp": incomingVoiceMessage.timestamp.bridgeTimestamp
     ]
     if let channelUser = incomingVoiceMessage.channelUser {
-      body["channelUserName"] = channelUser.name
+      body["channelUser"] = channelUser.jsonDictionary
     }
     sendSdkEvent(withName: "onIncomingVoiceMessageStopped", body: body)
   }
@@ -103,7 +108,7 @@ extension ZelloIOSSdkModule: Zello.Delegate {
       "timestamp": textMessage.timestamp.bridgeTimestamp
     ]
     if let channelUser = textMessage.channelUser {
-      body["channelUserName"] = channelUser.name
+      body["channelUser"] = channelUser.jsonDictionary
     }
     sendSdkEvent(withName: "onIncomingTextMessage", body: body)
   }
@@ -133,7 +138,7 @@ extension ZelloIOSSdkModule: Zello.Delegate {
     ]
 
     if let channelUser = imageMessage.channelUser {
-      body["channelUserName"] = channelUser.name
+      body["channelUser"] = channelUser.jsonDictionary
     }
 
     body["image"] = imageMessage.image.base64String
@@ -171,7 +176,7 @@ extension ZelloIOSSdkModule: Zello.Delegate {
       "accuracy": locationMessage.location.horizontalAccuracy,
     ]
     if let channelUser = locationMessage.channelUser {
-      body["channelUserName"] = channelUser.name
+      body["channelUser"] = channelUser.jsonDictionary
     }
     if let address = locationMessage.address {
       body["address"] = address
@@ -186,7 +191,7 @@ extension ZelloIOSSdkModule: Zello.Delegate {
       "timestamp": alertMessage.timestamp.bridgeTimestamp
     ]
     if let channelUser = alertMessage.channelUser {
-      body["channelUserName"] = channelUser.name
+      body["channelUser"] = channelUser.jsonDictionary
     }
     sendSdkEvent(withName: "onIncomingAlertMessage", body: body)
   }
@@ -317,5 +322,37 @@ extension ZelloIOSSdkModule: Zello.Delegate {
 
   func zello(_ zello: Zello, didUpdate consoleSettings: ZelloConsoleSettings) {
     sendSdkEvent(withName: "onConsoleSettingsChanged", body: consoleSettings.jsonDictionary)
+  }
+
+  func zello(_ zello: Zello, didJoin conversation: ZelloGroupConversation) {
+    sendSdkEvent(withName: "onGroupConversationInvite", body: ["conversation": conversation.jsonDictionary])
+  }
+
+  func zello(_ zello: Zello, didLeave conversation: ZelloGroupConversation) {
+    sendSdkEvent(withName: "onGroupConversationLeft", body: ["conversation": conversation.jsonDictionary])
+  }
+
+  func zello(_ zello: Zello, didCreate conversation: ZelloGroupConversation) {
+    sendSdkEvent(withName: "onGroupConversationCreated", body: ["conversation": conversation.jsonDictionary])
+  }
+
+  func zello(_ zello: Zello, didRename conversation: ZelloGroupConversation) {
+    sendSdkEvent(withName: "onGroupConversationRenamed", body: ["conversation": conversation.jsonDictionary])
+  }
+
+  func zello(_ zello: Zello, didAdd users: [ZelloGroupConversationUser], to conversation: ZelloGroupConversation) {
+    let body: [AnyHashable: Any] = [
+      "conversation": conversation.jsonDictionary,
+      "users": users.map { user in user.jsonDictionary }
+    ]
+    sendSdkEvent(withName: "onGroupConversationUsersAdded", body: body)
+  }
+
+  func zello(_ zello: Zello, didRemove users: [ZelloGroupConversationUser], from conversation: ZelloGroupConversation) {
+    let body: [AnyHashable: Any] = [
+      "conversation": conversation.jsonDictionary,
+      "users": users.map { user in user.jsonDictionary }
+    ]
+    sendSdkEvent(withName: "onGroupConversationUsersLeft", body: body)
   }
 }

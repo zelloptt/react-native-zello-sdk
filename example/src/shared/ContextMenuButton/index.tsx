@@ -18,11 +18,17 @@ interface ContextMenuButtonProps {
   showSendAlertOption?: boolean;
   showEmergencyOption?: boolean;
   showEndCallOption?: boolean;
+  showAddUsersToGroupConversationOption?: boolean;
+  showLeaveGroupConversationOption?: boolean;
+  showRenameGroupConversationOption?: boolean;
   isInOutgoingEmergency?: boolean;
   onSendTextSelected: () => void;
   onSendAlertSelected: () => void;
   onShowHistorySelected: () => void;
   onEndCallSelected?: () => void;
+  onAddUsersToGroupConversationSelected?: () => void;
+  onLeaveGroupConversationSelected?: () => void;
+  onRenameGroupConversationSelected?: () => void;
 }
 
 const ContextMenuButton = ({
@@ -33,11 +39,17 @@ const ContextMenuButton = ({
   showSendAlertOption = true,
   showEmergencyOption = false,
   showEndCallOption = false,
+  showAddUsersToGroupConversationOption,
+  showLeaveGroupConversationOption,
+  showRenameGroupConversationOption,
   isInOutgoingEmergency = false,
   onSendTextSelected,
   onSendAlertSelected,
   onShowHistorySelected,
   onEndCallSelected,
+  onAddUsersToGroupConversationSelected,
+  onLeaveGroupConversationSelected,
+  onRenameGroupConversationSelected,
 }: ContextMenuButtonProps) => {
   const sdk = useContext(SdkContext);
 
@@ -106,6 +118,30 @@ const ContextMenuButton = ({
             <MenuOption
               onSelect={() => onEndCallSelected?.()}
               text="End Call"
+            />
+          )}
+          {showAddUsersToGroupConversationOption && (
+            <MenuOption
+              onSelect={() => {
+                onAddUsersToGroupConversationSelected?.();
+              }}
+              text="Add Users to Group Conversation"
+            />
+          )}
+          {showLeaveGroupConversationOption && (
+            <MenuOption
+              onSelect={() => {
+                onLeaveGroupConversationSelected?.();
+              }}
+              text="Leave Group Conversation"
+            />
+          )}
+          {showRenameGroupConversationOption && (
+            <MenuOption
+              onSelect={() => {
+                onRenameGroupConversationSelected?.();
+              }}
+              text="Rename Group Conversation"
             />
           )}
           <MenuOption

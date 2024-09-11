@@ -25,6 +25,9 @@ RCT_EXTERN_METHOD(sendAlert:(NSString *)name isChannel:(BOOL)isChannel text:(NSS
 RCT_EXTERN_METHOD(connectChannel:(NSString *)name)
 RCT_EXTERN_METHOD(disconnectChannel:(NSString *)name)
 
+RCT_EXTERN_METHOD(connectGroupConversation:(NSString *)name)
+RCT_EXTERN_METHOD(disconnectGroupConversation:(NSString *)name)
+
 RCT_EXTERN_METHOD(submitProblemReport)
 
 RCT_EXTERN_METHOD(muteContact:(NSString *)name isChannel:(BOOL)isChannel)
@@ -42,5 +45,13 @@ RCT_EXTERN_METHOD(stopHistoryMessagePlayback)
 RCT_EXTERN_METHOD(getHistoryImageData:(NSString *)historyId contactName:(NSString *)contactName isChannel:(BOOL)isChannel callback:(RCTResponseSenderBlock)callback)
 
 RCT_EXTERN_METHOD(endDispatchCall:(NSString *)channelName)
+
+RCT_EXTERN_METHOD(createGroupConversation:(NSArray *)usernames displayName:(NSString *)displayName)
+
+RCT_EXTERN_METHOD(addUsersToGroupConversation:(NSString *)conversationName usernames:(NSArray *)usernames)
+
+RCT_EXTERN_METHOD(leaveGroupConversation:(NSString *)conversationName)
+
+RCT_EXTERN_METHOD(renameGroupConversation:(NSString *)conversationName newName:(NSString *)newName)
 
 @end
