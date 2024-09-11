@@ -207,6 +207,10 @@ object ZelloAndroidSdkModuleHelper {
 	fun consoleSettingsToWritableMap(settings: ZelloConsoleSettings): WritableMap {
 		return Arguments.createMap().apply {
 			putBoolean("allowNonDispatchersToEndCalls", settings.allowNonDispatchersToEndCalls)
+			putBoolean("allowTextMessages", settings.allowTextMessages)
+			putBoolean("allowImageMessages", settings.allowImageMessages)
+			putBoolean("allowLocationMessages", settings.allowLocationMessages)
+			putBoolean("allowAlertMessages", settings.allowAlertMessages)
 		}
 	}
 
