@@ -183,7 +183,7 @@ import ZelloSDK
   }
 
   @objc func playHistoryMessage(_ historyId: String, contactName: String, isChannel: Bool) {
-    guard 
+    guard
       let contact = isChannel ? zello.channel(named: contactName).map(ZelloContact.channel) : zello.user(named: contactName).map(ZelloContact.user),
       let message = zello.getHistoryMessage(historyId, contact: contact) as? ZelloHistoryVoiceMessage
     else {
@@ -210,7 +210,7 @@ import ZelloSDK
   }
 
   @objc func endDispatchCall(_ channelName: String) {
-    guard 
+    guard
       let dispatchChannel = zello.channel(named: channelName),
       let call = dispatchChannel.dispatchInfo?.currentCall
     else {
@@ -219,9 +219,9 @@ import ZelloSDK
     zello.end(call, on: dispatchChannel)
   }
 
-  @objc func createGroupConversation(_ usernames: [Any], name: String?) {
+  @objc func createGroupConversation(_ usernames: [Any], displayName: String?) {
       let users = usernames.compactMap { username in zello.user(named: username as? String ?? "") }
-      zello.createGroupConversation(users: users, name: name)
+      zello.createGroupConversation(users: users, displayName: displayName)
   }
 
   @objc func addUsersToGroupConversation(_ conversationName: String, usernames: [Any]) {

@@ -578,21 +578,21 @@ export class Zello extends EventEmitter {
    * Creates a new group conversation with the given users.
    * This will trigger the {@link ZelloEvent.GROUP_CONVERSATION_CREATED} and {@link ZelloEvent.CONTACT_LIST_UPDATED} events.
    * @param users The users to create the group conversation with.
-   * @param name Optional; The name of the group conversation. The conversation can be renamed later by using {@link renameGroupConversation}.
+   * @param displayName Optional; The display name of the group conversation. The conversation can be renamed later by using {@link renameGroupConversation}.
    */
-  public createGroupConversation(users: ZelloUser[], name?: string) {
+  public createGroupConversation(users: ZelloUser[], displayName?: string) {
     if (!this.consoleSettings?.allowGroupConversations) {
       return;
     }
     if (isAndroid) {
       ZelloAndroidSdkModule.createGroupConversation(
         users.map((user) => user.name),
-        name
+        displayName
       );
     } else {
       ZelloIOSSdkModule.createGroupConversation(
         users.map((user) => user.name),
-        name
+        displayName
       );
     }
   }

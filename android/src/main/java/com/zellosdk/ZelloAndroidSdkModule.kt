@@ -190,9 +190,9 @@ class ZelloAndroidSdkModule @Inject constructor(
   }
 
   @ReactMethod
-  fun createGroupConversation(usernames: ReadableArray, name: String?) {
+  fun createGroupConversation(usernames: ReadableArray, displayName: String?) {
     val users = usernames.toArrayList().mapNotNull { zello.getUser(it as String) }
-    zello.createGroupConversation(users, name)
+    zello.createGroupConversation(users, displayName)
   }
 
   @ReactMethod
