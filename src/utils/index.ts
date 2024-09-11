@@ -1,6 +1,7 @@
 import {
   ZelloChannel,
   ZelloChannelConnectionStatus,
+  ZelloChannelOptions,
   ZelloChannelUser,
   ZelloConsoleSettings,
   ZelloContact,
@@ -41,7 +42,21 @@ export function bridgeContactToSdkContact(
           ? ZelloChannelConnectionStatus.Connecting
           : ZelloChannelConnectionStatus.Disconnected;
       const usersOnline = eventContact.usersOnline;
-      const options = eventContact.options;
+      const eventOptions = eventContact.options;
+      let options: ZelloChannelOptions | undefined;
+      if (eventOptions) {
+        options = {
+          noDisconnect: eventOptions.noDisconnect,
+          hidePowerButton: eventOptions.hidePowerButton,
+          listenOnly: eventOptions.listenOnly,
+          allowAlertMessages: eventOptions.allowAlerts,
+          allowLocationMessages: eventOptions.allowLocations,
+          allowTextMessages: eventOptions.allowTextMessages,
+        };
+      }
+      if (!options) {
+        return undefined;
+      }
       if (eventContact.isDispatchChannel) {
         let call: ZelloDispatchCall | undefined;
         if (eventContact.currentCall) {
@@ -202,10 +217,14 @@ export function bridgeConsoleSettingsToSdkConsoleSettings(
   if (!settings) {
     return undefined;
   }
-  return new ZelloConsoleSettings(
-    settings.allowNonDispatchersToEndCalls,
-    settings.allowGroupConversations
-  );
+  return {
+    allowNonDispatchersToEndCalls: settings.allowNonDispatchersToEndCalls,
+    allowImageMessages: settings.allowImageMessages,
+    allowLocationMessages: settings.allowLocationMessages,
+    allowTextMessages: settings.allowTextMessages,
+    allowAlertMessages: settings.allowAlertMessages,
+    allowGroupConversations: settings.allowGroupConversations,
+  };
 }
 
 export function bridgeChannelUserToSdkChannelUser(

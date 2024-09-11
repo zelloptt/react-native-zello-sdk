@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import { useContext } from 'react';
 import {
+  ConsoleSettingsContext,
   HistoryContext,
   LastIncomingAlertMessageContext,
   LastIncomingImageMessageContext,
@@ -54,6 +55,8 @@ const UserView = ({
   openHistoryDialog,
 }: UserViewProps) => {
   const sdk = useContext(SdkContext);
+  const consoleSettings = useContext(ConsoleSettingsContext);
+
   const statusText = useCallback(() => {
     switch (user.status) {
       case ZelloUserStatus.Available:
@@ -87,6 +90,10 @@ const UserView = ({
       <View style={styles.trailingButtons}>
         <ContextMenuButton
           contact={user}
+          showSendTextOption={consoleSettings?.allowTextMessages}
+          showSendAlertOption={consoleSettings?.allowAlertMessages}
+          showSendImageOption={consoleSettings?.allowImageMessages}
+          showSendLocationOption={consoleSettings?.allowLocationMessages}
           onSendTextSelected={() => openSendTextDialog(user)}
           onSendAlertSelected={() => openSendAlertDialog(user)}
           onShowHistorySelected={() => openHistoryDialog(user)}

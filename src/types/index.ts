@@ -271,7 +271,7 @@ export type ZelloChannelOptions = {
    * Whether the user is allowed to send alert messages to the channel.
    * When this is true, you should not show any UI to allow the user to send alert messages to the channel.
    */
-  allowAlerts: boolean;
+  allowAlertMessages: boolean;
   /**
    * Whether the user is allowed to send text messages to the channel.
    * When this is true, you should not show any UI to allow the user to send text messages to the channel.
@@ -281,7 +281,7 @@ export type ZelloChannelOptions = {
    * Whether the user is allowed to send location messages to the channel.
    * When this is true, you should not show any UI to allow the user to send location messages to the channel.
    */
-  allowLocations: boolean;
+  allowLocationMessages: boolean;
 };
 
 /**
@@ -937,21 +937,29 @@ export type ZelloConfig = {
 /**
  * Settings for the network. These are configured via the Zello Work Administrative Console.
  */
-export class ZelloConsoleSettings {
+export type ZelloConsoleSettings = {
   /**
    * Allow non-dispatchers to end calls. When this is false, you should not show any UI to allow non-dispatchers to end calls.
    */
-  public readonly allowNonDispatchersToEndCalls: boolean;
+  allowNonDispatchersToEndCalls: boolean;
+  /**
+   * Allow image messages. When this is false, you should not show any UI to allow users to send image messages.
+   */
+  allowImageMessages: boolean;
+  /**
+   * Allow alert messages. When this is false, you should not show any UI to allow users to send alert messages.
+   */
+  allowAlertMessages: boolean;
+  /**
+   * Allow location messages. When this is false, you should not show any UI to allow users to send location messages.
+   */
+  allowLocationMessages: boolean;
+  /**
+   * Allow text messages. When this is false, you should not show any UI to allow users to send text messages.
+   */
+  allowTextMessages: boolean;
   /**
    * Allow group conversations. When this is false, you should not show any UI to allow users to create group conversations.
    */
-  public readonly allowGroupConversations: boolean;
-
-  constructor(
-    allowNonDispatchersToEndCalls: boolean,
-    allowGroupConversations: boolean
-  ) {
-    this.allowNonDispatchersToEndCalls = allowNonDispatchersToEndCalls;
-    this.allowGroupConversations = allowGroupConversations;
-  }
-}
+  allowGroupConversations: boolean;
+};

@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import {
   ChannelsContext,
+  ConsoleSettingsContext,
   EmergencyContext,
   HistoryContext,
   IncomingVoiceMessageContext,
@@ -57,6 +58,7 @@ const ChannelView = ({
   openHistoryDialog,
 }: ChannelViewProps) => {
   const sdk = useContext(SdkContext);
+  const consoleSettings = useContext(ConsoleSettingsContext);
   const incomingVoiceMessage = useContext(IncomingVoiceMessageContext);
   const emergency = useContext(EmergencyContext);
 
@@ -106,7 +108,6 @@ const ChannelView = ({
     if (!(channel instanceof ZelloDispatchChannel)) {
       return false;
     }
-    const consoleSettings = sdk.consoleSettings;
     if (!consoleSettings) {
       return false;
     }
@@ -114,7 +115,7 @@ const ChannelView = ({
       consoleSettings.allowNonDispatchersToEndCalls &&
       channel.currentCall?.status === ZelloDispatchCallStatus.Active
     );
-  }, [channel, sdk.consoleSettings]);
+  }, [channel, consoleSettings]);
 
   const endCall = useCallback(() => {
     if (!(channel instanceof ZelloDispatchChannel)) {
@@ -178,6 +179,19 @@ const ChannelView = ({
       <View style={styles.trailingButtons}>
         <ContextMenuButton
           contact={channel}
+          showSendImageOption={consoleSettings?.allowImageMessages}
+          showSendAlertOption={
+            consoleSettings?.allowAlertMessages &&
+            channel.options.allowAlertMessages
+          }
+          showSendTextOption={
+            consoleSettings?.allowTextMessages &&
+            channel.options.allowTextMessages
+          }
+          showSendLocationOption={
+            consoleSettings?.allowLocationMessages &&
+            channel.options.allowLocationMessages
+          }
           showEmergencyOption={isEmergencyChannel()}
           isInOutgoingEmergency={isOutgoingEmergency()}
           showEndCallOption={canEndCall()}
