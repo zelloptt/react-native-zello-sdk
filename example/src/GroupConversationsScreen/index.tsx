@@ -114,6 +114,10 @@ const GroupConversationView = ({
       <View style={styles.trailingButtons}>
         <ContextMenuButton
           contact={conversation}
+          showSendImageOption={isConnected}
+          showSendAlertOption={isConnected}
+          showSendTextOption={isConnected}
+          showSendLocationOption={isConnected}
           showAddUsersToGroupConversationOption={true}
           showLeaveGroupConversationOption={true}
           showRenameGroupConversationOption={true}

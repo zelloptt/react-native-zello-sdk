@@ -179,16 +179,21 @@ const ChannelView = ({
       <View style={styles.trailingButtons}>
         <ContextMenuButton
           contact={channel}
-          showSendImageOption={consoleSettings?.allowImageMessages}
+          showSendImageOption={
+            isConnected && consoleSettings?.allowImageMessages
+          }
           showSendAlertOption={
+            isConnected &&
             consoleSettings?.allowAlertMessages &&
             channel.options.allowAlertMessages
           }
           showSendTextOption={
+            isConnected &&
             consoleSettings?.allowTextMessages &&
             channel.options.allowTextMessages
           }
           showSendLocationOption={
+            isConnected &&
             consoleSettings?.allowLocationMessages &&
             channel.options.allowLocationMessages
           }
