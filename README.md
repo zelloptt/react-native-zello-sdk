@@ -120,7 +120,7 @@ class MainApplication : Application(), ReactApplication {
 
 ## Contributing
 
-See the [contributing guide](https://github.com/zelloptt/react-native-zello-sdk/blob/master/CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
+See the [contributing guide](CONTRIBUTING.md) to learn how to contribute to the repository and the development workflow.
 
 ## License
 
