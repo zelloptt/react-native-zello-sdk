@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import {
+  ConnectionContext,
   GroupConversationsContext,
   HistoryContext,
   IncomingVoiceMessageContext,
@@ -51,102 +52,108 @@ interface GroupConversationViewProps {
   openRenameDialog: (contact: ZelloGroupConversation) => void;
 }
 
-const GroupConversationView = ({
-  conversation,
-  isSelectedContact,
-  openSendTextDialog,
-  openSendAlertDialog,
-  openHistoryDialog,
-  openAddUsersDialog,
-  openRenameDialog,
-}: GroupConversationViewProps) => {
-  const sdk = useContext(SdkContext);
-  const incomingVoiceMessage = useContext(IncomingVoiceMessageContext);
+const GroupConversationView = React.memo(
+  ({
+    conversation,
+    isSelectedContact,
+    openSendTextDialog,
+    openSendAlertDialog,
+    openHistoryDialog,
+    openAddUsersDialog,
+    openRenameDialog,
+  }: GroupConversationViewProps) => {
+    const sdk = useContext(SdkContext);
+    const incomingVoiceMessage = useContext(IncomingVoiceMessageContext);
 
-  const onSwitchChange = useCallback(() => {
-    if (
-      conversation.connectionStatus === ZelloChannelConnectionStatus.Connected
-    ) {
-      sdk.disconnectChannel(conversation);
-    } else {
-      sdk.connectChannel(conversation);
-    }
-  }, [sdk, conversation]);
+    const onSwitchChange = useCallback(() => {
+      if (
+        conversation.connectionStatus === ZelloChannelConnectionStatus.Connected
+      ) {
+        sdk.disconnectChannel(conversation);
+      } else {
+        sdk.connectChannel(conversation);
+      }
+    }, [sdk, conversation]);
 
-  const isReceiving = useCallback(() => {
-    if (!incomingVoiceMessage) {
-      return false;
-    }
-    return isSameContact(incomingVoiceMessage?.contact, conversation);
-  }, [incomingVoiceMessage, conversation]);
+    const isReceiving = useCallback(() => {
+      return (
+        incomingVoiceMessage &&
+        isSameContact(incomingVoiceMessage?.contact, conversation)
+      );
+    }, [incomingVoiceMessage, conversation]);
 
-  const isConnected =
-    conversation.connectionStatus === ZelloChannelConnectionStatus.Connected;
+    const isConnected =
+      conversation.connectionStatus === ZelloChannelConnectionStatus.Connected;
 
-  return (
-    <TouchableOpacity
-      style={styles.conversationContainer}
-      onPress={() => sdk.setSelectedContact(conversation)}
-    >
-      <View style={styles.conversationNameContainer}>
-        <Text
-          style={[
-            styles.conversationName,
-            isSelectedContact && styles.selectedContact,
-          ]}
-          numberOfLines={2}
-          ellipsizeMode="tail"
-        >
-          {conversation.displayName}
-        </Text>
-        <Text>
-          {isConnected
-            ? 'Users Online: ' + conversation.usersOnline
-            : conversation.connectionStatus ===
-                ZelloChannelConnectionStatus.Connecting
-              ? 'Connecting'
-              : 'Disconnected'}
-        </Text>
-        {isReceiving() && (
-          <Text>{`Talking: ${incomingVoiceMessage?.channelUser?.displayName}`}</Text>
-        )}
-      </View>
-      <View style={styles.trailingButtons}>
-        <ContextMenuButton
-          contact={conversation}
-          showSendImageOption={isConnected}
-          showSendAlertOption={isConnected}
-          showSendTextOption={isConnected}
-          showSendLocationOption={isConnected}
-          showAddUsersToGroupConversationOption={true}
-          showLeaveGroupConversationOption={true}
-          showRenameGroupConversationOption={true}
-          onSendTextSelected={() => openSendTextDialog(conversation)}
-          onSendAlertSelected={() => openSendAlertDialog(conversation)}
-          onShowHistorySelected={() => openHistoryDialog(conversation)}
-          onAddUsersToGroupConversationSelected={() =>
-            openAddUsersDialog(conversation)
-          }
-          onRenameGroupConversationSelected={() =>
-            openRenameDialog(conversation)
-          }
-          onLeaveGroupConversationSelected={() =>
-            sdk.leaveGroupConversation(conversation)
-          }
-        />
-        <Switch
-          value={isConnected}
-          onValueChange={onSwitchChange}
-          style={styles.connectionSwitch}
-        />
-        <TalkButton contact={conversation} disabled={!isConnected} />
-      </View>
-    </TouchableOpacity>
-  );
-};
+    return (
+      <TouchableOpacity
+        style={styles.conversationContainer}
+        onPress={() => sdk.setSelectedContact(conversation)}
+      >
+        <View style={styles.conversationNameContainer}>
+          <Text
+            style={[
+              styles.conversationName,
+              isSelectedContact && styles.selectedContact,
+            ]}
+            numberOfLines={2}
+            ellipsizeMode="tail"
+          >
+            {conversation.displayName}
+          </Text>
+          <Text>
+            {isConnected
+              ? `Users Online: ${conversation.usersOnline}`
+              : conversation.connectionStatus ===
+                  ZelloChannelConnectionStatus.Connecting
+                ? 'Connecting'
+                : 'Disconnected'}
+          </Text>
+          {isReceiving() && (
+            <Text>{`Talking: ${incomingVoiceMessage?.channelUser?.displayName}`}</Text>
+          )}
+        </View>
+        <View style={styles.trailingButtons}>
+          <ContextMenuButton
+            contact={conversation}
+            showSendImageOption={isConnected}
+            showSendAlertOption={isConnected}
+            showSendTextOption={isConnected}
+            showSendLocationOption={isConnected}
+            showAddUsersToGroupConversationOption={true}
+            showLeaveGroupConversationOption={true}
+            showRenameGroupConversationOption={true}
+            onSendTextSelected={() => openSendTextDialog(conversation)}
+            onSendAlertSelected={() => openSendAlertDialog(conversation)}
+            onShowHistorySelected={() => openHistoryDialog(conversation)}
+            onAddUsersToGroupConversationSelected={() =>
+              openAddUsersDialog(conversation)
+            }
+            onRenameGroupConversationSelected={() =>
+              openRenameDialog(conversation)
+            }
+            onLeaveGroupConversationSelected={() =>
+              sdk.leaveGroupConversation(conversation)
+            }
+          />
+          <Switch
+            value={isConnected}
+            onValueChange={onSwitchChange}
+            style={styles.connectionSwitch}
+          />
+          <TalkButton contact={conversation} disabled={!isConnected} />
+        </View>
+      </TouchableOpacity>
+    );
+  },
+  (prevProps, nextProps) =>
+    prevProps.conversation === nextProps.conversation &&
+    prevProps.isSelectedContact === nextProps.isSelectedContact
+);
 
 const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
   const sdk = useContext(SdkContext);
+  const connection = useContext(ConnectionContext);
   const conversations = useContext(GroupConversationsContext);
   const selectedContact = useContext(SelectedContactContext);
   const { message: lastIncomingImageMessage } = useContext(
@@ -163,10 +170,8 @@ const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
   );
   const { setHistory } = useContext(HistoryContext);
 
-  const [isConnectDialogVisible, setIsConnectDialogVisible] =
-    React.useState(false);
-  const [isStatusDialogVisible, setIsStatusDialogVisible] =
-    React.useState(false);
+  const [isConnectDialogVisible, setIsConnectDialogVisible] = useState(false);
+  const [isStatusDialogVisible, setIsStatusDialogVisible] = useState(false);
   const [sendTextDialogVisible, setSendTextDialogVisible] = useState({
     visible: false,
     conversation: undefined as ZelloGroupConversation | undefined,
@@ -201,51 +206,53 @@ const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
     setIsStatusDialogVisible
   );
 
+  const renderItem = useCallback(
+    ({ item }: { item: ZelloGroupConversation }) => (
+      <GroupConversationView
+        conversation={item}
+        isSelectedContact={
+          selectedContact !== undefined && isSameContact(selectedContact, item)
+        }
+        openSendTextDialog={(contact: ZelloGroupConversation) =>
+          setSendTextDialogVisible({ visible: true, conversation: contact })
+        }
+        openSendAlertDialog={(contact: ZelloGroupConversation) =>
+          setSendAlertDialogVisible({ visible: true, conversation: contact })
+        }
+        openHistoryDialog={(contact: ZelloGroupConversation) => {
+          sdk.getHistory(contact).then((messages: ZelloHistoryMessage[]) => {
+            setHistory?.(contact, messages);
+            setHistoryDialogVisible(true);
+          });
+        }}
+        openAddUsersDialog={(contact: ZelloGroupConversation) =>
+          setAddUsersToGroupConversationDialogVisible({
+            visible: true,
+            conversation: contact,
+          })
+        }
+        openRenameDialog={(contact: ZelloGroupConversation) =>
+          setRenameGroupConversationDialogVisible({
+            visible: true,
+            conversation: contact,
+          })
+        }
+      />
+    ),
+    [selectedContact, sdk, setHistory]
+  );
+
+  const keyExtractor = useCallback(
+    (item: ZelloGroupConversation) => item.displayName,
+    []
+  );
+
   return (
     <View style={styles.container}>
       <FlatList
         data={conversations}
-        renderItem={({ item }) => (
-          <GroupConversationView
-            conversation={item}
-            isSelectedContact={
-              selectedContact !== undefined &&
-              isSameContact(selectedContact, item)
-            }
-            openSendTextDialog={(contact: ZelloGroupConversation) =>
-              setSendTextDialogVisible({
-                visible: true,
-                conversation: contact,
-              })
-            }
-            openSendAlertDialog={(contact: ZelloGroupConversation) =>
-              setSendAlertDialogVisible({
-                visible: true,
-                conversation: contact,
-              })
-            }
-            openHistoryDialog={(contact: ZelloGroupConversation) => {
-              sdk
-                .getHistory(contact)
-                .then((messages: ZelloHistoryMessage[]) => {
-                  setHistory?.(contact, messages);
-                  setHistoryDialogVisible(true);
-                });
-            }}
-            openAddUsersDialog={(contact: ZelloGroupConversation) =>
-              setAddUsersToGroupConversationDialogVisible({
-                visible: true,
-                conversation: contact,
-              })
-            }
-            openRenameDialog={(contact: ZelloGroupConversation) =>
-              setRenameGroupConversationDialogVisible({
-                visible: true,
-                conversation: contact,
-              })
-            }
-          />
-        )}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
       />
       {isConnectDialogVisible && (
         <ConnectModal
@@ -346,14 +353,16 @@ const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
             }
           />
         )}
-      <TouchableOpacity
-        style={styles.fab}
-        onPress={() => {
-          setCreateGroupConversationDialogVisible(true);
-        }}
-      >
-        <Text style={styles.fabIcon}>+</Text>
-      </TouchableOpacity>
+      {connection.isConnected && (
+        <TouchableOpacity
+          style={styles.fab}
+          onPress={() => {
+            setCreateGroupConversationDialogVisible(true);
+          }}
+        >
+          <Text style={styles.fabIcon}>+</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
