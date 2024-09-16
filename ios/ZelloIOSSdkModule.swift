@@ -220,8 +220,8 @@ import ZelloSDK
   }
 
   @objc func createGroupConversation(_ usernames: [Any], displayName: String?) {
-      let users = usernames.compactMap { username in zello.user(named: username as? String ?? "") }
-      zello.createGroupConversation(users: users, displayName: displayName)
+    let users = usernames.compactMap { username in zello.user(named: username as? String ?? "") }
+    zello.createGroupConversation(users: users, displayName: displayName)
   }
 
   @objc func addUsersToGroupConversation(_ conversationName: String, usernames: [Any]) {

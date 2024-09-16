@@ -124,7 +124,7 @@ const HistoryDialog = ({ onClose }: HistoryDialogProps) => {
   );
 
   return (
-    <Modal visible={true} transparent={true} onRequestClose={onClose}>
+    <Modal visible={true} transparent={true} onRequestClose={close}>
       <View style={styles.modalContainer}>
         <View style={styles.dialogContainer}>
           <FlatList
