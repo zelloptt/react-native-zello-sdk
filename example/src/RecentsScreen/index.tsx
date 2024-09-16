@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useContext } from 'react';
 import {
   LastIncomingAlertMessageContext,
   LastIncomingImageMessageContext,
@@ -29,33 +28,38 @@ import IncomingAlertDialog from '../shared/IncomingAlertDialog';
 import IncomingTextDialog from '../shared/IncomingTextDialog';
 import IncomingLocationDialog from '../shared/IncomingLocationDialog';
 
-interface UserViewProps {
+interface RecentViewProps {
   recent: ZelloRecentEntry;
 }
 
-const RecentView = ({ recent }: UserViewProps) => {
-  const title = useCallback(() => {
-    if (recent.channelUser) {
-      return `${recent.channelUser.name} : ${recent.contact.name}`;
-    }
-    return recent.contact.name;
-  }, [recent.contact, recent.channelUser]);
-  const timestamp = useCallback(() => {
-    return new Date(recent.timestamp).toLocaleString();
-  }, [recent.timestamp]);
-  return (
-    <TouchableOpacity style={styles.recentContainer}>
-      <Ionicons
-        name={recent.incoming ? 'arrow-down-outline' : 'arrow-up-outline'}
-      />
-      <View style={styles.recentTextContainer}>
-        <Text>{title()}</Text>
-        <Text>{recent.type}</Text>
-        <Text>{timestamp()}</Text>
-      </View>
-    </TouchableOpacity>
-  );
-};
+const RecentView = React.memo(
+  ({ recent }: RecentViewProps) => {
+    const title = useCallback(() => {
+      if (recent.channelUser) {
+        return `${recent.channelUser.name} : ${recent.contact.name}`;
+      }
+      return recent.contact.name;
+    }, [recent.contact, recent.channelUser]);
+
+    const timestamp = useCallback(() => {
+      return new Date(recent.timestamp).toLocaleString();
+    }, [recent.timestamp]);
+
+    return (
+      <TouchableOpacity style={styles.recentContainer}>
+        <Ionicons
+          name={recent.incoming ? 'arrow-down-outline' : 'arrow-up-outline'}
+        />
+        <View style={styles.recentTextContainer}>
+          <Text>{title()}</Text>
+          <Text>{recent.type}</Text>
+          <Text>{timestamp()}</Text>
+        </View>
+      </TouchableOpacity>
+    );
+  },
+  (prevProps, nextProps) => prevProps.recent === nextProps.recent
+);
 
 interface RecentsScreenProps {
   navigation: any;
@@ -86,12 +90,22 @@ const RecentsScreen = ({ navigation }: RecentsScreenProps) => {
     setIsStatusDialogVisible
   );
 
+  const renderItem = useCallback(
+    ({ item }: { item: ZelloRecentEntry }) => <RecentView recent={item} />,
+    []
+  );
+
+  const keyExtractor = useCallback(
+    (item: ZelloRecentEntry) => item.contact.name,
+    []
+  );
+
   return (
     <View style={styles.container}>
       <FlatList
         data={recents}
-        renderItem={({ item }) => <RecentView recent={item} />}
-        keyExtractor={(item) => item.contact.name}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
       />
       {isConnectDialogVisible && (
         <ConnectModal

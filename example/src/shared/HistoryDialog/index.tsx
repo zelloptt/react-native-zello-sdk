@@ -34,34 +34,40 @@ const HistoryItem = ({ item }: { item: ZelloHistoryMessage }) => {
     item.contact.name,
     item.channelUser?.displayName
   );
-  const timestamp = useCallback(() => {
-    return new Date(item.timestamp).toLocaleString();
-  }, [item.timestamp]);
+  const timestamp = useCallback(
+    () => new Date(item.timestamp).toLocaleString(),
+    [item.timestamp]
+  );
 
-  const [imageData, setImageData] = useState<string | undefined>(undefined);
-
-  useEffect(() => {
-    if (item instanceof ZelloHistoryImageMessage) {
-      sdk
-        .getImageDataForHistoryImageMessage(item)
-        .then((data: string | undefined) => {
-          setImageData(data);
-        });
-    }
-  }, [item, sdk]);
-
-  const onPress = useCallback(() => {
+  const renderMessageDetails = () => {
     if (item instanceof ZelloHistoryVoiceMessage) {
-      if (historyVoiceMessage) {
-        sdk.stopHistoryMessagePlayback();
-      } else {
-        sdk.playHistoryMessage(item);
-      }
+      return <Text style={styles.historyText}>{`${item.durationMs} ms`}</Text>;
+    }
+    if (item instanceof ZelloHistoryImageMessage) {
+      return <HistoryImage item={item} />;
+    }
+    if (
+      item instanceof ZelloHistoryAlertMessage ||
+      item instanceof ZelloHistoryTextMessage
+    ) {
+      return <Text style={styles.historyText}>{item.text}</Text>;
+    }
+    if (item instanceof ZelloHistoryLocationMessage) {
+      return <HistoryLocation item={item} />;
+    }
+    return null;
+  };
+
+  const handlePress = useCallback(() => {
+    if (item instanceof ZelloHistoryVoiceMessage) {
+      historyVoiceMessage
+        ? sdk.stopHistoryMessagePlayback()
+        : sdk.playHistoryMessage(item);
     }
   }, [item, historyVoiceMessage, sdk]);
 
   return (
-    <TouchableOpacity style={styles.historyItem} onPress={onPress}>
+    <TouchableOpacity style={styles.historyItem} onPress={handlePress}>
       <Ionicons
         name={item.incoming ? 'arrow-down-outline' : 'arrow-up-outline'}
         size={20}
@@ -71,30 +77,35 @@ const HistoryItem = ({ item }: { item: ZelloHistoryMessage }) => {
         <Text style={styles.historyText}>{title()}</Text>
         <Text style={styles.historyText}>{timestamp()}</Text>
         <Text style={styles.historyText}>{item.constructor.name}</Text>
-        {item instanceof ZelloHistoryVoiceMessage && (
-          <Text style={styles.historyText}>{`${item.durationMs} ms`}</Text>
-        )}
-        {item instanceof ZelloHistoryImageMessage && imageData && (
-          <Image source={{ uri: imageData }} style={styles.image} />
-        )}
-        {item instanceof ZelloHistoryAlertMessage && (
-          <Text style={styles.historyText}>{item.text}</Text>
-        )}
-        {item instanceof ZelloHistoryTextMessage && (
-          <Text style={styles.historyText}>{item.text}</Text>
-        )}
-        {item instanceof ZelloHistoryLocationMessage && (
-          <>
-            <Text style={styles.historyText}>{item.latitude}</Text>
-            <Text style={styles.historyText}>{item.longitude}</Text>
-            <Text style={styles.historyText}>{item.accuracy}</Text>
-            <Text style={styles.historyText}>{item.address}</Text>
-          </>
-        )}
+        {renderMessageDetails()}
       </View>
     </TouchableOpacity>
   );
 };
+
+const HistoryImage = ({ item }: { item: ZelloHistoryImageMessage }) => {
+  const sdk = useContext(SdkContext);
+  const [imageData, setImageData] = useState<string | undefined>(undefined);
+
+  useEffect(() => {
+    sdk
+      .getImageDataForHistoryImageMessage(item)
+      .then((data) => setImageData(data));
+  }, [item, sdk]);
+
+  return imageData ? (
+    <Image source={{ uri: imageData }} style={styles.image} />
+  ) : null;
+};
+
+const HistoryLocation = ({ item }: { item: ZelloHistoryLocationMessage }) => (
+  <>
+    <Text style={styles.historyText}>{item.latitude}</Text>
+    <Text style={styles.historyText}>{item.longitude}</Text>
+    <Text style={styles.historyText}>{item.accuracy}</Text>
+    <Text style={styles.historyText}>{item.address}</Text>
+  </>
+);
 
 export interface HistoryDialogProps {
   onClose: () => void;
@@ -113,7 +124,7 @@ const HistoryDialog = ({ onClose }: HistoryDialogProps) => {
   );
 
   return (
-    <Modal visible={true} transparent={true} onRequestClose={onClose}>
+    <Modal visible={true} transparent={true} onRequestClose={close}>
       <View style={styles.modalContainer}>
         <View style={styles.dialogContainer}>
           <FlatList

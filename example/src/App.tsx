@@ -1,8 +1,13 @@
-import * as React from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import UsersScreen from './UsersScreen';
-import { createContext, useCallback, useEffect, useState } from 'react';
 import { Platform } from 'react-native';
 import {
   PERMISSIONS,
@@ -153,6 +158,7 @@ export default function App() {
       }
     | undefined
   >(undefined);
+  const historyRef = useRef(history);
   const [historyVoiceMessage, setHistoryVoiceMessage] = useState<
     ZelloHistoryVoiceMessage | undefined
   >(undefined);
@@ -320,6 +326,13 @@ export default function App() {
       setConsoleSettings(sdk.consoleSettings);
     });
 
+    sdk.addListener(ZelloEvent.HISTORY_UPDATED, async () => {
+      if (historyRef.current) {
+        const messages = await sdk.getHistory(historyRef.current.contact);
+        setHistory({ contact: historyRef.current.contact, messages: messages });
+      }
+    });
+
     // Removes the listener once unmounted
     return () => {
       sdk.destroy();
@@ -327,12 +340,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    sdk.addListener(ZelloEvent.HISTORY_UPDATED, async () => {
-      if (history) {
-        const messages = await sdk.getHistory(history.contact);
-        setHistory({ contact: history.contact, messages: messages });
-      }
-    });
+    historyRef.current = history;
   }, [history]);
 
   const clearLastIncomingImageMessage = useCallback(() => {
