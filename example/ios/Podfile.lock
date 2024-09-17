@@ -963,7 +963,7 @@ PODS:
     - React-debug
   - react-native-safe-area-context (4.10.8):
     - React-Core
-  - react-native-zello-sdk (0.4.0):
+  - react-native-zello-sdk (1.0.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1531,7 +1531,7 @@ SPEC CHECKSUMS:
   React-logger: 257858bd55f3a4e1bc0cf07ddc8fb9faba6f8c7c
   React-Mapbuffer: dce508662b995ffefd29e278a16b78217039d43d
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
-  react-native-zello-sdk: ad029f4c63c2461f8ec78d3ef8bdc0142edc0a0f
+  react-native-zello-sdk: 476fc408067cef4bdafc2f79d58cad2252e1e65f
   React-nativeconfig: f326487bc61eba3f0e328da6efb2711533dcac46
   React-NativeModulesApple: d89733f5baed8b9249ca5a8e497d63c550097312
   React-perflogger: ed4e0c65781521e0424f2e5e40b40cc7879d737e
