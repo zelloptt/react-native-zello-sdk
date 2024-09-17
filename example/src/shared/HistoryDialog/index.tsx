@@ -27,9 +27,6 @@ import {
 } from '@zelloptt/react-native-zello-sdk';
 
 const HistoryItem = ({ item }: { item: ZelloHistoryMessage }) => {
-  const sdk = useContext(SdkContext);
-  const historyVoiceMessage = useContext(HistoryVoiceMessageContext);
-
   const title = useMessageTitle(
     item.contact.name,
     item.channelUser?.displayName
@@ -41,7 +38,7 @@ const HistoryItem = ({ item }: { item: ZelloHistoryMessage }) => {
 
   const renderMessageDetails = () => {
     if (item instanceof ZelloHistoryVoiceMessage) {
-      return <Text style={styles.historyText}>{`${item.durationMs} ms`}</Text>;
+      return <HistoryVoiceMessage item={item} />;
     }
     if (item instanceof ZelloHistoryImageMessage) {
       return <HistoryImage item={item} />;
@@ -58,16 +55,8 @@ const HistoryItem = ({ item }: { item: ZelloHistoryMessage }) => {
     return null;
   };
 
-  const handlePress = useCallback(() => {
-    if (item instanceof ZelloHistoryVoiceMessage) {
-      historyVoiceMessage
-        ? sdk.stopHistoryMessagePlayback()
-        : sdk.playHistoryMessage(item);
-    }
-  }, [item, historyVoiceMessage, sdk]);
-
   return (
-    <TouchableOpacity style={styles.historyItem} onPress={handlePress}>
+    <View style={styles.historyItem}>
       <Ionicons
         name={item.incoming ? 'arrow-down-outline' : 'arrow-up-outline'}
         size={20}
@@ -79,7 +68,33 @@ const HistoryItem = ({ item }: { item: ZelloHistoryMessage }) => {
         <Text style={styles.historyText}>{item.constructor.name}</Text>
         {renderMessageDetails()}
       </View>
-    </TouchableOpacity>
+    </View>
+  );
+};
+
+const HistoryVoiceMessage = ({ item }: { item: ZelloHistoryVoiceMessage }) => {
+  const sdk = useContext(SdkContext);
+  const historyVoiceMessage = useContext(HistoryVoiceMessageContext);
+
+  const handlePress = useCallback(() => {
+    if (historyVoiceMessage) {
+      sdk.stopHistoryMessagePlayback();
+    } else {
+      sdk.playHistoryMessage(item);
+    }
+  }, [historyVoiceMessage, item, sdk]);
+
+  return (
+    <View style={styles.voiceMessageContainer}>
+      <Text style={styles.historyText}>{`${item.durationMs} ms`}</Text>
+      <TouchableOpacity onPress={handlePress}>
+        <Ionicons
+          name={historyVoiceMessage ? 'stop-outline' : 'play-outline'}
+          size={24}
+          color="black"
+        />
+      </TouchableOpacity>
+    </View>
   );
 };
 
@@ -198,6 +213,10 @@ const styles = StyleSheet.create({
     height: 100,
     resizeMode: 'contain',
     marginTop: 10,
+  },
+  voiceMessageContainer: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
 });
 
