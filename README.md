@@ -115,6 +115,7 @@ class MainApplication : Application(), ReactApplication {
 
       override fun onCreate() {
         super.onCreate()
+        // Don't forget to start the SDK!
         zello.start()
       }
 }
