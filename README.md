@@ -44,7 +44,7 @@ Before getting started, please reference the Android Installation Guide.
 
 #### Dependencies
 
-Add the repositories to your app's `build.gradle`:
+You may or may not need to add the repositories to your app's `build.gradle`:
 
 ```
 repositories {
