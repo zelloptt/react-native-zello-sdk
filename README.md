@@ -8,7 +8,7 @@ This repository contains both the React Native Bridge, as well as an example app
 
 To see an example of the React Native SDK, check out [the example folder](https://github.com/zelloptt/react-native-zello-sdk/tree/master/example).
 
-The following instructions are for the SDK, not for the example app.
+The following instructions are for the installation of the SDK into your application - **not** for the example app.
 
 ## Prerequisites
 A React Native application and environment.
