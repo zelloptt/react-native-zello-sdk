@@ -13,6 +13,8 @@ The following instructions are for the installation of the SDK into your applica
 ## Prerequisites
 A React Native application and environment.
 
+A thorough understanding of Zello. The best place to get started is our [documentation](https://sdk.zello.com/).
+
 
 ## Installation
 
