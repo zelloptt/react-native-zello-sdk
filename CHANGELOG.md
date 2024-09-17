@@ -6,6 +6,9 @@
 
 * Added adhoc group conversations support [#3](https://github.com/zelloptt/react-native-zello-sdk/pull/3)
 * Add console settings for allowing different message types [#4](https://github.com/zelloptt/react-native-zello-sdk/pull/4)
+
+### Bug Fixes
+
 * Performance improvements for the example app [#6](https://github.com/zelloptt/react-native-zello-sdk/pull/6/files)
 
 # 0.4.0
