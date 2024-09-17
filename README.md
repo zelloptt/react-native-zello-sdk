@@ -8,10 +8,12 @@ This repository contains both the React Native Bridge, as well as an example app
 
 To see an example of the React Native SDK, check out [the example folder](https://github.com/zelloptt/react-native-zello-sdk/tree/master/example).
 
-The following instructions are for the SDK, not for the example app.
+The following instructions are for the installation of the SDK into your application - **not** for the example app.
 
 ## Prerequisites
 A React Native application and environment.
+
+A thorough understanding of Zello. The best place to get started is our [documentation](https://sdk.zello.com/).
 
 
 ## Installation
@@ -23,7 +25,9 @@ npm install @zelloptt/react-native-zello-sdk
 
 ### iOS
 
-Before getting started, please reference the iOS Installation Guide.
+Before getting started, please reference the [iOS Installation Guide](https://sdk.zello.com/installation-guides/ios-installation-guide).
+
+The main amendment to the guide is that there is no need to add the `ZelloSDK` as a pod directly to your project.
 
 #### Troubleshooting
 
@@ -40,7 +44,7 @@ If you receive the above error, you should move the `Build Phases` phase named `
 
 ### Android
 
-Before getting started, please reference the Android Installation Guide.
+Before getting started, please reference the [Android Installation Guide](https://sdk.zello.com/installation-guides/android-installation-guide).
 
 #### Dependencies
 
@@ -113,6 +117,7 @@ class MainApplication : Application(), ReactApplication {
 
       override fun onCreate() {
         super.onCreate()
+        // Don't forget to start the SDK!
         zello.start()
       }
 }

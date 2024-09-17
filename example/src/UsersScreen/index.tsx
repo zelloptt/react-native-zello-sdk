@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import React, { useCallback, useState, useContext } from 'react';
 import {
   FlatList,
   StyleSheet,
@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { useContext } from 'react';
 import {
+  ConsoleSettingsContext,
   HistoryContext,
   LastIncomingAlertMessageContext,
   LastIncomingImageMessageContext,
@@ -46,56 +46,71 @@ interface UserViewProps {
   openHistoryDialog: (contact: ZelloUser) => void;
 }
 
-const UserView = ({
-  user,
-  isSelectedContact,
-  openSendTextDialog,
-  openSendAlertDialog,
-  openHistoryDialog,
-}: UserViewProps) => {
-  const sdk = useContext(SdkContext);
-  const statusText = useCallback(() => {
-    switch (user.status) {
-      case ZelloUserStatus.Available:
-        return 'Available';
-      case ZelloUserStatus.Busy:
-        return 'Busy';
-      case ZelloUserStatus.Standby:
-        return 'Standby';
-      case ZelloUserStatus.Offline:
-        return 'Offline';
-    }
-  }, [user.status]);
-  return (
-    <TouchableOpacity
-      style={styles.userContainer}
-      onPress={() => sdk.setSelectedContact(user)}
-    >
-      {user.profilePictureThumbnailUrl && (
-        <ProfilePicture url={user.profilePictureThumbnailUrl} />
-      )}
-      <View style={styles.usernameContainer}>
-        <Text
-          style={[styles.username, isSelectedContact && styles.selectedContact]}
-          numberOfLines={2}
-          ellipsizeMode="tail"
-        >
-          {user.name}
-        </Text>
-        <Text>{statusText()}</Text>
-      </View>
-      <View style={styles.trailingButtons}>
-        <ContextMenuButton
-          contact={user}
-          onSendTextSelected={() => openSendTextDialog(user)}
-          onSendAlertSelected={() => openSendAlertDialog(user)}
-          onShowHistorySelected={() => openHistoryDialog(user)}
-        />
-        <TalkButton contact={user} disabled={false} />
-      </View>
-    </TouchableOpacity>
-  );
-};
+const UserView = React.memo(
+  ({
+    user,
+    isSelectedContact,
+    openSendTextDialog,
+    openSendAlertDialog,
+    openHistoryDialog,
+  }: UserViewProps) => {
+    const sdk = useContext(SdkContext);
+    const consoleSettings = useContext(ConsoleSettingsContext);
+
+    const statusText = useCallback(() => {
+      switch (user.status) {
+        case ZelloUserStatus.Available:
+          return 'Available';
+        case ZelloUserStatus.Busy:
+          return 'Busy';
+        case ZelloUserStatus.Standby:
+          return 'Standby';
+        case ZelloUserStatus.Offline:
+          return 'Offline';
+      }
+    }, [user.status]);
+
+    return (
+      <TouchableOpacity
+        style={styles.userContainer}
+        onPress={() => sdk.setSelectedContact(user)}
+      >
+        {user.profilePictureThumbnailUrl && (
+          <ProfilePicture url={user.profilePictureThumbnailUrl} />
+        )}
+        <View style={styles.usernameContainer}>
+          <Text
+            style={[
+              styles.username,
+              isSelectedContact && styles.selectedContact,
+            ]}
+            numberOfLines={2}
+            ellipsizeMode="tail"
+          >
+            {user.name}
+          </Text>
+          <Text>{statusText()}</Text>
+        </View>
+        <View style={styles.trailingButtons}>
+          <ContextMenuButton
+            contact={user}
+            showSendTextOption={consoleSettings?.allowTextMessages}
+            showSendAlertOption={consoleSettings?.allowAlertMessages}
+            showSendImageOption={consoleSettings?.allowImageMessages}
+            showSendLocationOption={consoleSettings?.allowLocationMessages}
+            onSendTextSelected={() => openSendTextDialog(user)}
+            onSendAlertSelected={() => openSendAlertDialog(user)}
+            onShowHistorySelected={() => openHistoryDialog(user)}
+          />
+          <TalkButton contact={user} disabled={false} />
+        </View>
+      </TouchableOpacity>
+    );
+  },
+  (prevProps, nextProps) =>
+    prevProps.user === nextProps.user &&
+    prevProps.isSelectedContact === nextProps.isSelectedContact
+);
 
 interface UsersScreenProps {
   navigation: any;
@@ -137,40 +152,44 @@ const UsersScreen = ({ navigation }: UsersScreenProps) => {
     setIsStatusDialogVisible
   );
 
+  const renderItem = useCallback(
+    ({ item }: { item: ZelloUser }) => (
+      <UserView
+        user={item}
+        isSelectedContact={
+          selectedContact !== undefined && isSameContact(selectedContact, item)
+        }
+        openSendTextDialog={(contact: ZelloUser) =>
+          setSendTextDialogVisible({
+            visible: true,
+            user: contact,
+          })
+        }
+        openSendAlertDialog={(contact: ZelloUser) =>
+          setSendAlertDialogVisible({
+            visible: true,
+            user: contact,
+          })
+        }
+        openHistoryDialog={(contact: ZelloUser) => {
+          sdk.getHistory(contact).then((messages: ZelloHistoryMessage[]) => {
+            setHistory?.(contact, messages);
+            setHistoryDialogVisible(true);
+          });
+        }}
+      />
+    ),
+    [selectedContact, sdk, setHistory]
+  );
+
+  const keyExtractor = useCallback((item: ZelloUser) => item.name, []);
+
   return (
     <View style={styles.container}>
       <FlatList
         data={users}
-        renderItem={({ item }) => (
-          <UserView
-            user={item}
-            isSelectedContact={
-              selectedContact !== undefined &&
-              isSameContact(selectedContact, item)
-            }
-            openSendTextDialog={(contact: ZelloUser) =>
-              setSendTextDialogVisible({
-                visible: true,
-                user: contact,
-              })
-            }
-            openSendAlertDialog={(contact: ZelloUser) =>
-              setSendAlertDialogVisible({
-                visible: true,
-                user: contact,
-              })
-            }
-            openHistoryDialog={(contact: ZelloUser) => {
-              sdk
-                .getHistory(contact)
-                .then((messages: ZelloHistoryMessage[]) => {
-                  setHistory?.(contact, messages);
-                  setHistoryDialogVisible(true);
-                });
-            }}
-          />
-        )}
-        keyExtractor={(item) => item.name}
+        renderItem={renderItem}
+        keyExtractor={keyExtractor}
       />
       {isConnectDialogVisible && (
         <ConnectModal

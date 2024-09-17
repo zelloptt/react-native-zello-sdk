@@ -984,7 +984,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-    - ZelloSDK (~> 0.4.0)
+    - ZelloSDK (~> 1.0.0)
   - React-nativeconfig (0.74.5)
   - React-NativeModulesApple (0.74.5):
     - glog
@@ -1266,16 +1266,18 @@ PODS:
   - SDWebImage (5.19.7):
     - SDWebImage/Core (= 5.19.7)
   - SDWebImage/Core (5.19.7)
+  - SnowplowTracker (6.0.8)
   - SocketRocket (0.7.0)
   - Yoga (0.0.0)
   - zello-opus-ios (1.0.1)
-  - ZelloSDK (0.4.0):
+  - ZelloSDK (1.0.0):
     - CocoaAsyncSocket (~> 7.6)
     - CocoaLumberjack/Swift (~> 3.7)
     - OpenSSL-Universal (~> 1.1)
     - PhoneNumberKit/PhoneNumberKitCore (~> 3.6)
     - PromisesSwift (~> 2.1)
     - SDWebImage (~> 5.13)
+    - SnowplowTracker (~> 6.0)
     - zello-opus-ios (~> 1.0)
 
 DEPENDENCIES:
@@ -1342,7 +1344,7 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
-  - ZelloSDK (~> 0.4.0)
+  - ZelloSDK (~> 1.0.0)
 
 SPEC REPOS:
   trunk:
@@ -1357,6 +1359,7 @@ SPEC REPOS:
     - PromisesObjC
     - PromisesSwift
     - SDWebImage
+    - SnowplowTracker
     - SocketRocket
     - zello-opus-ios
     - ZelloSDK
@@ -1528,7 +1531,7 @@ SPEC CHECKSUMS:
   React-logger: 257858bd55f3a4e1bc0cf07ddc8fb9faba6f8c7c
   React-Mapbuffer: dce508662b995ffefd29e278a16b78217039d43d
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
-  react-native-zello-sdk: 6de9ce7d6de6f12c07cb2619b2487816108e4e06
+  react-native-zello-sdk: ad029f4c63c2461f8ec78d3ef8bdc0142edc0a0f
   React-nativeconfig: f326487bc61eba3f0e328da6efb2711533dcac46
   React-NativeModulesApple: d89733f5baed8b9249ca5a8e497d63c550097312
   React-perflogger: ed4e0c65781521e0424f2e5e40b40cc7879d737e
@@ -1558,11 +1561,12 @@ SPEC CHECKSUMS:
   RNScreens: cfe03c0356f5d19e1f04e45b7e2ff6edd92fe6e1
   RNVectorIcons: 7ac7aaa83f8f3d4c7c0f7daea5a431e91a29b0cd
   SDWebImage: 8a6b7b160b4d710e2a22b6900e25301075c34cb3
+  SnowplowTracker: c7dcb63a584038ac3459bc803bfedec98cf87de9
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
   Yoga: 33622183a85805e12703cd618b2c16bfd18bfffb
   zello-opus-ios: 8c1f08799d7a147c86f21ec2a18f7b19f8c2ceed
-  ZelloSDK: 85bfe4d3f07077163ff0711b7fd24aa9b28789f9
+  ZelloSDK: 38bd1581f93072d521ee708064577fe009349f02
 
-PODFILE CHECKSUM: eee33d3934c126d0307e61774962e18a31b78728
+PODFILE CHECKSUM: 2420b2b2d35e8155b51cf07f8b3d872d94eba375
 
 COCOAPODS: 1.15.2

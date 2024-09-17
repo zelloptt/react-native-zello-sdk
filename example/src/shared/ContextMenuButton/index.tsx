@@ -12,24 +12,44 @@ import { ZelloContact } from '@zelloptt/react-native-zello-sdk';
 
 interface ContextMenuButtonProps {
   contact: ZelloContact;
+  showSendImageOption?: boolean;
+  showSendLocationOption?: boolean;
+  showSendTextOption?: boolean;
+  showSendAlertOption?: boolean;
   showEmergencyOption?: boolean;
   showEndCallOption?: boolean;
+  showAddUsersToGroupConversationOption?: boolean;
+  showLeaveGroupConversationOption?: boolean;
+  showRenameGroupConversationOption?: boolean;
   isInOutgoingEmergency?: boolean;
   onSendTextSelected: () => void;
   onSendAlertSelected: () => void;
   onShowHistorySelected: () => void;
   onEndCallSelected?: () => void;
+  onAddUsersToGroupConversationSelected?: () => void;
+  onLeaveGroupConversationSelected?: () => void;
+  onRenameGroupConversationSelected?: () => void;
 }
 
 const ContextMenuButton = ({
   contact,
+  showSendImageOption = true,
+  showSendLocationOption = true,
+  showSendTextOption = true,
+  showSendAlertOption = true,
   showEmergencyOption = false,
   showEndCallOption = false,
+  showAddUsersToGroupConversationOption,
+  showLeaveGroupConversationOption,
+  showRenameGroupConversationOption,
   isInOutgoingEmergency = false,
   onSendTextSelected,
   onSendAlertSelected,
   onShowHistorySelected,
   onEndCallSelected,
+  onAddUsersToGroupConversationSelected,
+  onLeaveGroupConversationSelected,
+  onRenameGroupConversationSelected,
 }: ContextMenuButtonProps) => {
   const sdk = useContext(SdkContext);
 
@@ -40,27 +60,38 @@ const ContextMenuButton = ({
           <Icon size={24} source="dots-horizontal" />
         </MenuTrigger>
         <MenuOptions>
-          <MenuOption
-            onSelect={async () => {
-              const response = await fetch(
-                'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Yellow_Happy.jpg/1200px-Yellow_Happy.jpg'
-              );
-              const arrayBuffer = await response.arrayBuffer();
-              sdk.sendImage(contact, Array.from(new Uint8Array(arrayBuffer)));
-            }}
-            text="Send Image"
-          />
-          <MenuOption
-            onSelect={() => {
-              sdk.sendLocation(contact);
-            }}
-            text="Send Location"
-          />
-          <MenuOption onSelect={() => onSendTextSelected()} text="Send Text" />
-          <MenuOption
-            onSelect={() => onSendAlertSelected()}
-            text="Send Alert"
-          />
+          {showSendImageOption && (
+            <MenuOption
+              onSelect={async () => {
+                const response = await fetch(
+                  'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Yellow_Happy.jpg/1200px-Yellow_Happy.jpg'
+                );
+                const arrayBuffer = await response.arrayBuffer();
+                sdk.sendImage(contact, Array.from(new Uint8Array(arrayBuffer)));
+              }}
+              text="Send Image"
+            />
+          )}
+          {showSendLocationOption && (
+            <MenuOption
+              onSelect={() => {
+                sdk.sendLocation(contact);
+              }}
+              text="Send Location"
+            />
+          )}
+          {showSendTextOption && (
+            <MenuOption
+              onSelect={() => onSendTextSelected()}
+              text="Send Text"
+            />
+          )}
+          {showSendAlertOption && (
+            <MenuOption
+              onSelect={() => onSendAlertSelected()}
+              text="Send Alert"
+            />
+          )}
           <MenuOption
             onSelect={() => {
               contact.isMuted
@@ -87,6 +118,30 @@ const ContextMenuButton = ({
             <MenuOption
               onSelect={() => onEndCallSelected?.()}
               text="End Call"
+            />
+          )}
+          {showAddUsersToGroupConversationOption && (
+            <MenuOption
+              onSelect={() => {
+                onAddUsersToGroupConversationSelected?.();
+              }}
+              text="Add Users to Group Conversation"
+            />
+          )}
+          {showLeaveGroupConversationOption && (
+            <MenuOption
+              onSelect={() => {
+                onLeaveGroupConversationSelected?.();
+              }}
+              text="Leave Group Conversation"
+            />
+          )}
+          {showRenameGroupConversationOption && (
+            <MenuOption
+              onSelect={() => {
+                onRenameGroupConversationSelected?.();
+              }}
+              text="Rename Group Conversation"
             />
           )}
           <MenuOption

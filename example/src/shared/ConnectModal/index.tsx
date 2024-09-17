@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Modal, StyleSheet, Text, TextInput, View, Button } from 'react-native';
 
 interface ConnectDialogProps {
@@ -7,11 +7,23 @@ interface ConnectDialogProps {
 }
 
 const ConnectModal: React.FC<ConnectDialogProps> = ({ onClose, onConnect }) => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [network, setNetwork] = useState('');
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: '',
+    network: '',
+  });
+
+  const handleInputChange = (field: string, value: string) => {
+    setCredentials((prev) => ({ ...prev, [field]: value }));
+  };
+
+  const isValidCredentials = useCallback(() => {
+    const { username, password, network } = credentials;
+    return username && password && network;
+  }, [credentials]);
 
   const handleConnect = () => {
+    const { username, password, network } = credentials;
     onConnect(username, password, network);
     onClose();
   };
@@ -29,28 +41,32 @@ const ConnectModal: React.FC<ConnectDialogProps> = ({ onClose, onConnect }) => {
           <TextInput
             style={styles.input}
             placeholder="Username"
-            value={username}
+            value={credentials.username}
             autoCapitalize="none"
-            onChangeText={setUsername}
+            onChangeText={(value) => handleInputChange('username', value)}
           />
           <TextInput
             style={styles.input}
             placeholder="Password"
             secureTextEntry
-            value={password}
+            value={credentials.password}
             autoCapitalize="none"
-            onChangeText={setPassword}
+            onChangeText={(value) => handleInputChange('password', value)}
           />
           <TextInput
             style={styles.input}
             placeholder="Network"
-            value={network}
+            value={credentials.network}
             autoCapitalize="none"
-            onChangeText={setNetwork}
+            onChangeText={(value) => handleInputChange('network', value)}
           />
           <View style={styles.buttonContainer}>
             <Button title="Cancel" onPress={onClose} />
-            <Button title="Connect" onPress={handleConnect} />
+            <Button
+              title="Connect"
+              disabled={!isValidCredentials()}
+              onPress={handleConnect}
+            />
           </View>
         </View>
       </View>

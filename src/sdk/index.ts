@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import {
   bridgeCallToSdkCall,
+  bridgeChannelUserToSdkChannelUser,
   bridgeConsoleSettingsToSdkConsoleSettings,
   isAndroid,
 } from '../utils';
@@ -15,7 +16,6 @@ import {
   ZelloAlertMessage,
   ZelloChannel,
   ZelloChannelAlertLevel,
-  ZelloChannelUser,
   ZelloConfig,
   ZelloConnectionError,
   ZelloConnectionState,
@@ -24,6 +24,7 @@ import {
   ZelloContactType,
   ZelloCredentials,
   ZelloDispatchChannel,
+  ZelloGroupConversation,
   ZelloHistoryImageMessage,
   ZelloHistoryMessage,
   ZelloHistoryVoiceMessage,
@@ -82,6 +83,10 @@ export class Zello extends EventEmitter {
    * The list of {@link ZelloChannel} in the contact list. Sorted by name, ascending.
    */
   public channels: ZelloChannel[] = [];
+  /**
+   * The list of {@link ZelloGroupConversation} in the contact list. Sorted by name, ascending.
+   */
+  public groupConversations: ZelloGroupConversation[] = [];
 
   /**
    * The current account status. undefined when {@link state} is not {@link ZelloConnectionState.Connected}.
@@ -145,9 +150,6 @@ export class Zello extends EventEmitter {
 
   /**
    * Sets configuration variables for the SDK.
-   *
-   * At the moment, this is only functional on Android.
-   *
    * @param config The configuration to set.
    */
   public configure(config: ZelloConfig) {
@@ -223,6 +225,17 @@ export class Zello extends EventEmitter {
   }
 
   /**
+   * Returns the group conversation with the given name. Case-insensitive.
+   * @param name The name of the group conversation to search for.
+   * @return The group conversation with the given name, or null if no group conversation with that name exists.
+   */
+  public getGroupConversation(
+    name: string
+  ): ZelloGroupConversation | undefined {
+    return sortedArrayFind(this.groupConversations, name, compareNameAscending);
+  }
+
+  /**
    * Sets the selected contact.
    * While optional, this is typically used for tracking the contact that the user is currently interacting with.
    * This will trigger the {@link ZelloEvent.SELECTED_CONTACT_CHANGED} event.
@@ -260,7 +273,11 @@ export class Zello extends EventEmitter {
     if (isAndroid) {
       ZelloAndroidSdkModule.connectChannel(channel.name);
     } else {
-      ZelloIOSSdkModule.connectChannel(channel.name);
+      if (channel.type === ZelloContactType.GroupConversation) {
+        ZelloIOSSdkModule.connectGroupConversation(channel.name);
+      } else {
+        ZelloIOSSdkModule.connectChannel(channel.name);
+      }
     }
   }
 
@@ -274,7 +291,11 @@ export class Zello extends EventEmitter {
     if (isAndroid) {
       ZelloAndroidSdkModule.disconnectChannel(channel.name);
     } else {
-      ZelloIOSSdkModule.disconnectChannel(channel.name);
+      if (channel.type === ZelloContactType.GroupConversation) {
+        ZelloIOSSdkModule.disconnectGroupConversation(channel.name);
+      } else {
+        ZelloIOSSdkModule.disconnectChannel(channel.name);
+      }
     }
   }
 
@@ -553,6 +574,94 @@ export class Zello extends EventEmitter {
     }
   }
 
+  /**
+   * Creates a new group conversation with the given users.
+   * This will trigger the {@link ZelloEvent.GROUP_CONVERSATION_CREATED} and {@link ZelloEvent.CONTACT_LIST_UPDATED} events.
+   * @param users The users to create the group conversation with.
+   * @param displayName Optional; The display name of the group conversation. The conversation can be renamed later by using {@link renameGroupConversation}.
+   */
+  public createGroupConversation(users: ZelloUser[], displayName?: string) {
+    if (!this.consoleSettings?.allowGroupConversations) {
+      return;
+    }
+    if (isAndroid) {
+      ZelloAndroidSdkModule.createGroupConversation(
+        users.map((user) => user.name),
+        displayName
+      );
+    } else {
+      ZelloIOSSdkModule.createGroupConversation(
+        users.map((user) => user.name),
+        displayName
+      );
+    }
+  }
+
+  /**
+   * Adds users to the given group conversation.
+   * This will trigger the {@link ZelloEvent.GROUP_CONVERSATION_USERS_ADDED} and {@link ZelloEvent.CONTACT_LIST_UPDATED} events.
+   * @param groupConversation The group conversation to add users to.
+   * @param users The users to add to the group conversation.
+   */
+  public addUsersToGroupConversation(
+    groupConversation: ZelloGroupConversation,
+    users: ZelloUser[]
+  ) {
+    if (!this.consoleSettings?.allowGroupConversations) {
+      return;
+    }
+    if (isAndroid) {
+      ZelloAndroidSdkModule.addUsersToGroupConversation(
+        groupConversation.name,
+        users.map((user) => user.name)
+      );
+    } else {
+      ZelloIOSSdkModule.addUsersToGroupConversation(
+        groupConversation.name,
+        users.map((user) => user.name)
+      );
+    }
+  }
+
+  /**
+   * Removes the user from the group conversation.
+   * This will trigger the {@link ZelloEvent.GROUP_CONVERSATION_LEFT} and {@link ZelloEvent.CONTACT_LIST_UPDATED} events.
+   * @param groupConversation The group conversation to leave.
+   */
+  public leaveGroupConversation(groupConversation: ZelloGroupConversation) {
+    if (!this.consoleSettings?.allowGroupConversations) {
+      return;
+    }
+    if (isAndroid) {
+      ZelloAndroidSdkModule.leaveGroupConversation(groupConversation.name);
+    } else {
+      ZelloIOSSdkModule.leaveGroupConversation(groupConversation.name);
+    }
+  }
+
+  /**
+   * Renames the group conversation.
+   * This will trigger the {@link ZelloEvent.GROUP_CONVERSATION_RENAMED} and {@link ZelloEvent.CONTACT_LIST_UPDATED} events.
+   * @param groupConversation The group conversation to rename.
+   * @param name The new name for the group conversation.
+   */
+  public renameGroupConversation(
+    groupConversation: ZelloGroupConversation,
+    name: string
+  ) {
+    if (!this.consoleSettings?.allowGroupConversations) {
+      return;
+    }
+    if (isAndroid) {
+      ZelloAndroidSdkModule.renameGroupConversation(
+        groupConversation.name,
+        name
+      );
+    } else {
+      ZelloIOSSdkModule.renameGroupConversation(groupConversation.name, name);
+    }
+  }
+
   private setupEventListener(eventEmitter: NativeEventEmitter) {
     this.eventListener = eventEmitter.addListener('zellosdk', (event) => {
       const eventName = event.eventName;
@@ -598,13 +707,24 @@ export class Zello extends EventEmitter {
           );
           this.channels.sort(compareNameAscending);
 
+          this.groupConversations = event.groupConversations.map(
+            (groupConversation: any) =>
+              bridgeContactToSdkContact(groupConversation)
+          );
+          this.groupConversations.sort(compareNameAscending);
+
           if (event.emergencyChannel) {
             this.emergencyChannel = bridgeContactToSdkContact(
               event.emergencyChannel
             ) as ZelloChannel;
           }
 
-          this.emit(ZelloEvent.CONTACT_LIST_UPDATED, this.users, this.channels);
+          this.emit(
+            ZelloEvent.CONTACT_LIST_UPDATED,
+            this.users,
+            this.channels,
+            this.groupConversations
+          );
           break;
         }
         case 'onSelectedContactChanged': {
@@ -632,7 +752,7 @@ export class Zello extends EventEmitter {
           }
           this.incomingVoiceMessage = new ZelloIncomingVoiceMessage(
             contact,
-            new ZelloChannelUser(event.channelUserName),
+            bridgeChannelUserToSdkChannelUser(event.channelUser),
             parseInt(event.timestamp, 10)
           );
           this.emit(
@@ -651,7 +771,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_VOICE_MESSAGE_STOPPED,
             new ZelloIncomingVoiceMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               parseInt(event.timestamp, 10)
             )
           );
@@ -724,7 +844,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_IMAGE_MESSAGE_RECEIVED,
             new ZelloImageMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               true,
               parseInt(event.timestamp, 10),
               event.thumbnail,
@@ -778,7 +898,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_ALERT_MESSAGE_RECEIVED,
             new ZelloAlertMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               true,
               parseInt(event.timestamp, 10),
               event.text
@@ -829,7 +949,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_TEXT_MESSAGE_RECEIVED,
             new ZelloTextMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               true,
               parseInt(event.timestamp, 10),
               event.text
@@ -880,7 +1000,7 @@ export class Zello extends EventEmitter {
             ZelloEvent.INCOMING_LOCATION_MESSAGE_RECEIVED,
             new ZelloLocationMessage(
               contact,
-              new ZelloChannelUser(event.channelUserName),
+              bridgeChannelUserToSdkChannelUser(event.channelUser),
               true,
               parseInt(event.timestamp, 10),
               event.latitude,
@@ -1009,12 +1129,9 @@ export class Zello extends EventEmitter {
               if (!contact) {
                 return undefined;
               }
-              const channelUser = recent.channelUser
-                ? new ZelloChannelUser(recent.channelUser)
-                : undefined;
               return new ZelloRecentEntry(
                 contact,
-                channelUser,
+                bridgeChannelUserToSdkChannelUser(event.channelUser),
                 parseInt(recent.timestamp, 10),
                 recent.type.toLowerCase(),
                 recent.incoming
@@ -1061,6 +1178,86 @@ export class Zello extends EventEmitter {
           this.processDispatchCallEvent(event);
           break;
         }
+        case 'onGroupConversationLeft': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          this.emit(ZelloEvent.GROUP_CONVERSATION_LEFT, groupConversation);
+          break;
+        }
+        case 'onGroupConversationInvite': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          this.emit(ZelloEvent.GROUP_CONVERSATION_INVITE, groupConversation);
+          break;
+        }
+        case 'onGroupConversationCreated': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          this.emit(ZelloEvent.GROUP_CONVERSATION_CREATED, groupConversation);
+          break;
+        }
+        case 'onGroupConversationRenamed': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          this.emit(ZelloEvent.GROUP_CONVERSATION_RENAMED, groupConversation);
+          break;
+        }
+        case 'onGroupConversationUsersAdded': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          const users = event.users.map((user: any) =>
+            bridgeChannelUserToSdkChannelUser(user)
+          );
+          if (!users || users.length === 0) {
+            return;
+          }
+          this.emit(
+            ZelloEvent.GROUP_CONVERSATION_USERS_ADDED,
+            groupConversation,
+            users
+          );
+          break;
+        }
+        case 'onGroupConversationUsersLeft': {
+          const groupConversation = bridgeContactToSdkContact(
+            event.conversation
+          ) as ZelloGroupConversation;
+          if (!groupConversation) {
+            break;
+          }
+          const users = event.users.map((user: any) =>
+            bridgeChannelUserToSdkChannelUser(user)
+          );
+          if (!users || users.length === 0) {
+            return;
+          }
+          this.emit(
+            ZelloEvent.GROUP_CONVERSATION_USERS_LEFT,
+            groupConversation,
+            users
+          );
+          break;
+        }
         default:
           break;
       }
@@ -1096,6 +1293,7 @@ export class Zello extends EventEmitter {
   private clearContactList() {
     this.users = [];
     this.channels = [];
+    this.groupConversations = [];
   }
 
   private static getSdk() {

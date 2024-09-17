@@ -20,7 +20,7 @@ const IncomingImageDialog = ({ message }: IncomingImageDialogProps) => {
 
   const title = useMessageTitle(
     message.contact.name,
-    message.channelUser?.name
+    message.channelUser?.displayName
   );
 
   const onClose = useCallback(() => {

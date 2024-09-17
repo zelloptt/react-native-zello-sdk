@@ -10,6 +10,7 @@ import com.zello.sdk.ZelloChannel
 import com.zello.sdk.ZelloConsoleSettings
 import com.zello.sdk.ZelloContact
 import com.zello.sdk.ZelloDispatchChannel
+import com.zello.sdk.ZelloGroupConversation
 import com.zello.sdk.ZelloHistoryAlertMessage
 import com.zello.sdk.ZelloHistoryImageMessage
 import com.zello.sdk.ZelloHistoryLocationMessage
@@ -22,7 +23,7 @@ import com.zello.sdk.ZelloUser
 import java.io.ByteArrayOutputStream
 
 object ZelloAndroidSdkModuleHelper {
-	fun contactListToWritableMap(users: List<ZelloUser>, channels: List<ZelloChannel>): WritableMap {
+	fun contactListToWritableMap(users: List<ZelloUser>, channels: List<ZelloChannel>, groupConversation: List<ZelloGroupConversation>): WritableMap {
 		return Arguments.createMap().apply {
 			putArray("users", WritableNativeArray().apply {
 				users.forEach { user ->
@@ -32,6 +33,11 @@ object ZelloAndroidSdkModuleHelper {
 			putArray("channels", WritableNativeArray().apply {
 				channels.forEach { channel ->
 					pushMap(sdkContactToWritableMap(channel))
+				}
+			})
+			putArray("groupConversations", WritableNativeArray().apply {
+				groupConversation.forEach { conversation ->
+					pushMap(sdkContactToWritableMap(conversation))
 				}
 			})
 		}
@@ -48,6 +54,9 @@ object ZelloAndroidSdkModuleHelper {
 				putString("customStatusText", contact.customStatusText)
 				putString("profilePictureUrl", contact.profilePictureUrl)
 				putString("profilePictureThumbnailUrl", contact.profilePictureThumbnailUrl)
+				putMap("supportedFeatures", WritableNativeMap().apply {
+					putBoolean("groupConversations", contact.supportedFeatures.groupConversations)
+				})
 			}
 
 			is ZelloChannel -> WritableNativeMap().apply {
@@ -71,6 +80,19 @@ object ZelloAndroidSdkModuleHelper {
 					contact.currentCall?.let { call ->
 						putMap("currentCall", callToWritableMap(call))
 					}
+				} else if (contact is ZelloGroupConversation) {
+					putBoolean("isGroupConversation", true)
+					putString("displayName", contact.displayName)
+					putArray("users", WritableNativeArray().apply {
+						contact.users.forEach { user ->
+							pushMap(channelUserToWritableMap(user))
+						}
+					})
+					putArray("onlineUsers", WritableNativeArray().apply {
+						contact.onlineUsers.forEach { user ->
+							pushMap(channelUserToWritableMap(user))
+						}
+					})
 				}
 			}
 
@@ -89,7 +111,7 @@ object ZelloAndroidSdkModuleHelper {
 	fun incomingEmergencyToWritableMap(incomingEmergency: ZelloIncomingEmergency): WritableMap {
 		return Arguments.createMap().apply {
 			putMap("channel", sdkContactToWritableMap(contact = incomingEmergency.channel))
-			putString("channelUserName", incomingEmergency.channelUser.name)
+			putMap("channelUser", channelUserToWritableMap(incomingEmergency.channelUser))
 			putString("emergencyId", incomingEmergency.emergencyId)
 			putString("startTimestamp", incomingEmergency.startTimestamp.toString())
 			incomingEmergency.endTimestamp?.let {
@@ -114,7 +136,7 @@ object ZelloAndroidSdkModuleHelper {
 			recents.forEach {
 				pushMap(WritableNativeMap().apply {
 					putMap("contact", sdkContactToWritableMap(it.contact))
-					putString("channelUserName", it.channelUser?.name)
+					putMap("channelUser", channelUserToWritableMap(it.channelUser))
 					putString("type", it.type.toString())
 					putString("timestamp", it.timestamp.toString())
 					putBoolean("incoming", it.incoming)
@@ -146,7 +168,7 @@ object ZelloAndroidSdkModuleHelper {
 		return Arguments.createMap().apply {
 			putMap("contact", sdkContactToWritableMap(contact = message.contact))
 			putString("type", "voice")
-			putString("channelUserName", message.channelUser?.name)
+			putMap("channelUser", channelUserToWritableMap(message.channelUser))
 			putString("timestamp", message.timestamp.toString())
 			putString("historyId", message.historyId)
 			putBoolean("incoming", message.incoming)
@@ -158,7 +180,7 @@ object ZelloAndroidSdkModuleHelper {
 		return Arguments.createMap().apply {
 			putMap("contact", sdkContactToWritableMap(contact = message.contact))
 			putString("type", "image")
-			putString("channelUserName", message.channelUser?.name)
+			putMap("channelUser", channelUserToWritableMap(message.channelUser))
 			putString("timestamp", message.timestamp.toString())
 			putString("historyId", message.historyId)
 			putBoolean("incoming", message.incoming)
@@ -169,7 +191,7 @@ object ZelloAndroidSdkModuleHelper {
 		return Arguments.createMap().apply {
 			putMap("contact", sdkContactToWritableMap(contact = message.contact))
 			putString("type", "text")
-			putString("channelUserName", message.channelUser?.name)
+			putMap("channelUser", channelUserToWritableMap(message.channelUser))
 			putString("timestamp", message.timestamp.toString())
 			putString("historyId", message.historyId)
 			putBoolean("incoming", message.incoming)
@@ -181,7 +203,7 @@ object ZelloAndroidSdkModuleHelper {
 		return Arguments.createMap().apply {
 			putMap("contact", sdkContactToWritableMap(contact = message.contact))
 			putString("type", "alert")
-			putString("channelUserName", message.channelUser?.name)
+			putMap("channelUser", channelUserToWritableMap(message.channelUser))
 			putString("timestamp", message.timestamp.toString())
 			putString("historyId", message.historyId)
 			putBoolean("incoming", message.incoming)
@@ -193,7 +215,7 @@ object ZelloAndroidSdkModuleHelper {
 		return Arguments.createMap().apply {
 			putMap("contact", sdkContactToWritableMap(contact = message.contact))
 			putString("type", "location")
-			putString("channelUserName", message.channelUser?.name)
+			putMap("channelUser", channelUserToWritableMap(message.channelUser))
 			putString("timestamp", message.timestamp.toString())
 			putString("historyId", message.historyId)
 			putBoolean("incoming", message.incoming)
@@ -207,6 +229,11 @@ object ZelloAndroidSdkModuleHelper {
 	fun consoleSettingsToWritableMap(settings: ZelloConsoleSettings): WritableMap {
 		return Arguments.createMap().apply {
 			putBoolean("allowNonDispatchersToEndCalls", settings.allowNonDispatchersToEndCalls)
+			putBoolean("allowTextMessages", settings.allowTextMessages)
+			putBoolean("allowImageMessages", settings.allowImageMessages)
+			putBoolean("allowLocationMessages", settings.allowLocationMessages)
+			putBoolean("allowAlertMessages", settings.allowAlertMessages)
+			putBoolean("allowGroupConversations", settings.allowGroupConversations)
 		}
 	}
 
@@ -216,6 +243,24 @@ object ZelloAndroidSdkModuleHelper {
 			putString("status", call.status.toString())
 			putString("dispatcher", call.dispatcher)
 			putString("timestamp", call.timestamp.toString())
+		}
+	}
+
+	fun channelUserToWritableMap(channelUser: ZelloChannel.User?): WritableMap? {
+		if (channelUser == null) {
+			return null
+		}
+		return Arguments.createMap().apply {
+			putString("name", channelUser.name)
+			putString("displayName", channelUser.displayName)
+		}
+	}
+
+	fun channelUsersToWritableArray(channelUsers: List<ZelloChannel.User>): WritableNativeArray {
+		return WritableNativeArray().apply {
+			channelUsers.forEach {
+				pushMap(channelUserToWritableMap(it))
+			}
 		}
 	}
 }

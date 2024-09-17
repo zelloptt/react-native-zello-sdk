@@ -108,14 +108,28 @@ import ZelloSDK
     guard let channel = zello.channel(named: name) else {
       return
     }
-    zello.connectChannel(channel: channel)
+    zello.connect(to: channel)
   }
 
   @objc func disconnectChannel(_ name: String) {
     guard let channel = zello.channel(named: name) else {
       return
     }
-    zello.disconnectChannel(channel: channel)
+    zello.disconnect(from: channel)
+  }
+
+  @objc func connectGroupConversation(_ name: String) {
+    guard let conversation = zello.conversation(named: name) else {
+      return
+    }
+    zello.connect(to: conversation)
+  }
+
+  @objc func disconnectGroupConversation(_ name: String) {
+    guard let conversation = zello.conversation(named: name) else {
+      return
+    }
+    zello.disconnect(from: conversation)
   }
 
   @objc func submitProblemReport() {
@@ -169,7 +183,7 @@ import ZelloSDK
   }
 
   @objc func playHistoryMessage(_ historyId: String, contactName: String, isChannel: Bool) {
-    guard 
+    guard
       let contact = isChannel ? zello.channel(named: contactName).map(ZelloContact.channel) : zello.user(named: contactName).map(ZelloContact.user),
       let message = zello.getHistoryMessage(historyId, contact: contact) as? ZelloHistoryVoiceMessage
     else {
@@ -196,13 +210,40 @@ import ZelloSDK
   }
 
   @objc func endDispatchCall(_ channelName: String) {
-    guard 
+    guard
       let dispatchChannel = zello.channel(named: channelName),
       let call = dispatchChannel.dispatchInfo?.currentCall
     else {
       return
     }
     zello.end(call, on: dispatchChannel)
+  }
+
+  @objc func createGroupConversation(_ usernames: [Any], displayName: String?) {
+    let users = usernames.compactMap { username in zello.user(named: username as? String ?? "") }
+    zello.createGroupConversation(users: users, displayName: displayName)
+  }
+
+  @objc func addUsersToGroupConversation(_ conversationName: String, usernames: [Any]) {
+    guard let conversation = zello.conversation(named: conversationName) else {
+      return
+    }
+    let users = usernames.compactMap { username in zello.user(named: username as? String ?? "") }
+    zello.add(users, to: conversation)
+  }
+
+  @objc func leaveGroupConversation(_ conversationName: String) {
+    guard let conversation = zello.conversation(named: conversationName) else {
+      return
+    }
+    zello.leave(conversation)
+  }
+
+  @objc func renameGroupConversation(_ conversationName: String, newName: String) {
+    guard let conversation = zello.conversation(named: conversationName) else {
+      return
+    }
+    zello.rename(conversation, to: newName)
   }
 }
 
