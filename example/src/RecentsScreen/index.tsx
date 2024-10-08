@@ -27,6 +27,7 @@ import IncomingImageDialog from '../shared/IncomingImageDialog';
 import IncomingAlertDialog from '../shared/IncomingAlertDialog';
 import IncomingTextDialog from '../shared/IncomingTextDialog';
 import IncomingLocationDialog from '../shared/IncomingLocationDialog';
+import useMessageTitle from '../shared/hooks/useMessageTitle';
 
 interface RecentViewProps {
   recent: ZelloRecentEntry;
@@ -34,12 +35,10 @@ interface RecentViewProps {
 
 const RecentView = React.memo(
   ({ recent }: RecentViewProps) => {
-    const title = useCallback(() => {
-      if (recent.channelUser) {
-        return `${recent.channelUser.name} : ${recent.contact.name}`;
-      }
-      return recent.contact.name;
-    }, [recent.contact, recent.channelUser]);
+    const title = useMessageTitle(
+      recent.contact,
+      recent.channelUser?.displayName
+    );
 
     const timestamp = useCallback(() => {
       return new Date(recent.timestamp).toLocaleString();

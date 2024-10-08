@@ -1,12 +1,15 @@
 import { useCallback } from 'react';
+import useContactDisplayName from './useContactDisplayName';
+import { ZelloContact } from '@zelloptt/react-native-zello-sdk';
 
-const useMessageTitle = (contactName: string, channelUserName?: string) => {
+const useMessageTitle = (contact: ZelloContact, channelUserName?: string) => {
+  const contactDisplayName = useContactDisplayName(contact)();
   return useCallback(() => {
     if (channelUserName) {
-      return `${channelUserName} in ${contactName}`;
+      return `${channelUserName} in ${contactDisplayName}`;
     }
-    return contactName;
-  }, [contactName, channelUserName]);
+    return contactDisplayName;
+  }, [contactDisplayName, channelUserName]);
 };
 
 export default useMessageTitle;

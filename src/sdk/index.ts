@@ -242,11 +242,10 @@ export class Zello extends EventEmitter {
    * @param contact The contact to set as selected.
    */
   public setSelectedContact(contact: ZelloContact) {
-    const isChannel = contact.type === ZelloContactType.Channel;
     if (isAndroid) {
-      ZelloAndroidSdkModule.setSelectedContact(contact.name, isChannel);
+      ZelloAndroidSdkModule.setSelectedContact(contact.name, contact.type);
     } else {
-      ZelloIOSSdkModule.selectContact(contact.name, isChannel);
+      ZelloIOSSdkModule.selectContact(contact.name, contact.type);
     }
   }
 
@@ -306,11 +305,10 @@ export class Zello extends EventEmitter {
    * @param contact The contact to start the voice message with.
    */
   public startVoiceMessage(contact: ZelloContact) {
-    const isChannel = contact.type === ZelloContactType.Channel;
     if (isAndroid) {
-      ZelloAndroidSdkModule.startVoiceMessage(contact.name, isChannel);
+      ZelloAndroidSdkModule.startVoiceMessage(contact.name, contact.type);
     } else {
-      ZelloIOSSdkModule.startVoiceMessage(contact.name, isChannel);
+      ZelloIOSSdkModule.startVoiceMessage(contact.name, contact.type);
     }
   }
 
@@ -333,11 +331,10 @@ export class Zello extends EventEmitter {
    * @param data The image data to send.
    */
   public sendImage(contact: ZelloContact, data: number[]) {
-    const isChannel = contact.type === ZelloContactType.Channel;
     if (isAndroid) {
-      ZelloAndroidSdkModule.sendImage(contact.name, isChannel, data);
+      ZelloAndroidSdkModule.sendImage(contact.name, contact.type, data);
     } else {
-      ZelloIOSSdkModule.sendImage(contact.name, isChannel, data);
+      ZelloIOSSdkModule.sendImage(contact.name, contact.type, data);
     }
   }
 
@@ -347,11 +344,10 @@ export class Zello extends EventEmitter {
    * @param contact The contact to send the alert to.
    */
   public sendLocation(contact: ZelloContact) {
-    const isChannel = contact.type === ZelloContactType.Channel;
     if (isAndroid) {
-      ZelloAndroidSdkModule.sendLocation(contact.name, isChannel);
+      ZelloAndroidSdkModule.sendLocation(contact.name, contact.type);
     } else {
-      ZelloIOSSdkModule.sendLocation(contact.name, isChannel);
+      ZelloIOSSdkModule.sendLocation(contact.name, contact.type);
     }
   }
 
@@ -362,11 +358,10 @@ export class Zello extends EventEmitter {
    * @param text The text to send.
    */
   public sendText(contact: ZelloContact, text: string) {
-    const isChannel = contact.type === ZelloContactType.Channel;
     if (isAndroid) {
-      ZelloAndroidSdkModule.sendText(contact.name, isChannel, text);
+      ZelloAndroidSdkModule.sendText(contact.name, contact.type, text);
     } else {
-      ZelloIOSSdkModule.sendText(contact.name, isChannel, text);
+      ZelloIOSSdkModule.sendText(contact.name, contact.type, text);
     }
   }
 
@@ -382,11 +377,10 @@ export class Zello extends EventEmitter {
     text: string,
     level?: ZelloChannelAlertLevel
   ) {
-    const isChannel = contact.type === ZelloContactType.Channel;
     if (isAndroid) {
-      ZelloAndroidSdkModule.sendAlert(contact.name, isChannel, text, level);
+      ZelloAndroidSdkModule.sendAlert(contact.name, contact.type, text, level);
     } else {
-      ZelloIOSSdkModule.sendAlert(contact.name, isChannel, text, level);
+      ZelloIOSSdkModule.sendAlert(contact.name, contact.type, text, level);
     }
   }
 
@@ -408,11 +402,10 @@ export class Zello extends EventEmitter {
    * @param contact The contact to mute.
    */
   public muteContact(contact: ZelloContact) {
-    const isChannel = contact.type === ZelloContactType.Channel;
     if (isAndroid) {
-      ZelloAndroidSdkModule.muteContact(contact.name, isChannel);
+      ZelloAndroidSdkModule.muteContact(contact.name, contact.type);
     } else {
-      ZelloIOSSdkModule.muteContact(contact.name, isChannel);
+      ZelloIOSSdkModule.muteContact(contact.name, contact.type);
     }
   }
 
@@ -422,11 +415,10 @@ export class Zello extends EventEmitter {
    * @param contact The contact to unmute.
    */
   public unmuteContact(contact: ZelloContact) {
-    const isChannel = contact.type === ZelloContactType.Channel;
     if (isAndroid) {
-      ZelloAndroidSdkModule.unmuteContact(contact.name, isChannel);
+      ZelloAndroidSdkModule.unmuteContact(contact.name, contact.type);
     } else {
-      ZelloIOSSdkModule.unmuteContact(contact.name, isChannel);
+      ZelloIOSSdkModule.unmuteContact(contact.name, contact.type);
     }
   }
 
@@ -467,7 +459,6 @@ export class Zello extends EventEmitter {
   ): Promise<ZelloHistoryMessage[]> {
     const defaultHistorySize = 50;
     return new Promise((resolve) => {
-      const isChannel = contact.type === ZelloContactType.Channel;
       const callback = (history: any[] | undefined) => {
         if (!history) {
           resolve([]);
@@ -481,14 +472,14 @@ export class Zello extends EventEmitter {
       if (isAndroid) {
         ZelloAndroidSdkModule.getHistory(
           contact.name,
-          isChannel,
+          contact.type,
           size ?? defaultHistorySize,
           callback
         );
       } else {
         ZelloIOSSdkModule.getHistory(
           contact.name,
-          isChannel,
+          contact.type,
           size ?? defaultHistorySize,
           callback
         );
@@ -502,18 +493,17 @@ export class Zello extends EventEmitter {
    * @param message The history message to play.
    */
   public playHistoryMessage(message: ZelloHistoryVoiceMessage) {
-    const isChannel = message.contact.type === ZelloContactType.Channel;
     if (isAndroid) {
       ZelloAndroidSdkModule.playHistoryMessage(
         message.historyId,
         message.contact.name,
-        isChannel
+        message.contact.type
       );
     } else {
       ZelloIOSSdkModule.playHistoryMessage(
         message.historyId,
         message.contact.name,
-        isChannel
+        message.contact.type
       );
     }
   }
@@ -539,19 +529,18 @@ export class Zello extends EventEmitter {
     message: ZelloHistoryImageMessage
   ): Promise<string | undefined> {
     return new Promise((resolve) => {
-      const isChannel = message.contact.type === ZelloContactType.Channel;
       if (isAndroid) {
         ZelloAndroidSdkModule.getImageDataForHistoryImageMessage(
           message.historyId,
           message.contact.name,
-          isChannel,
+          message.contact.type,
           (data: string | undefined) => resolve(data)
         );
       } else {
         ZelloIOSSdkModule.getHistoryImageData(
           message.historyId,
           message.contact.name,
-          isChannel,
+          message.contact.type,
           (data: string | undefined) => resolve(data)
         );
       }

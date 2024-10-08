@@ -19,7 +19,7 @@ const IncomingImageDialog = ({ message }: IncomingImageDialogProps) => {
   const { clearMessage } = useContext(LastIncomingImageMessageContext);
 
   const title = useMessageTitle(
-    message.contact.name,
+    message.contact,
     message.channelUser?.displayName
   );
 
