@@ -27,10 +27,7 @@ import {
 } from '@zelloptt/react-native-zello-sdk';
 
 const HistoryItem = ({ item }: { item: ZelloHistoryMessage }) => {
-  const title = useMessageTitle(
-    item.contact.name,
-    item.channelUser?.displayName
-  );
+  const title = useMessageTitle(item.contact, item.channelUser?.displayName);
   const timestamp = useCallback(
     () => new Date(item.timestamp).toLocaleString(),
     [item.timestamp]

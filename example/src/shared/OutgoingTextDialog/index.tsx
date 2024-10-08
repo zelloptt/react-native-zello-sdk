@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { ZelloContact } from '@zelloptt/react-native-zello-sdk';
 import { SdkContext } from '../../App';
+import useContactDisplayName from '../hooks/useContactDisplayName';
 
 export interface OutgoingTextDialogProps {
   contact: ZelloContact;
@@ -25,11 +26,13 @@ const OutgoingTextDialog = ({ contact, onClose }: OutgoingTextDialogProps) => {
     onClose();
   }, [contact, sdk, text, onClose]);
 
+  const contactName = useContactDisplayName(contact);
+
   return (
     <Modal visible={true} transparent={true} onRequestClose={onClose}>
       <View style={styles.modalContainer}>
         <View style={styles.dialogContainer}>
-          <Text>{`Send text to ${contact.name}`}</Text>
+          <Text>{`Send text to ${contactName()}`}</Text>
           <View style={styles.spacer} />
           <TextInput
             placeholder="Type your message"

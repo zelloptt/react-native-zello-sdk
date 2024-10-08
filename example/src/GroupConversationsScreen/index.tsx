@@ -243,7 +243,7 @@ const GroupConversationsScreen = ({ navigation }: { navigation: any }) => {
   );
 
   const keyExtractor = useCallback(
-    (item: ZelloGroupConversation) => item.displayName,
+    (item: ZelloGroupConversation) => item.name,
     []
   );
 

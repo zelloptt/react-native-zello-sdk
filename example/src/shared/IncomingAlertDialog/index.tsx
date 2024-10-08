@@ -12,7 +12,7 @@ const IncomingAlertDialog = ({ message }: IncomingAlertDialogProps) => {
   const { clearMessage } = useContext(LastIncomingAlertMessageContext);
 
   const title = useMessageTitle(
-    message.contact.name,
+    message.contact,
     message.channelUser?.displayName
   );
 

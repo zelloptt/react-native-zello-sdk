@@ -61,8 +61,8 @@ class ZelloAndroidSdkModule @Inject constructor(
     zello.disconnect()
   }
 
-  @ReactMethod fun setSelectedContact(name: String, isChannel: Boolean) {
-    val contact = (if (isChannel) zello.getChannel(name) else zello.getUser(name)) ?: return
+  @ReactMethod fun setSelectedContact(name: String, type: String) {
+    val contact = contactFrom(name, type) ?: return
     zello.setSelectedContact(contact)
   }
 
@@ -85,8 +85,8 @@ class ZelloAndroidSdkModule @Inject constructor(
     zello.disconnectChannel(channel)
   }
 
-  @ReactMethod fun startVoiceMessage(name: String, isChannel: Boolean) {
-    val contact = (if (isChannel) zello.getChannel(name) else zello.getUser(name)) ?: return
+  @ReactMethod fun startVoiceMessage(name: String, type: String) {
+    val contact = contactFrom(name, type) ?: return
     zello.startVoiceMessage(contact)
   }
 
@@ -95,8 +95,8 @@ class ZelloAndroidSdkModule @Inject constructor(
   }
 
   @ReactMethod
-  fun sendImage(name: String, isChannel: Boolean, data: ReadableArray) {
-    val contact = (if (isChannel) zello.getChannel(name) else zello.getUser(name)) ?: return
+  fun sendImage(name: String, type: String, data: ReadableArray) {
+    val contact = contactFrom(name, type) ?: return
     val byteArray = ByteArray(data.size())
     for (i in 0 until data.size()) {
       byteArray[i] = data.getInt(i).toByte()
@@ -105,20 +105,20 @@ class ZelloAndroidSdkModule @Inject constructor(
   }
 
   @ReactMethod
-  fun sendLocation(name: String, isChannel: Boolean) {
-    val contact = (if (isChannel) zello.getChannel(name) else zello.getUser(name)) ?: return
+  fun sendLocation(name: String, type: String) {
+    val contact = contactFrom(name, type) ?: return
     zello.sendLocation(contact)
   }
 
   @ReactMethod
-  fun sendText(name: String, isChannel: Boolean, text: String) {
-    val contact = (if (isChannel) zello.getChannel(name) else zello.getUser(name)) ?: return
+  fun sendText(name: String, type: String, text: String) {
+    val contact = contactFrom(name, type) ?: return
     zello.sendText(text, contact)
   }
 
   @ReactMethod
-  fun sendAlert(name: String, isChannel: Boolean, text: String, level: String?) {
-    val contact = (if (isChannel) zello.getChannel(name) else zello.getUser(name)) ?: return
+  fun sendAlert(name: String, type: String, text: String, level: String?) {
+    val contact = contactFrom(name, type) ?: return
     val channelAlertLevel = when (level) {
       "all" -> ZelloAlertMessage.ChannelLevel.ALL
       "connected" -> ZelloAlertMessage.ChannelLevel.CONNECTED
@@ -133,14 +133,14 @@ class ZelloAndroidSdkModule @Inject constructor(
   }
 
   @ReactMethod
-  fun muteContact(name: String, isChannel: Boolean) {
-    val contact = (if (isChannel) zello.getChannel(name) else zello.getUser(name)) ?: return
+  fun muteContact(name: String, type: String) {
+    val contact = contactFrom(name, type) ?: return
     zello.muteContact(contact)
   }
 
   @ReactMethod
-  fun unmuteContact(name: String, isChannel: Boolean) {
-    val contact = (if (isChannel) zello.getChannel(name) else zello.getUser(name)) ?: return
+  fun unmuteContact(name: String, type: String) {
+    val contact = contactFrom(name, type) ?: return
     zello.unmuteContact(contact)
   }
 
@@ -155,15 +155,15 @@ class ZelloAndroidSdkModule @Inject constructor(
   }
 
   @ReactMethod
-  fun getHistory(name: String, isChannel: Boolean, size: Int?, callback: Callback) {
-    val contact = (if (isChannel) zello.getChannel(name) else zello.getUser(name)) ?: return
+  fun getHistory(name: String, type: String, size: Int?, callback: Callback) {
+    val contact = contactFrom(name, type) ?: return
     val messages = if (size != null) zello.getHistory(contact, size) else zello.getHistory(contact)
     callback.invoke(ZelloAndroidSdkModuleHelper.historyMessagesToWritableArray(messages))
   }
 
   @ReactMethod
-  fun playHistoryMessage(historyId: String, contactName: String, isChannel: Boolean) {
-    val contact = (if (isChannel) zello.getChannel(contactName) else zello.getUser(contactName)) ?: return
+  fun playHistoryMessage(historyId: String, contactName: String, type: String) {
+    val contact = contactFrom(name, type) ?: return
     val message = zello.getHistoryMessage(historyId, contact) as? ZelloHistoryVoiceMessage ?: return
     zello.playHistoryMessage(message)
   }
@@ -174,8 +174,8 @@ class ZelloAndroidSdkModule @Inject constructor(
   }
 
   @ReactMethod
-  fun getImageDataForHistoryImageMessage(historyId: String, contactName: String, isChannel: Boolean, callback: Callback) {
-    val contact = (if (isChannel) zello.getChannel(contactName) else zello.getUser(contactName)) ?: return
+  fun getImageDataForHistoryImageMessage(historyId: String, contactName: String, type: String, callback: Callback) {
+    val contact = contactFrom(name, type) ?: return
     val message = zello.getHistoryMessage(historyId, contact) as? ZelloHistoryImageMessage ?: return
     zello.loadBitmapForHistoryImageMessage(message) {
       callback.invoke(ZelloAndroidSdkModuleHelper.bitmapToBase64String(it))
@@ -537,6 +537,15 @@ class ZelloAndroidSdkModule @Inject constructor(
       putMap("conversation", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(conversation))
       putArray("users", ZelloAndroidSdkModuleHelper.channelUsersToWritableArray(users))
     })
+  }
+
+  private fun contactFrom(name: String, type: String): ZelloContact? {
+    return when (type) {
+      "channel", "dispatchChannel" -> zello.getChannel(name)
+      "groupConversation" -> zello.getGroupConversation(name)
+      "user" -> zello.getUser(name)
+      else -> null
+    }
   }
 
   private fun sendEvent(reactContext: ReactContext, name: String, params: WritableMap?) {
