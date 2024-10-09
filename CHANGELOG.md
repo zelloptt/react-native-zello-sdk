@@ -1,5 +1,11 @@
 # Changelog
 
+# 1.0.1
+
+### Bug Fixes
+
+* Fix adhoc group conversation bugs [#9](https://github.com/zelloptt/react-native-zello-sdk/pull/9)
+
 # 1.0.0
 
 ### Features
