@@ -12,7 +12,7 @@ const IncomingLocationDialog = ({ message }: IncomingLocationDialogProps) => {
   const { clearMessage } = useContext(LastIncomingLocationMessageContext);
 
   const title = useMessageTitle(
-    message.contact.name,
+    message.contact,
     message.channelUser?.displayName
   );
 

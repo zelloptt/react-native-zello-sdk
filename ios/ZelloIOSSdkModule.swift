@@ -42,15 +42,15 @@ import ZelloSDK
     zello.setAccountStatus(status: accountStatus)
   }
 
-  @objc func selectContact(_ name: String, isChannel: Bool) {
-    guard let contact = isChannel ? zello.channel(named: name).map(ZelloContact.channel) : zello.user(named: name).map(ZelloContact.user) else {
+  @objc func selectContact(_ name: String, contactType: String) {
+    guard let contact = contactFromType(contactType, name: name) else {
       return
     }
     zello.setSelectedContact(contact: contact)
   }
 
-  @objc func startVoiceMessage(_ name: String, isChannel: Bool) {
-    guard let contact = isChannel ? zello.channel(named: name).map(ZelloContact.channel) : zello.user(named: name).map(ZelloContact.user) else {
+  @objc func startVoiceMessage(_ name: String, contactType: String) {
+    guard let contact = contactFromType(contactType, name: name) else {
       return
     }
     zello.startVoiceMessage(contact: contact)
@@ -60,8 +60,8 @@ import ZelloSDK
     zello.stopVoiceMessage()
   }
 
-  @objc func sendImage(_ name: String, isChannel: Bool, data: [Int]) {
-    guard let contact = isChannel ? zello.channel(named: name).map(ZelloContact.channel) : zello.user(named: name).map(ZelloContact.user) else {
+  @objc func sendImage(_ name: String, contactType: String, data: [Int]) {
+    guard let contact = contactFromType(contactType, name: name) else {
       return
     }
     let byteArray = data.map { UInt8($0) }
@@ -72,26 +72,26 @@ import ZelloSDK
     zello.send(image, to: contact)
   }
 
-  @objc func sendLocation(_ name: String, isChannel: Bool) {
-    guard let contact = isChannel ? zello.channel(named: name).map(ZelloContact.channel) : zello.user(named: name).map(ZelloContact.user) else {
+  @objc func sendLocation(_ name: String, contactType: String) {
+    guard let contact = contactFromType(contactType, name: name) else {
       return
     }
     zello.sendLocation(to: contact)
   }
 
-  @objc func sendText(_ name: String, isChannel: Bool, text: String) {
-    guard let contact = isChannel ? zello.channel(named: name).map(ZelloContact.channel) : zello.user(named: name).map(ZelloContact.user) else {
+  @objc func sendText(_ name: String, contactType: String, text: String) {
+    guard let contact = contactFromType(contactType, name: name) else {
       return
     }
     zello.send(textMessage: text, to: contact)
   }
 
-  @objc func sendAlert(_ name: String, isChannel: Bool, text: String, level: String?) {
-    guard let contact = isChannel ? zello.channel(named: name).map(ZelloContact.channel) : zello.user(named: name).map(ZelloContact.user) else {
+  @objc func sendAlert(_ name: String, contactType: String, text: String, level: String?) {
+    guard let contact = contactFromType(contactType, name: name) else {
       return
     }
     var alertLevel: ZelloAlertMessage.ChannelLevel? = nil
-    if isChannel {
+    if contact.isZelloChannel || contact.isZelloGroupConversation {
       switch level {
       case "all":
         alertLevel = .all
@@ -136,15 +136,15 @@ import ZelloSDK
     zello.submitReport()
   }
 
-  @objc func muteContact(_ name: String, isChannel: Bool) {
-    guard let contact = isChannel ? zello.channel(named: name).map(ZelloContact.channel) : zello.user(named: name).map(ZelloContact.user) else {
+  @objc func muteContact(_ name: String, contactType: String) {
+    guard let contact = contactFromType(contactType, name: name) else {
       return
     }
     zello.muteContact(contact: contact)
   }
 
-  @objc func unmuteContact(_ name: String, isChannel: Bool) {
-    guard let contact = isChannel ? zello.channel(named: name).map(ZelloContact.channel) : zello.user(named: name).map(ZelloContact.user) else {
+  @objc func unmuteContact(_ name: String, contactType: String) {
+    guard let contact = contactFromType(contactType, name: name) else {
       return
     }
     zello.unmuteContact(contact: contact)
@@ -160,8 +160,8 @@ import ZelloSDK
     }
   }
 
-  @objc func getHistory(_ name: String, isChannel: Bool, maxMessages: Int, callback: RCTResponseSenderBlock) {
-    guard let contact = isChannel ? zello.channel(named: name).map(ZelloContact.channel) : zello.user(named: name).map(ZelloContact.user) else {
+  @objc func getHistory(_ name: String, contactType: String, maxMessages: Int, callback: RCTResponseSenderBlock) {
+    guard let contact = contactFromType(contactType, name: name) else {
       callback(nil)
       return
     }
@@ -182,9 +182,9 @@ import ZelloSDK
     }])
   }
 
-  @objc func playHistoryMessage(_ historyId: String, contactName: String, isChannel: Bool) {
+  @objc func playHistoryMessage(_ historyId: String, contactName: String, contactType: String) {
     guard
-      let contact = isChannel ? zello.channel(named: contactName).map(ZelloContact.channel) : zello.user(named: contactName).map(ZelloContact.user),
+      let contact = contactFromType(contactType, name: contactName),
       let message = zello.getHistoryMessage(historyId, contact: contact) as? ZelloHistoryVoiceMessage
     else {
       return
@@ -196,9 +196,9 @@ import ZelloSDK
     zello.stopHistoryMessagePlayback()
   }
 
-  @objc func getHistoryImageData(_ historyId: String, contactName: String, isChannel: Bool, callback: RCTResponseSenderBlock) {
+  @objc func getHistoryImageData(_ historyId: String, contactName: String, contactType: String, callback: RCTResponseSenderBlock) {
     guard
-      let contact = isChannel ? zello.channel(named: contactName).map(ZelloContact.channel) : zello.user(named: contactName).map(ZelloContact.user),
+      let contact = contactFromType(contactType, name: contactName),
       let message = zello.getHistoryMessage(historyId, contact: contact) as? ZelloHistoryImageMessage,
       let image = zello.loadHistoryImage(for: message),
       let base64String = image.base64String
@@ -248,6 +248,26 @@ import ZelloSDK
 }
 
 extension ZelloIOSSdkModule {
+  func contactFromType(_ type: String, name: String) -> ZelloContact? {
+    if type == "user" {
+      guard let user = zello.user(named: name) else {
+        return nil
+      }
+      return ZelloContact.user(user)
+    } else if type == "channel" || type == "dispatchChannel" {
+      guard let user = zello.channel(named: name) else {
+        return nil
+      }
+      return ZelloContact.channel(user)
+    } else if type == "groupConversation" {
+      guard let user = zello.conversation(named: name) else {
+        return nil
+      }
+      return ZelloContact.conversation(user)
+    }
+    return nil
+  }
+
   func sendSdkEvent(withName name: String, body: [AnyHashable: Any]?) {
     var eventBody = body ?? [:]
     eventBody[eventName] = name

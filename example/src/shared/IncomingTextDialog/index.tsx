@@ -12,7 +12,7 @@ const IncomingTextDialog = ({ message }: IncomingTextDialogProps) => {
   const { clearMessage } = useContext(LastIncomingTextMessageContext);
 
   const title = useMessageTitle(
-    message.contact.name,
+    message.contact,
     message.channelUser?.displayName
   );
 

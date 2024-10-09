@@ -6,6 +6,8 @@ extension ZelloContact {
       return user.jsonDictionary
     } else if let channel = self.asZelloChannel() {
       return channel.jsonDictionary
+    } else if let groupConversation = self.asZelloGroupConversation() {
+      return groupConversation.jsonDictionary
     }
     return [:]
   }

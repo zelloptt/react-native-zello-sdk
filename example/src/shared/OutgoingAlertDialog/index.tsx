@@ -14,6 +14,7 @@ import {
   ZelloContactType,
 } from '@zelloptt/react-native-zello-sdk';
 import { SdkContext } from '../../App';
+import useContactDisplayName from '../hooks/useContactDisplayName';
 
 export interface OutgoingAlertDialogProps {
   contact: ZelloContact;
@@ -36,11 +37,13 @@ const OutgoingAlertDialog = ({
     onClose();
   }, [contact, sdk, text, alertLevel, onClose]);
 
+  const contactName = useContactDisplayName(contact);
+
   return (
     <Modal visible={true} transparent={true} onRequestClose={onClose}>
       <View style={styles.modalContainer}>
         <View style={styles.dialogContainer}>
-          <Text>{`Send alert to ${contact.name}`}</Text>
+          <Text>{`Send alert to ${contactName()}`}</Text>
           <View style={styles.spacer} />
           <TextInput
             placeholder="Type your message"
