@@ -47,6 +47,7 @@
     "clean": "del-cli android/build example/android/build example/android/app/build example/ios/build lib",
     "prepare": "bob build",
     "release": "release-it",
+    "perform-release": "npm run typecheck && npm run prepare && npm run docs && npm run release",
     "docs": "npx typedoc --out src/docs --entryPointStrategy expand src --exclude \"src/docs/**/*\" --exclude \"src/utils/**/*\""
   },
   "keywords": [
