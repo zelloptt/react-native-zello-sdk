@@ -28,7 +28,7 @@ PODS:
   - hermes-engine (0.74.5):
     - hermes-engine/Pre-built (= 0.74.5)
   - hermes-engine/Pre-built (0.74.5)
-  - OpenSSL-Universal (1.1.2200)
+  - OpenSSL-Universal (1.1.2301)
   - PhoneNumberKit/PhoneNumberKitCore (3.8.0)
   - PromisesObjC (2.4.0)
   - PromisesSwift (2.4.0):
@@ -963,7 +963,7 @@ PODS:
     - React-debug
   - react-native-safe-area-context (4.10.8):
     - React-Core
-  - react-native-zello-sdk (1.0.0):
+  - react-native-zello-sdk (1.0.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1502,7 +1502,7 @@ SPEC CHECKSUMS:
   glog: fdfdfe5479092de0c4bdbebedd9056951f092c4f
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   hermes-engine: 8c1577f3fdb849cbe7729c2e7b5abc4b845e88f8
-  OpenSSL-Universal: 6e1ae0555546e604dbc632a2b9a24a9c46c41ef6
+  OpenSSL-Universal: ca89c20240633a77c776082ba76b7d90f992bf77
   PhoneNumberKit: ec00ab8cef5342c1dc49fadb99d23fa7e66cf0ef
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   PromisesSwift: 9d77319bbe72ebf6d872900551f7eeba9bce2851
@@ -1531,7 +1531,7 @@ SPEC CHECKSUMS:
   React-logger: 257858bd55f3a4e1bc0cf07ddc8fb9faba6f8c7c
   React-Mapbuffer: dce508662b995ffefd29e278a16b78217039d43d
   react-native-safe-area-context: b7daa1a8df36095a032dff095a1ea8963cb48371
-  react-native-zello-sdk: 476fc408067cef4bdafc2f79d58cad2252e1e65f
+  react-native-zello-sdk: 974d226a9de45298c69b8bff091d5a8c0a867b45
   React-nativeconfig: f326487bc61eba3f0e328da6efb2711533dcac46
   React-NativeModulesApple: d89733f5baed8b9249ca5a8e497d63c550097312
   React-perflogger: ed4e0c65781521e0424f2e5e40b40cc7879d737e
