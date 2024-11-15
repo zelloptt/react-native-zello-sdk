@@ -45,6 +45,7 @@ class ZelloAndroidSdkModule @Inject constructor(
 
   init {
     zello.listener = this
+    zello.framework = Zello.Framework.REACT_NATIVE
   }
 
   override fun getName() = "ZelloAndroidSdkModule"
