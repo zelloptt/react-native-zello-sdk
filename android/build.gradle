@@ -102,7 +102,7 @@ repositories {
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
-def zelloSdkVersion = "1.0.0"
+def zelloSdkVersion = "1.0.1"
 
 dependencies {
   // For < 0.71, this will be from the local maven repo
