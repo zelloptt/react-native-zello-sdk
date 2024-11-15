@@ -1,5 +1,11 @@
 # Changelog
 
+# 1.0.2
+
+### Bug Fixes
+
+* Increase Android SDK to 1.0.1 [b36b8b2ddbc57c57f0a7097f643ea6d47be08293](https://github.com/zelloptt/react-native-zello-sdk/commit/b36b8b2ddbc57c57f0a7097f643ea6d47be08293)
+
 # 1.0.1
 
 ### Bug Fixes
