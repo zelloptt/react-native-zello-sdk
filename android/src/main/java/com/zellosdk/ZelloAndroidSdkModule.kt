@@ -164,7 +164,7 @@ class ZelloAndroidSdkModule @Inject constructor(
 
   @ReactMethod
   fun playHistoryMessage(historyId: String, contactName: String, type: String) {
-    val contact = contactFrom(name, type) ?: return
+    val contact = contactFrom(contactName, type) ?: return
     val message = zello.getHistoryMessage(historyId, contact) as? ZelloHistoryVoiceMessage ?: return
     zello.playHistoryMessage(message)
   }
@@ -176,7 +176,7 @@ class ZelloAndroidSdkModule @Inject constructor(
 
   @ReactMethod
   fun getImageDataForHistoryImageMessage(historyId: String, contactName: String, type: String, callback: Callback) {
-    val contact = contactFrom(name, type) ?: return
+    val contact = contactFrom(contactName, type) ?: return
     val message = zello.getHistoryMessage(historyId, contact) as? ZelloHistoryImageMessage ?: return
     zello.loadBitmapForHistoryImageMessage(message) {
       callback.invoke(ZelloAndroidSdkModuleHelper.bitmapToBase64String(it))

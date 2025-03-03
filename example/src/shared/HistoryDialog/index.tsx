@@ -86,7 +86,11 @@ const HistoryVoiceMessage = ({ item }: { item: ZelloHistoryVoiceMessage }) => {
       <Text style={styles.historyText}>{`${item.durationMs} ms`}</Text>
       <TouchableOpacity onPress={handlePress}>
         <Ionicons
-          name={historyVoiceMessage ? 'stop-outline' : 'play-outline'}
+          name={
+            historyVoiceMessage?.historyId === item.historyId
+              ? 'stop-outline'
+              : 'play-outline'
+          }
           size={24}
           color="black"
         />
