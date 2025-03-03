@@ -1,5 +1,11 @@
 # Changelog
 
+# 1.0.3
+
+### Bug Fixes
+
+* Fix History message playback [#12](https://github.com/zelloptt/react-native-zello-sdk/pull/12)
+
 # 1.0.2
 
 ### Bug Fixes
