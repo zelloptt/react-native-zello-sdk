@@ -1,0 +1,13 @@
+# pinact - https://github.com/suzuki-shunsuke/pinact
+version: 3
+# files:
+#   - pattern: action.yaml
+#   - pattern: */action.yaml
+
+ignore_actions:
+#   - name: actions/.*
+#     ref: main
+  - name: zelloptt/.*
+    ref: v.*
+  - name: zelloptt/zello-devops/.github/workflows/lint-pr-title.yml
+    ref: master
