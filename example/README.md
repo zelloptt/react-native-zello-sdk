@@ -1,67 +1,74 @@
 # Getting Started
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/set-up-your-environment) instructions before proceeding.
+> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
 
-## Install Dependencies
-```
-# Navigate to the project root
-cd ..
-npm install
-# OR using Yarn
-# yarn install
-cd example
-npm install
-```
+## Step 1: Start Metro
 
-## Start the Metro Server
+First, you will need to run **Metro**, the JavaScript build tool for React Native.
 
-To start Metro, run the following command from the `example` folder:
+To start the Metro dev server, run the following command from the root of your React Native project:
 
-```bash
+```sh
+# Using npm
 npm start
+
+# OR using Yarn
+yarn start
 ```
 
-## Start the Application
+## Step 2: Build and run your app
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal. Run the following command to start the _Android_ or _iOS_ app:
+With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
 
-### For Android
+### Android
 
-```bash
-# using npm
+```sh
+# Using npm
 npm run android
 
 # OR using Yarn
 yarn android
 ```
 
-### For iOS
+### iOS
 
-Install the dependencies:
-```bash
-cd ios
-pod install
+For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
 
-# OR using npm
-npx pod-install
+The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+
+```sh
+bundle install
 ```
 
-You will need to change the Code Signing team to your own team. Additionally, you may need to setup your own App Groups + Keychain Sharing values.
+Then, and every time you update your native dependencies, run:
 
-Please note that if you want the example app to work in the background, you will need to setup an APNS key, and email us at sdk@zello.com. Lastly, you'll need to modify the App Group value in [this file](https://github.com/zelloptt/react-native-zello-sdk/blob/develop/example/ios/NotificationServiceExtension/NotificationService.swift).
+```sh
+bundle exec pod install
+```
 
-```bash
-# using npm
+For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+
+```sh
+# Using npm
 npm run ios
 
 # OR using Yarn
 yarn ios
 ```
 
-If everything is set up _correctly_, you should see the new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
 
-This is one way to run the app — you can also run it directly from within Android Studio and Xcode respectively.
+This is one way to run your app — you can also build it directly from Android Studio or Xcode.
 
-# Troubleshooting
+## Step 3: Modify your app
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+Now that you have successfully run the app, let's make changes!
+
+Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+
+When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+
+- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
+- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+
+## Congratulations! :tada:

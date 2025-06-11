@@ -42,11 +42,6 @@ target 'ZelloSdkExample' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'ZelloSdkExampleTests' do
-    inherit! :complete
-    # Pods for testing
-  end
-
   pre_install do |installer|
     installer.pod_targets.each do |pod|
       if pod.name.eql?('RNScreens')
@@ -79,6 +74,6 @@ target 'NotificationServiceExtension' do
   use_frameworks!
 
   # IMPORTANT: Make sure this is the same version as the podspec
-  pod "ZelloSDK", "~> 1.0.0"
+  pod "ZelloSDK", "~> 2.0.0"
 
 end
