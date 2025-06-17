@@ -6030,7 +6030,7 @@ react-native-vector-icons@*, react-native-vector-icons@10.1.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-"react-native-zello-sdk-example@file:/Users/developer/react-native-zello-sdk-v3/example":
+"react-native-zello-sdk-example@file:/Users/developer/react-native-zello-sdk/example":
   version "0.0.1"
   resolved "file:example"
   dependencies:
