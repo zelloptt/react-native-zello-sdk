@@ -5,7 +5,7 @@
 ### BREAKING CHANGES
 
 * Dropped support for iOS 14 — minimum supported version is now iOS 15.
-* Updating to SDK 2.0.0 or higher will be **required** to continue communication with Zello servers starting October 2025.
+* Updating to SDK 2.0.0 or higher will be **required** to continue communication with Zello servers starting Aug 12 2025.
 
 # 1.0.3
 
