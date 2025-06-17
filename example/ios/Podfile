@@ -79,6 +79,6 @@ target 'NotificationServiceExtension' do
   use_frameworks!
 
   # IMPORTANT: Make sure this is the same version as the podspec
-  pod "ZelloSDK", "~> 1.0.0"
+  pod "ZelloSDK", "~> 2.0.0"
 
 end
