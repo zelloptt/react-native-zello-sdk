@@ -996,7 +996,7 @@ export class Zello extends EventEmitter {
               event.longitude,
               event.accuracy,
               event.address
-            ).contact
+            )
           );
           break;
         }
