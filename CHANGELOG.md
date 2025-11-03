@@ -1,5 +1,9 @@
 # Changelog
 
+# 2.0.1
+
+* Increase Android SDK to 1.0.+ (1.0.4)
+
 # 2.0.0
 
 ### BREAKING CHANGES
