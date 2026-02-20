@@ -25,7 +25,7 @@ npm install @zelloptt/react-native-zello-sdk
 
 ### iOS
 
-Before getting started, please reference the [iOS Installation Guide](https://sdk.zello.com/installation-guides/ios-installation-guide).
+Before getting started, please reference the [iOS Installation Guide](https://developers.zello.com/sdk/latest/ios/documentation/zellosdk/getting-started).
 
 The main amendment to the guide is that there is no need to add the `ZelloSDK` as a pod directly to your project.
 
