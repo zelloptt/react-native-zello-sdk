@@ -71,6 +71,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
     "@evilmartians/lefthook": "^1.5.0",
+    "@react-native-community/cli": "20.1.0",
     "@react-native/eslint-config": "0.86.0",
     "@react-native/jest-preset": "0.86.0",
     "@types/jest": "^29.5.13",
@@ -185,8 +186,20 @@
       ]
     ]
   },
+  "codegenConfig": {
+    "name": "RNZelloSdkSpec",
+    "type": "modules",
+    "jsSrcsDir": "src/specs",
+    "outputDir": {
+      "ios": "ios/generated",
+      "android": "android/generated"
+    },
+    "android": {
+      "javaPackageName": "com.zellosdk"
+    }
+  },
   "create-react-native-library": {
-    "type": "module-legacy",
+    "type": "turbo-module",
     "languages": "kotlin-swift",
     "version": "0.40.0"
   }
