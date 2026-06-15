@@ -199,7 +199,7 @@
     }
   },
   "create-react-native-library": {
-    "type": "turbo-module",
+    "type": "module-new",
     "languages": "kotlin-swift",
     "version": "0.40.0"
   }
