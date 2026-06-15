@@ -48,7 +48,11 @@ import {
   bridgeIncomingEmergencyToSdkIncomingEmergency,
 } from '../utils';
 import { ZelloEvent } from '../events';
+import NativeZelloSdk from '../specs/NativeZelloSdk';
 
+// `ZelloAndroidSdkModule` / `ZelloIOSSdkModule` remain only for the event
+// emitter (see `getSdk`); all method calls now go through the unified
+// `NativeZelloSdk` TurboModule.
 const { ZelloAndroidSdkModule, ZelloIOSSdkModule } = NativeModules;
 
 /**
@@ -153,14 +157,7 @@ export class Zello extends EventEmitter {
    * @param config The configuration to set.
    */
   public configure(config: ZelloConfig) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.configure(
-        config.android.enableOfflineMessagePushNotifications,
-        config.android.enableForegroundService
-      );
-    } else {
-      ZelloIOSSdkModule.configure(config.ios.isDebugBuild, config.ios.appGroup);
-    }
+    NativeZelloSdk.configure(config);
   }
 
   /**
@@ -179,19 +176,11 @@ export class Zello extends EventEmitter {
    * @param credentials The credentials to use for signing in.
    */
   public connect(credentials: ZelloCredentials) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.connect(
-        credentials.network,
-        credentials.username,
-        credentials.password
-      );
-    } else {
-      ZelloIOSSdkModule.connect(
-        credentials.network,
-        credentials.username,
-        credentials.password
-      );
-    }
+    NativeZelloSdk.connect(
+      credentials.network,
+      credentials.username,
+      credentials.password
+    );
   }
 
   /**
@@ -199,11 +188,7 @@ export class Zello extends EventEmitter {
    * This will trigger the {@link ZelloEvent.DISCONNECTED} event.
    */
   public disconnect() {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.disconnect();
-    } else {
-      ZelloIOSSdkModule.disconnect();
-    }
+    NativeZelloSdk.disconnect();
   }
 
   /**
@@ -242,11 +227,7 @@ export class Zello extends EventEmitter {
    * @param contact The contact to set as selected.
    */
   public setSelectedContact(contact: ZelloContact) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.setSelectedContact(contact.name, contact.type);
-    } else {
-      ZelloIOSSdkModule.selectContact(contact.name, contact.type);
-    }
+    NativeZelloSdk.selectContact(contact.name, contact.type);
   }
 
   /**
@@ -255,11 +236,7 @@ export class Zello extends EventEmitter {
    * @param status The account status to set.
    */
   public setAccountStatus(status: ZelloAccountStatus) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.setAccountStatus(status);
-    } else {
-      ZelloIOSSdkModule.setAccountStatus(status);
-    }
+    NativeZelloSdk.setAccountStatus(status);
   }
 
   /**
@@ -269,14 +246,10 @@ export class Zello extends EventEmitter {
    * @param channel The channel to connect to.
    */
   public connectChannel(channel: ZelloChannel) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.connectChannel(channel.name);
+    if (channel.type === ZelloContactType.GroupConversation) {
+      NativeZelloSdk.connectGroupConversation(channel.name);
     } else {
-      if (channel.type === ZelloContactType.GroupConversation) {
-        ZelloIOSSdkModule.connectGroupConversation(channel.name);
-      } else {
-        ZelloIOSSdkModule.connectChannel(channel.name);
-      }
+      NativeZelloSdk.connectChannel(channel.name);
     }
   }
 
@@ -287,14 +260,10 @@ export class Zello extends EventEmitter {
    * @param channel The channel to disconnect from.
    */
   public disconnectChannel(channel: ZelloChannel) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.disconnectChannel(channel.name);
+    if (channel.type === ZelloContactType.GroupConversation) {
+      NativeZelloSdk.disconnectGroupConversation(channel.name);
     } else {
-      if (channel.type === ZelloContactType.GroupConversation) {
-        ZelloIOSSdkModule.disconnectGroupConversation(channel.name);
-      } else {
-        ZelloIOSSdkModule.disconnectChannel(channel.name);
-      }
+      NativeZelloSdk.disconnectChannel(channel.name);
     }
   }
 
@@ -305,11 +274,7 @@ export class Zello extends EventEmitter {
    * @param contact The contact to start the voice message with.
    */
   public startVoiceMessage(contact: ZelloContact) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.startVoiceMessage(contact.name, contact.type);
-    } else {
-      ZelloIOSSdkModule.startVoiceMessage(contact.name, contact.type);
-    }
+    NativeZelloSdk.startVoiceMessage(contact.name, contact.type);
   }
 
   /**
@@ -317,11 +282,7 @@ export class Zello extends EventEmitter {
    * This will trigger the {@link ZelloEvent.OUTGOING_VOICE_MESSAGE_STOPPED} event.
    */
   public stopVoiceMessage() {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.stopVoiceMessage();
-    } else {
-      ZelloIOSSdkModule.stopVoiceMessage();
-    }
+    NativeZelloSdk.stopVoiceMessage();
   }
 
   /**
@@ -331,11 +292,7 @@ export class Zello extends EventEmitter {
    * @param data The image data to send.
    */
   public sendImage(contact: ZelloContact, data: number[]) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.sendImage(contact.name, contact.type, data);
-    } else {
-      ZelloIOSSdkModule.sendImage(contact.name, contact.type, data);
-    }
+    NativeZelloSdk.sendImage(contact.name, contact.type, data);
   }
 
   /**
@@ -344,11 +301,7 @@ export class Zello extends EventEmitter {
    * @param contact The contact to send the alert to.
    */
   public sendLocation(contact: ZelloContact) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.sendLocation(contact.name, contact.type);
-    } else {
-      ZelloIOSSdkModule.sendLocation(contact.name, contact.type);
-    }
+    NativeZelloSdk.sendLocation(contact.name, contact.type);
   }
 
   /**
@@ -358,11 +311,7 @@ export class Zello extends EventEmitter {
    * @param text The text to send.
    */
   public sendText(contact: ZelloContact, text: string) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.sendText(contact.name, contact.type, text);
-    } else {
-      ZelloIOSSdkModule.sendText(contact.name, contact.type, text);
-    }
+    NativeZelloSdk.sendText(contact.name, contact.type, text);
   }
 
   /**
@@ -377,11 +326,7 @@ export class Zello extends EventEmitter {
     text: string,
     level?: ZelloChannelAlertLevel
   ) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.sendAlert(contact.name, contact.type, text, level);
-    } else {
-      ZelloIOSSdkModule.sendAlert(contact.name, contact.type, text, level);
-    }
+    NativeZelloSdk.sendAlert(contact.name, contact.type, text, level ?? '');
   }
 
   /**
@@ -389,11 +334,7 @@ export class Zello extends EventEmitter {
    * Additionally, please contact us to provide more information on what happened.
    */
   public submitProblemReport() {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.submitProblemReport();
-    } else {
-      ZelloIOSSdkModule.submitProblemReport();
-    }
+    NativeZelloSdk.submitProblemReport();
   }
 
   /**
@@ -402,11 +343,7 @@ export class Zello extends EventEmitter {
    * @param contact The contact to mute.
    */
   public muteContact(contact: ZelloContact) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.muteContact(contact.name, contact.type);
-    } else {
-      ZelloIOSSdkModule.muteContact(contact.name, contact.type);
-    }
+    NativeZelloSdk.muteContact(contact.name, contact.type);
   }
 
   /**
@@ -415,11 +352,7 @@ export class Zello extends EventEmitter {
    * @param contact The contact to unmute.
    */
   public unmuteContact(contact: ZelloContact) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.unmuteContact(contact.name, contact.type);
-    } else {
-      ZelloIOSSdkModule.unmuteContact(contact.name, contact.type);
-    }
+    NativeZelloSdk.unmuteContact(contact.name, contact.type);
   }
 
   /**
@@ -428,11 +361,7 @@ export class Zello extends EventEmitter {
    * This will trigger the {@link ZelloEvent.OUTGOING_EMERGENCY_STARTED} event.
    */
   public startEmergency() {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.startEmergency();
-    } else {
-      ZelloIOSSdkModule.startEmergency();
-    }
+    NativeZelloSdk.startEmergency();
   }
 
   /**
@@ -440,11 +369,7 @@ export class Zello extends EventEmitter {
    * This will trigger the {@link ZelloEvent.OUTGOING_EMERGENCY_STOPPED} event.
    */
   public stopEmergency() {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.stopEmergency();
-    } else {
-      ZelloIOSSdkModule.stopEmergency();
-    }
+    NativeZelloSdk.stopEmergency();
   }
 
   /**
@@ -453,38 +378,22 @@ export class Zello extends EventEmitter {
    * @param size Optional; The number of history items to retrieve. Defaults to 50.
    * @return The history items for the given contact.
    */
-  public getHistory(
+  public async getHistory(
     contact: ZelloContact,
     size?: number
   ): Promise<ZelloHistoryMessage[]> {
     const defaultHistorySize = 50;
-    return new Promise((resolve) => {
-      const callback = (history: any[] | undefined) => {
-        if (!history) {
-          resolve([]);
-          return;
-        }
-        const messages = history
-          .map((message) => bridgeHistoryMessageToSdkHistoryMessage(message))
-          .filter((item) => item !== undefined) as ZelloHistoryMessage[];
-        resolve(messages);
-      };
-      if (isAndroid) {
-        ZelloAndroidSdkModule.getHistory(
-          contact.name,
-          contact.type,
-          size ?? defaultHistorySize,
-          callback
-        );
-      } else {
-        ZelloIOSSdkModule.getHistory(
-          contact.name,
-          contact.type,
-          size ?? defaultHistorySize,
-          callback
-        );
-      }
-    });
+    const history = (await NativeZelloSdk.getHistory(
+      contact.name,
+      contact.type,
+      size ?? defaultHistorySize
+    )) as unknown as any[] | undefined;
+    if (!history) {
+      return [];
+    }
+    return history
+      .map((message) => bridgeHistoryMessageToSdkHistoryMessage(message))
+      .filter((item) => item !== undefined) as ZelloHistoryMessage[];
   }
 
   /**
@@ -493,19 +402,11 @@ export class Zello extends EventEmitter {
    * @param message The history message to play.
    */
   public playHistoryMessage(message: ZelloHistoryVoiceMessage) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.playHistoryMessage(
-        message.historyId,
-        message.contact.name,
-        message.contact.type
-      );
-    } else {
-      ZelloIOSSdkModule.playHistoryMessage(
-        message.historyId,
-        message.contact.name,
-        message.contact.type
-      );
-    }
+    NativeZelloSdk.playHistoryMessage(
+      message.historyId,
+      message.contact.name,
+      message.contact.type
+    );
   }
 
   /**
@@ -513,11 +414,7 @@ export class Zello extends EventEmitter {
    * This will trigger the {@link ZelloEvent.HISTORY_PLAYBACK_STOPPED} event.
    */
   public stopHistoryMessagePlayback() {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.stopHistoryMessagePlayback();
-    } else {
-      ZelloIOSSdkModule.stopHistoryMessagePlayback();
-    }
+    NativeZelloSdk.stopHistoryMessagePlayback();
   }
 
   /**
@@ -528,23 +425,11 @@ export class Zello extends EventEmitter {
   public getImageDataForHistoryImageMessage(
     message: ZelloHistoryImageMessage
   ): Promise<string | undefined> {
-    return new Promise((resolve) => {
-      if (isAndroid) {
-        ZelloAndroidSdkModule.getImageDataForHistoryImageMessage(
-          message.historyId,
-          message.contact.name,
-          message.contact.type,
-          (data: string | undefined) => resolve(data)
-        );
-      } else {
-        ZelloIOSSdkModule.getHistoryImageData(
-          message.historyId,
-          message.contact.name,
-          message.contact.type,
-          (data: string | undefined) => resolve(data)
-        );
-      }
-    });
+    return NativeZelloSdk.getHistoryImageData(
+      message.historyId,
+      message.contact.name,
+      message.contact.type
+    ) as unknown as Promise<string | undefined>;
   }
 
   /**
@@ -556,11 +441,7 @@ export class Zello extends EventEmitter {
    * @param channel The dispatch channel to end the call for.
    */
   public endDispatchCall(channel: ZelloDispatchChannel) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.endDispatchCall(channel.name);
-    } else {
-      ZelloIOSSdkModule.endDispatchCall(channel.name);
-    }
+    NativeZelloSdk.endDispatchCall(channel.name);
   }
 
   /**
@@ -573,17 +454,10 @@ export class Zello extends EventEmitter {
     if (!this.consoleSettings?.allowGroupConversations) {
       return;
     }
-    if (isAndroid) {
-      ZelloAndroidSdkModule.createGroupConversation(
-        users.map((user) => user.name),
-        displayName
-      );
-    } else {
-      ZelloIOSSdkModule.createGroupConversation(
-        users.map((user) => user.name),
-        displayName
-      );
-    }
+    NativeZelloSdk.createGroupConversation(
+      users.map((user) => user.name),
+      displayName ?? ''
+    );
   }
 
   /**
@@ -599,17 +473,10 @@ export class Zello extends EventEmitter {
     if (!this.consoleSettings?.allowGroupConversations) {
       return;
     }
-    if (isAndroid) {
-      ZelloAndroidSdkModule.addUsersToGroupConversation(
-        groupConversation.name,
-        users.map((user) => user.name)
-      );
-    } else {
-      ZelloIOSSdkModule.addUsersToGroupConversation(
-        groupConversation.name,
-        users.map((user) => user.name)
-      );
-    }
+    NativeZelloSdk.addUsersToGroupConversation(
+      groupConversation.name,
+      users.map((user) => user.name)
+    );
   }
 
   /**
@@ -621,11 +488,7 @@ export class Zello extends EventEmitter {
     if (!this.consoleSettings?.allowGroupConversations) {
       return;
     }
-    if (isAndroid) {
-      ZelloAndroidSdkModule.leaveGroupConversation(groupConversation.name);
-    } else {
-      ZelloIOSSdkModule.leaveGroupConversation(groupConversation.name);
-    }
+    NativeZelloSdk.leaveGroupConversation(groupConversation.name);
   }
 
   /**
@@ -641,14 +504,7 @@ export class Zello extends EventEmitter {
     if (!this.consoleSettings?.allowGroupConversations) {
       return;
     }
-    if (isAndroid) {
-      ZelloAndroidSdkModule.renameGroupConversation(
-        groupConversation.name,
-        name
-      );
-    } else {
-      ZelloIOSSdkModule.renameGroupConversation(groupConversation.name, name);
-    }
+    NativeZelloSdk.renameGroupConversation(groupConversation.name, name);
   }
 
   private setupEventListener(eventEmitter: NativeEventEmitter) {
