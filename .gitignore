@@ -83,3 +83,5 @@ google-services.json
 # Codegen output (regenerated at build time)
 ios/generated/
 android/generated/
+
+example/ios/.xcode.env.local

@@ -1,8 +1,13 @@
 #import "ZelloSdkModule.h"
 
 // Generated Swift interface header for this pod (module name derived from the
-// podspec name `react-native-zello-sdk`).
+// podspec name `react-native-zello-sdk`). Use the framework-style import when
+// built with use_frameworks!, falling back to the flat header otherwise.
+#if __has_include(<react_native_zello_sdk/react_native_zello_sdk-Swift.h>)
+#import <react_native_zello_sdk/react_native_zello_sdk-Swift.h>
+#else
 #import "react_native_zello_sdk-Swift.h"
+#endif
 
 #ifdef RCT_NEW_ARCH_ENABLED
 // The generated spec header is Objective-C++ only, so it is imported here in

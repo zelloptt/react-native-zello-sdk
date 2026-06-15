@@ -39,6 +39,8 @@
 	<string>Location message and tracking</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Sending voice messages</string>
+	<key>RCTNewArchEnabled</key>
+	<true/>
 	<key>UIAppFonts</key>
 	<array>
 		<string>AntDesign.ttf</string>
