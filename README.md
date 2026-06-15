@@ -25,6 +25,9 @@ npm install @zelloptt/react-native-zello-sdk
 
 ### iOS
 
+> [!WARNING]
+> **CocoaPods support is deprecated.** It still works and remains supported, but Swift Package Manager is the recommended installation path going forward.
+
 Before getting started, please reference the [iOS Installation Guide](https://developers.zello.com/sdk/latest/ios/documentation/zellosdk/getting-started).
 
 The main amendment to the guide is that there is no need to add the `ZelloSDK` as a pod directly to your project.

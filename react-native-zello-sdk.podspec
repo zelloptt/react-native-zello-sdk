@@ -3,6 +3,12 @@ require "json"
 package = JSON.parse(File.read(File.join(__dir__, "package.json")))
 folly_compiler_flags = '-DFOLLY_NO_CONFIG -DFOLLY_MOBILE=1 -DFOLLY_USE_LIBCPP=1 -Wno-comma -Wno-shorten-64-to-32'
 
+# CocoaPods support is deprecated. CocoaPods still works and remains supported,
+# but Swift Package Manager is the recommended installation path going forward.
+if defined?(Pod::UI)
+  Pod::UI.warn "[react-native-zello-sdk] CocoaPods support is deprecated. It still works, but Swift Package Manager is the recommended installation path going forward. See https://github.com/zelloptt/react-native-zello-sdk#installation"
+end
+
 Pod::Spec.new do |s|
   s.name         = "react-native-zello-sdk"
   s.version      = package["version"]
