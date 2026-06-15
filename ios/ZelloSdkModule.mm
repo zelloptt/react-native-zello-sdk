@@ -4,6 +4,16 @@
 // podspec name `react-native-zello-sdk`).
 #import "react_native_zello_sdk-Swift.h"
 
+#ifdef RCT_NEW_ARCH_ENABLED
+// The generated spec header is Objective-C++ only, so it is imported here in
+// the .mm rather than in the public .h. Conformance is declared via a class
+// extension so the public interface stays Swift-umbrella safe.
+#import "RNZelloSdkSpec.h"
+
+@interface ZelloSdkModule () <NativeZelloSdkSpec>
+@end
+#endif
+
 @implementation ZelloSdkModule {
   ZelloSdkModuleImpl *_impl;
 }

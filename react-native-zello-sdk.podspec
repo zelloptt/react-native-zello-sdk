@@ -21,6 +21,9 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/zelloptt/react-native-zello-sdk/react-native-zello-sdk.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift}"
+  # `ios/generated` is local codegen output (from `bob build --target codegen`);
+  # the real codegen runs during the host app build, so never compile it here.
+  s.exclude_files = "ios/generated/**/*"
 
   s.dependency 'ZelloSDK', '~> 2.0.0'
 
