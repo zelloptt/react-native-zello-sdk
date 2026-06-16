@@ -25,7 +25,21 @@ Pod::Spec.new do |s|
   # the real codegen runs during the host app build, so never compile it here.
   s.exclude_files = "ios/generated/**/*"
 
-  s.dependency 'ZelloSDK', '~> 2.0.0'
+  # ZelloSDK native dependency.
+  # Default: CocoaPods (`pod 'ZelloSDK'`). Set ZELLO_USE_SPM=1 before `pod install`
+  # to consume ZelloSDK via Swift Package Manager instead — prebuilt xcframeworks
+  # from github.com/zelloptt/ios-mobile-sdk (product `ZelloSDKUmbrella`). SPM is
+  # Zello's recommended path and avoids the CocoaPods resilient-symbol workaround.
+  # This mirrors sentry-react-native's `SENTRY_USE_SPM=1` opt-in pattern.
+  if ENV['ZELLO_USE_SPM'] == '1' && respond_to?(:spm_dependency, true)
+    spm_dependency(s,
+      url: 'https://github.com/zelloptt/ios-mobile-sdk',
+      requirement: { kind: 'upToNextMajorVersion', minimumVersion: '2.0.0' },
+      products: ['ZelloSDKUmbrella']
+    )
+  else
+    s.dependency 'ZelloSDK', '~> 2.0.0'
+  end
 
   # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.
   # See https://github.com/facebook/react-native/blob/febf6b7f33fdb4904669f99d795eba4c0f95d7bf/scripts/cocoapods/new_architecture.rb#L79.
