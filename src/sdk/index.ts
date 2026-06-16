@@ -50,10 +50,10 @@ import {
 import { ZelloEvent } from '../events';
 import NativeZelloSdk from '../specs/NativeZelloSdk';
 
-// `ZelloAndroidSdkModule` / `ZelloIOSSdkModule` remain only for the event
-// emitter (see `getSdk`); all method calls now go through the unified
-// `NativeZelloSdk` TurboModule.
-const { ZelloAndroidSdkModule, ZelloIOSSdkModule } = NativeModules;
+// `ZelloIOSSdkModule` is the iOS RCTEventEmitter that owns the Zello delegate
+// (see `getSdk`). All method calls go through the unified `NativeZelloSdk`
+// TurboModule, which on Android also owns the delegate.
+const { ZelloIOSSdkModule } = NativeModules;
 
 /**
  * Zello SDK.
@@ -1139,9 +1139,10 @@ export class Zello extends EventEmitter {
   }
 
   private static getSdk() {
-    if (isAndroid) {
-      return ZelloAndroidSdkModule;
-    }
-    return ZelloIOSSdkModule;
+    // On Android the TurboModule owns the Zello delegate and is already created
+    // by importing the spec; on iOS the ZelloIOSSdkModule RCTEventEmitter owns
+    // it and is instantiated on access. Either way this only needs to be truthy
+    // so the DeviceEventEmitter listener gets registered.
+    return isAndroid ? NativeZelloSdk : ZelloIOSSdkModule;
   }
 }

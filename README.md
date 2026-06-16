@@ -96,29 +96,38 @@ repositories {
 
 #### Linking
 
-Since the Zello Android SDK requires Hilt, and we must inject the `Zello` instance into the `ReactPackage`, the project does not work with autolinking.
+Since the Zello Android SDK requires Hilt, and we must inject the `Zello` instance into the package, the project does not work with autolinking.
 
-As such, you will need to create a `ReactPackage` wrapper like this:
+Because the module is now a Turbo Native Module (New Architecture), the package must be a `BaseReactPackage` that exposes the module through a `ReactModuleInfoProvider` with `isTurboModule = true`:
 
 ```kotlin
 /// ZelloAndroidSdkPackage.kt
 
-import com.facebook.react.ReactPackage
+import com.facebook.react.BaseReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.uimanager.ViewManager
+import com.facebook.react.module.model.ReactModuleInfo
+import com.facebook.react.module.model.ReactModuleInfoProvider
 import com.zello.sdk.Zello
 import com.zellosdk.ZelloAndroidSdkModule
 import javax.inject.Inject
 
-class ZelloAndroidSdkPackage @Inject constructor(private val zello: Zello) : ReactPackage {
+class ZelloAndroidSdkPackage @Inject constructor(private val zello: Zello) : BaseReactPackage() {
 
-  override fun createNativeModules(reactContext: ReactApplicationContext): List<NativeModule> {
-    return listOf(ZelloAndroidSdkModule(reactContext, zello))
-  }
+  override fun getModule(name: String, reactContext: ReactApplicationContext): NativeModule? =
+    if (name == "NativeZelloSdk") ZelloAndroidSdkModule(reactContext, zello) else null
 
-  override fun createViewManagers(reactContext: ReactApplicationContext): List<ViewManager<*, *>> {
-    return emptyList()
+  override fun getReactModuleInfoProvider() = ReactModuleInfoProvider {
+    mapOf(
+      "NativeZelloSdk" to ReactModuleInfo(
+        "NativeZelloSdk", // name
+        "NativeZelloSdk", // className
+        false, // canOverrideExistingModule
+        false, // needsEagerInit
+        false, // isCxxModule
+        true   // isTurboModule
+      )
+    )
   }
 }
 ```
