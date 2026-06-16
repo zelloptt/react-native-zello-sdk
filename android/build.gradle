@@ -69,13 +69,15 @@ android {
   }
 
   if (isNewArchitectureEnabled()) {
-    // The TurboModule codegen spec (NativeZelloSdkSpec) is generated here by the
-    // React Native Gradle plugin; add it to the compile source set.
+    // Make the generated TurboModule spec (NativeZelloSdkSpec) visible to the
+    // Kotlin/kapt compile. The RN Gradle plugin generates it under
+    // build/generated/source/codegen and adds it via finalizeDsl, but because
+    // this library uses kapt (Hilt) that late addition isn't reliably picked up,
+    // so register the dir explicitly here.
     sourceSets {
       main {
         java.srcDirs += [
-          "generated/java",
-          "generated/jni"
+          layout.buildDirectory.dir("generated/source/codegen/java").get().asFile
         ]
       }
     }
