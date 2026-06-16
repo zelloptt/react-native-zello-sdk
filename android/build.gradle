@@ -14,7 +14,6 @@ buildscript {
     classpath "com.android.tools.build:gradle:8.13.0"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath("com.google.dagger:hilt-android-gradle-plugin:2.56.2")
   }
 }
 
@@ -29,12 +28,11 @@ def isNewArchitectureEnabled() {
 
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
-apply plugin: 'com.google.dagger.hilt.android'
-apply plugin: 'kotlin-kapt'
 
-hilt {
-  enableAggregatingTask = true
-}
+// Note: this library does NOT apply Hilt/kapt. Its only @Inject was on a class
+// that the host app constructs manually (see ZelloAndroidSdkPackage), so Hilt
+// never processed it. Avoiding kapt also lets the generated TurboModule codegen
+// spec compile cleanly (kapt doesn't reliably see generated sources).
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
@@ -134,8 +132,6 @@ dependencies {
   }
   implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
   implementation("com.google.firebase:firebase-messaging")
-  implementation("com.google.dagger:hilt-android:2.56.2")
-  kapt("com.google.dagger:hilt-android-compiler:2.56.2")
 }
 
 if (isNewArchitectureEnabled()) {

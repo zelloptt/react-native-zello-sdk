@@ -32,9 +32,8 @@ import com.zello.sdk.ZelloConsoleSettings
 import com.zello.sdk.ZelloGroupConversation
 import com.zello.sdk.ZelloState
 import com.zello.sdk.ZelloTextMessage
-import javax.inject.Inject
 
-class ZelloAndroidSdkModule @Inject constructor(
+class ZelloAndroidSdkModule(
   reactContext: ReactApplicationContext,
   private val zello: Zello
 ) : NativeZelloSdkSpec(reactContext), Zello.Listener {
