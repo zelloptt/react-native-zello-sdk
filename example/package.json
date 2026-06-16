@@ -10,7 +10,6 @@
     "build:ios": "react-native build-ios --scheme ZelloSdkExample --mode Debug --extra-params \"-sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO\""
   },
   "dependencies": {
-    "@react-native-firebase/app": "24.1.1",
     "@react-native-picker/picker": "2.11.4",
     "@react-navigation/bottom-tabs": "7.18.2",
     "@react-navigation/native": "7.3.3",
