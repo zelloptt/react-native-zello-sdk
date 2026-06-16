@@ -68,6 +68,19 @@ android {
     }
   }
 
+  if (isNewArchitectureEnabled()) {
+    // The TurboModule codegen spec (NativeZelloSdkSpec) is generated here by the
+    // React Native Gradle plugin; add it to the compile source set.
+    sourceSets {
+      main {
+        java.srcDirs += [
+          "generated/java",
+          "generated/jni"
+        ]
+      }
+    }
+  }
+
   compileSdkVersion getExtOrIntegerDefault("compileSdkVersion")
 
   defaultConfig {
@@ -121,4 +134,12 @@ dependencies {
   implementation("com.google.firebase:firebase-messaging")
   implementation("com.google.dagger:hilt-android:2.56.2")
   kapt("com.google.dagger:hilt-android-compiler:2.56.2")
+}
+
+if (isNewArchitectureEnabled()) {
+  react {
+    jsRootDir = file("../src/")
+    libraryName = "NativeZelloSdk"
+    codegenJavaPackageName = "com.zellosdk"
+  }
 }
