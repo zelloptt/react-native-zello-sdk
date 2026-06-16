@@ -107,7 +107,9 @@ jobs:
           yarn turbo run build:android --cache-dir="${{ env.TURBO_CACHE_DIR }}"
 
   build-ios:
-    runs-on: macos-14
+    # macos-15 ships Xcode 16.x; React Native 0.86 requires Xcode >= 16.1
+    # (macos-14 defaults to 15.4).
+    runs-on: macos-15
     strategy:
       fail-fast: false
       matrix:
