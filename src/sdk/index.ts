@@ -1,8 +1,8 @@
 // noinspection JSUnusedGlobalSymbols
 
 import {
+  DeviceEventEmitter,
   EmitterSubscription,
-  NativeEventEmitter,
   NativeModules,
 } from 'react-native';
 import {
@@ -140,15 +140,12 @@ export class Zello extends EventEmitter {
 
   private constructor() {
     super();
+    // Accessing the native module instantiates it, which registers the SDK
+    // delegate that drives events. The events themselves arrive on the global
+    // DeviceEventEmitter 'zellosdk' channel (bridgeless-safe on both platforms).
     const sdk = Zello.getSdk();
     if (sdk) {
-      let eventEmitter: NativeEventEmitter;
-      if (isAndroid) {
-        eventEmitter = new NativeEventEmitter();
-      } else {
-        eventEmitter = new NativeEventEmitter(sdk);
-      }
-      this.setupEventListener(eventEmitter);
+      this.setupEventListener();
     }
   }
 
@@ -507,8 +504,8 @@ export class Zello extends EventEmitter {
     NativeZelloSdk.renameGroupConversation(groupConversation.name, name);
   }
 
-  private setupEventListener(eventEmitter: NativeEventEmitter) {
-    this.eventListener = eventEmitter.addListener('zellosdk', (event) => {
+  private setupEventListener() {
+    this.eventListener = DeviceEventEmitter.addListener('zellosdk', (event) => {
       const eventName = event.eventName;
       switch (eventName) {
         case 'onConnectFailed': {
