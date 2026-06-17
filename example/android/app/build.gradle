@@ -118,12 +118,13 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
-    // Must match the Hilt version the com.zello:sdk AAR was built with (2.52).
-    // The AAR ships precompiled @HiltViewModel modules; a newer app-side Hilt
-    // (2.55+) generates LazyClassKey (_LazyMapKey) references that don't exist
-    // in the AAR, breaking :app:hiltJavaCompileDebug.
-    implementation("com.google.dagger:hilt-android:2.52")
-    kapt("com.google.dagger:hilt-android-compiler:2.52")
+    // Hilt 2.54: newest release BEFORE Dagger's LazyClassKey became default
+    // (2.55). 2.55+ generates _LazyMapKey references absent from the
+    // com.zello:sdk AAR (built with Hilt 2.52), and 2.52 itself crashes kapt
+    // under Kotlin 2.1.20. 2.54 satisfies both: Kotlin-2.1-compatible kapt and
+    // no LazyClassKey output.
+    implementation("com.google.dagger:hilt-android:2.54")
+    kapt("com.google.dagger:hilt-android-compiler:2.54")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

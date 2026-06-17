@@ -15,7 +15,7 @@ buildscript {
         classpath("com.android.tools.build:gradle")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin")
-        classpath("com.google.dagger:hilt-android-gradle-plugin:2.52")
+        classpath("com.google.dagger:hilt-android-gradle-plugin:2.54")
 
         // Uncomment to enable Firebase services. Requires google-services.json file.
         // Also uncomment the noted line in the app level build.gradle file.
