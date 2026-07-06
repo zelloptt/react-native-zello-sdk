@@ -85,7 +85,8 @@ extension ZelloIOSSdkModule: Zello.Delegate {
   func zello(_ zello: Zello, didStartReceiving incomingVoiceMessage: ZelloIncomingVoiceMessage) {
     var body: [AnyHashable: Any] = [
       "contact": incomingVoiceMessage.contact.jsonDictionary,
-      "timestamp": incomingVoiceMessage.timestamp.bridgeTimestamp
+      "timestamp": incomingVoiceMessage.timestamp.bridgeTimestamp,
+      "isTranslation": incomingVoiceMessage.isTranslation
     ]
     if let channelUser = incomingVoiceMessage.channelUser {
       body["channelUser"] = channelUser.jsonDictionary
@@ -96,7 +97,8 @@ extension ZelloIOSSdkModule: Zello.Delegate {
   func zello(_ zello: Zello, didFinishReceiving incomingVoiceMessage: ZelloIncomingVoiceMessage) {
     var body: [AnyHashable: Any] = [
       "contact": incomingVoiceMessage.contact.jsonDictionary,
-      "timestamp": incomingVoiceMessage.timestamp.bridgeTimestamp
+      "timestamp": incomingVoiceMessage.timestamp.bridgeTimestamp,
+      "isTranslation": incomingVoiceMessage.isTranslation
     ]
     if let channelUser = incomingVoiceMessage.channelUser {
       body["channelUser"] = channelUser.jsonDictionary
@@ -289,6 +291,10 @@ extension ZelloIOSSdkModule: Zello.Delegate {
 
   func zello(_ zello: Zello, didFinishHistoryPlayback message: ZelloHistoryVoiceMessage) {
     sendSdkEvent(withName: "onHistoryPlaybackStopped", body: message.jsonDictionary)
+  }
+
+  func zello(_ zello: Zello, didReceiveTranscriptionFor message: ZelloHistoryVoiceMessage) {
+    sendSdkEvent(withName: "onHistoryVoiceMessageTranscriptionAvailable", body: message.jsonDictionary)
   }
 
   func zello(_ zello: Zello, callDidBecomePending call: ZelloDispatchCall, on channel: ZelloChannel) {

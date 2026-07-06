@@ -38,7 +38,9 @@ Pod::Spec.new do |s|
       products: ['ZelloSDKUmbrella']
     )
   else
-    s.dependency 'ZelloSDK', '~> 2.0.0'
+    # Channel type and emergency end-others require the first ZelloSDK release after 3.0.2;
+    # transcriptions and translation flags are available as of 3.0.2.
+    s.dependency 'ZelloSDK', '~> 3.0'
   end
 
   # Use install_modules_dependencies helper to install the dependencies if React Native version >=0.71.0.

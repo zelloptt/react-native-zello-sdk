@@ -165,6 +165,18 @@ import ZelloSDK
     }
   }
 
+  @objc func stopIncomingEmergency(_ emergencyId: String) {
+    DispatchQueue.main.async { [weak self] in
+      guard
+        let self,
+        let incomingEmergency = self.zello.incomingEmergencies.first(where: { $0.id == emergencyId })
+      else {
+        return
+      }
+      self.zello.stopIncomingEmergency(incomingEmergency)
+    }
+  }
+
   @objc func getHistory(_ name: String, contactType: String, maxMessages: Int, callback: RCTResponseSenderBlock) {
     guard let contact = contactFromType(contactType, name: name) else {
       callback(nil)

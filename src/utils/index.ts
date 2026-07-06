@@ -2,6 +2,7 @@ import {
   ZelloChannel,
   ZelloChannelConnectionStatus,
   ZelloChannelOptions,
+  ZelloChannelType,
   ZelloChannelUser,
   ZelloConsoleSettings,
   ZelloContact,
@@ -16,6 +17,8 @@ import {
   ZelloHistoryTextMessage,
   ZelloHistoryVoiceMessage,
   ZelloIncomingEmergency,
+  ZelloTranscription,
+  ZelloTranslation,
   ZelloUser,
   ZelloUserStatus,
   ZelloUserSupportedFeatures,
@@ -52,11 +55,15 @@ export function bridgeContactToSdkContact(
           allowAlertMessages: eventOptions.allowAlerts,
           allowLocationMessages: eventOptions.allowLocations,
           allowTextMessages: eventOptions.allowTextMessages,
+          allowEmergencyEndOwn: eventOptions.allowEmergencyEndOwn === true,
+          allowEmergencyEndOthers:
+            eventOptions.allowEmergencyEndOthers === true,
         };
       }
       if (!options) {
         return undefined;
       }
+      const translationsEnabled = eventContact.translationsEnabled === true;
       if (eventContact.isDispatchChannel) {
         let call: ZelloDispatchCall | undefined;
         if (eventContact.currentCall) {
@@ -75,7 +82,8 @@ export function bridgeContactToSdkContact(
           connectionStatus,
           usersOnline,
           options,
-          call
+          call,
+          translationsEnabled
         );
       } else if (eventContact.isGroupConversation) {
         contact = new ZelloGroupConversation(
@@ -98,7 +106,9 @@ export function bridgeContactToSdkContact(
           isMuted,
           connectionStatus,
           usersOnline,
-          options
+          options,
+          bridgeChannelTypeToSdkChannelType(eventContact.channelType),
+          translationsEnabled
         );
       }
     } else {
@@ -121,6 +131,42 @@ export function bridgeContactToSdkContact(
     }
   }
   return contact;
+}
+
+function bridgeChannelTypeToSdkChannelType(channelType: any): ZelloChannelType {
+  switch (channelType?.toLowerCase()) {
+    case 'dispatch':
+      return ZelloChannelType.Dispatch;
+    case 'team':
+      return ZelloChannelType.Team;
+    case 'group_conversation':
+      return ZelloChannelType.GroupConversation;
+    default:
+      return ZelloChannelType.Dynamic;
+  }
+}
+
+export function bridgeTranscriptionToSdkTranscription(
+  transcription: any
+): ZelloTranscription | undefined {
+  if (!transcription) {
+    return undefined;
+  }
+  const translations = Array.isArray(transcription.translations)
+    ? transcription.translations
+        .filter((translation: any) => translation?.text != null)
+        .map(
+          (translation: any) =>
+            new ZelloTranslation(translation.text, translation.language)
+        )
+    : [];
+  return new ZelloTranscription(
+    transcription.text ?? undefined,
+    transcription.language ?? undefined,
+    transcription.isTruncated === true,
+    transcription.confidence ?? 0,
+    translations
+  );
 }
 
 export function bridgeIncomingEmergencyToSdkIncomingEmergency(
@@ -155,7 +201,8 @@ export function bridgeHistoryMessageToSdkHistoryMessage(
         parseInt(message.timestamp, 10),
         message.historyId,
         message.incoming,
-        message.durationMs
+        message.durationMs,
+        bridgeTranscriptionToSdkTranscription(message.transcription)
       );
     case 'image':
       return new ZelloHistoryImageMessage(
