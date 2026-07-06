@@ -448,6 +448,25 @@ export class Zello extends EventEmitter {
   }
 
   /**
+   * Stops an incoming emergency started by another user on the emergency channel.
+   *
+   * This requires the emergency channel's {@link ZelloChannelOptions.allowEmergencyEndOthers | allowEmergencyEndOthers} option
+   * to be true; otherwise this method has no effect.
+   *
+   * On success, this will trigger the {@link ZelloEvent.INCOMING_EMERGENCY_STOPPED} event for the emergency.
+   * @param incomingEmergency The incoming emergency to stop. Must be one of the entries currently in {@link incomingEmergencies}.
+   */
+  public stopIncomingEmergency(incomingEmergency: ZelloIncomingEmergency) {
+    if (isAndroid) {
+      ZelloAndroidSdkModule.stopIncomingEmergency(
+        incomingEmergency.emergencyId
+      );
+    } else {
+      ZelloIOSSdkModule.stopIncomingEmergency(incomingEmergency.emergencyId);
+    }
+  }
+
+  /**
    * Returns the history messages for the given contact.
    * @param contact The contact to get the history for.
    * @param size Optional; The number of history items to retrieve. Defaults to 50.
@@ -742,7 +761,8 @@ export class Zello extends EventEmitter {
           this.incomingVoiceMessage = new ZelloIncomingVoiceMessage(
             contact,
             bridgeChannelUserToSdkChannelUser(event.channelUser),
-            parseInt(event.timestamp, 10)
+            parseInt(event.timestamp, 10),
+            event.isTranslation === true
           );
           this.emit(
             ZelloEvent.INCOMING_VOICE_MESSAGE_STARTED,
@@ -761,7 +781,8 @@ export class Zello extends EventEmitter {
             new ZelloIncomingVoiceMessage(
               contact,
               bridgeChannelUserToSdkChannelUser(event.channelUser),
-              parseInt(event.timestamp, 10)
+              parseInt(event.timestamp, 10),
+              event.isTranslation === true
             )
           );
           break;
@@ -1151,6 +1172,17 @@ export class Zello extends EventEmitter {
           this.emit(
             ZelloEvent.HISTORY_PLAYBACK_STOPPED,
             this.historyVoiceMessage
+          );
+          break;
+        }
+        case 'onHistoryVoiceMessageTranscriptionAvailable': {
+          const message = bridgeHistoryMessageToSdkHistoryMessage(event);
+          if (!(message instanceof ZelloHistoryVoiceMessage)) {
+            break;
+          }
+          this.emit(
+            ZelloEvent.HISTORY_VOICE_MESSAGE_TRANSCRIPTION_AVAILABLE,
+            message
           );
           break;
         }

@@ -333,6 +333,19 @@ export default function App() {
       }
     });
 
+    sdk.addListener(
+      ZelloEvent.HISTORY_VOICE_MESSAGE_TRANSCRIPTION_AVAILABLE,
+      async () => {
+        if (historyRef.current) {
+          const messages = await sdk.getHistory(historyRef.current.contact);
+          setHistory({
+            contact: historyRef.current.contact,
+            messages: messages,
+          });
+        }
+      }
+    );
+
     // Removes the listener once unmounted
     return () => {
       sdk.destroy();
