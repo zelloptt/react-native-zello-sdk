@@ -17,9 +17,13 @@ public class ZelloSdkModuleImpl: NSObject {
 
   @objc public func configure(_ config: NSDictionary) {
     let options = Config(config)
-    var configuration = ZelloConfiguration(appGroup: options.appGroup)
-    configuration.pushNotificationEnvironment =
-      options.isDebugBuild ? .development : .production
+    // ZelloConfiguration is applied by assigning Zello.configuration; there is
+    // no configure() method on the SDK. (Master built this value but never
+    // assigned it, so appGroup/pushNotificationEnvironment were silently ignored.)
+    zello.configuration = ZelloConfiguration(
+      pushNotificationEnvironment: options.isDebugBuild ? .development : .production,
+      appGroup: options.appGroup
+    )
   }
 
   /// Typed view over the `configure(config)` payload.
