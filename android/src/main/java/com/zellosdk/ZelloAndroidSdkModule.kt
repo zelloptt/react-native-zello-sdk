@@ -95,8 +95,8 @@ class ZelloAndroidSdkModule(
   }
 
   override fun connectGroupConversation(name: String) {
-    // NOTE: confirm against the Android SDK that connectChannel accepts a
-    // ZelloGroupConversation (group conversations are channel-like in Zello).
+    // ZelloGroupConversation extends ZelloChannel, so connectChannel(ZelloChannel)
+    // accepts a group conversation directly.
     val conversation = zello.getGroupConversation(name) ?: return
     zello.connectChannel(conversation)
   }
