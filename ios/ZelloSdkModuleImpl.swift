@@ -16,12 +16,29 @@ public class ZelloSdkModuleImpl: NSObject {
   private let zello = Zello.shared
 
   @objc public func configure(_ config: NSDictionary) {
-    let ios = config["ios"] as? NSDictionary
-    let isDebugBuild = (ios?["isDebugBuild"] as? Bool) ?? false
-    let appGroupRaw = (ios?["appGroup"] as? String) ?? ""
-    let group: String? = appGroupRaw.isEmpty ? nil : appGroupRaw
-    var configuration = ZelloConfiguration(appGroup: group)
-    configuration.pushNotificationEnvironment = isDebugBuild ? .development : .production
+    let options = Config(config)
+    var configuration = ZelloConfiguration(appGroup: options.appGroup)
+    configuration.pushNotificationEnvironment =
+      options.isDebugBuild ? .development : .production
+  }
+
+  /// Typed view over the `configure(config)` payload.
+  ///
+  /// The TurboModule boundary is an untyped object — the codegen spec declares
+  /// `configure(config: UnsafeObject)` (→ `NSDictionary` here) because the
+  /// configuration is platform-specific and iOS only consumes the `ios` slice.
+  /// Decoding into this struct keeps the rest of the method type-safe and keeps
+  /// every assumption about the payload's shape in one place.
+  private struct Config {
+    let isDebugBuild: Bool
+    let appGroup: String?
+
+    init(_ config: NSDictionary) {
+      let ios = config["ios"] as? [String: Any]
+      isDebugBuild = ios?["isDebugBuild"] as? Bool ?? false
+      // Treat a missing or empty app group as "none".
+      appGroup = (ios?["appGroup"] as? String).flatMap { $0.isEmpty ? nil : $0 }
+    }
   }
 
   @objc public func connect(_ network: String, username: String, password: String) {
