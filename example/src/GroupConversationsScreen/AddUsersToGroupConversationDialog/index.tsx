@@ -131,6 +131,8 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
+    // Cap the name width so a long displayName can't push the checkbox off the row.
+    width: '70%',
   },
   buttonContainer: {
     flexDirection: 'row',
