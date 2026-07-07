@@ -77,7 +77,10 @@ const AddUsersToGroupConversationDialog: React.FC<
                 onPress={() => toggleUserSelection(item.name)}
               >
                 <Text style={styles.userName}>{item.displayName}</Text>
-                <Checkbox
+                {/* Checkbox.Android renders a visible box in both states on
+                    every platform; the adaptive Checkbox uses Checkbox.IOS on
+                    iOS, which shows nothing when unchecked. */}
+                <Checkbox.Android
                   status={
                     selectedUserIds.includes(item.name)
                       ? 'checked'
