@@ -1,0 +1,9 @@
+package com.zello.ui.camera;
+
+// AUTO-GENERATED -- do not edit. See example/android/scripts/gen-zello-lazyclasskey-shims.sh
+// Compatibility shim for the prebuilt Zello SDK (Dagger 2.52, pre-LazyMapKey).
+public final class CameraPreviewViewModel_HiltModules_BindsModule_Binds_LazyMapKey {
+  public static String lazyClassKeyName = "com.zello.ui.camera.CameraPreviewViewModel";
+  @SuppressWarnings("unused")
+  static CameraPreviewViewModel keepFieldType;
+}

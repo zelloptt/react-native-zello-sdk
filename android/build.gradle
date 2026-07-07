@@ -11,10 +11,9 @@ buildscript {
   }
 
   dependencies {
-    classpath "com.android.tools.build:gradle:8.5.1"
+    classpath "com.android.tools.build:gradle:8.13.0"
     // noinspection DifferentKotlinGradleVersion
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath("com.google.dagger:hilt-android-gradle-plugin:2.51")
   }
 }
 
@@ -29,12 +28,11 @@ def isNewArchitectureEnabled() {
 
 apply plugin: "com.android.library"
 apply plugin: "kotlin-android"
-apply plugin: 'com.google.dagger.hilt.android'
-apply plugin: 'kotlin-kapt'
 
-hilt {
-  enableAggregatingTask = true
-}
+// Note: this library does NOT apply Hilt/kapt. Its only @Inject was on a class
+// that the host app constructs manually (see ZelloAndroidSdkPackage), so Hilt
+// never processed it. Avoiding kapt also lets the generated TurboModule codegen
+// spec compile cleanly (kapt doesn't reliably see generated sources).
 
 if (isNewArchitectureEnabled()) {
   apply plugin: "com.facebook.react"
@@ -64,6 +62,21 @@ android {
     sourceSets {
       main {
         manifest.srcFile "src/main/AndroidManifestNew.xml"
+      }
+    }
+  }
+
+  if (isNewArchitectureEnabled()) {
+    // Make the generated TurboModule spec (NativeZelloSdkSpec) visible to the
+    // Kotlin/kapt compile. The RN Gradle plugin generates it under
+    // build/generated/source/codegen and adds it via finalizeDsl, but because
+    // this library uses kapt (Hilt) that late addition isn't reliably picked up,
+    // so register the dir explicitly here.
+    sourceSets {
+      main {
+        java.srcDirs += [
+          layout.buildDirectory.dir("generated/source/codegen/java").get().asFile
+        ]
       }
     }
   }
@@ -102,7 +115,7 @@ repositories {
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
-def zelloSdkVersion = "1.0.3"
+def zelloSdkVersion = "1.0.+"
 
 dependencies {
   // For < 0.71, this will be from the local maven repo
@@ -119,6 +132,12 @@ dependencies {
   }
   implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
   implementation("com.google.firebase:firebase-messaging")
-  implementation("com.google.dagger:hilt-android:2.51")
-  kapt("com.google.dagger:hilt-android-compiler:2.51")
+}
+
+if (isNewArchitectureEnabled()) {
+  react {
+    jsRootDir = file("../src/")
+    libraryName = "NativeZelloSdk"
+    codegenJavaPackageName = "com.zellosdk"
+  }
 }

@@ -176,7 +176,9 @@ export default function App() {
 
   useEffect(() => {
     if (Platform.OS === 'android') {
-      request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS).then(() => {
+      // react-native-permissions v5 removed PERMISSIONS.ANDROID.POST_NOTIFICATIONS;
+      // notification permission is handled via the dedicated requestNotifications API.
+      requestNotifications(['alert', 'sound']).then(() => {
         request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(() => {
           request(PERMISSIONS.ANDROID.RECORD_AUDIO);
         });

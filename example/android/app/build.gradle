@@ -14,6 +14,9 @@ apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
  * By default you don't need to apply any configuration, just uncomment the lines you need.
  */
 react {
+    /* Autolinking */
+    autolinkLibrariesWithApp()
+
     /* Folders */
     //   The root of your project, i.e. where "package.json" lives. Default is '..'
     // root = file("../")
@@ -115,8 +118,13 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
-    implementation("com.google.dagger:hilt-android:2.51")
-    kapt("com.google.dagger:hilt-android-compiler:2.51")
+    // Hilt 2.54: newest release BEFORE Dagger's LazyClassKey became default
+    // (2.55). 2.55+ generates _LazyMapKey references absent from the
+    // com.zello:sdk AAR (built with Hilt 2.52), and 2.52 itself crashes kapt
+    // under Kotlin 2.1.20. 2.54 satisfies both: Kotlin-2.1-compatible kapt and
+    // no LazyClassKey output.
+    implementation("com.google.dagger:hilt-android:2.54")
+    kapt("com.google.dagger:hilt-android-compiler:2.54")
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
@@ -125,4 +133,3 @@ dependencies {
     }
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
