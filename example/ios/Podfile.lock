@@ -1,5 +1,4 @@
 PODS:
-  - CocoaAsyncSocket (7.6.5)
   - CocoaLumberjack/Core (3.9.0)
   - CocoaLumberjack/Swift (3.9.0):
     - CocoaLumberjack/Core
@@ -1526,7 +1525,7 @@ PODS:
     - ReactCommon/turbomodule/core
     - ReactNativeDependencies
     - Yoga
-    - ZelloSDK (~> 2.0.0)
+    - ZelloSDK (~> 3.0)
   - React-NativeModulesApple (0.86.0):
     - hermes-engine
     - React-callinvoker
@@ -2063,11 +2062,10 @@ PODS:
   - SDWebImage (5.21.7):
     - SDWebImage/Core (= 5.21.7)
   - SDWebImage/Core (5.21.7)
-  - SnowplowTracker (6.2.4)
+  - SnowplowTracker (6.2.5)
   - Yoga (0.0.0)
   - zello-opus-ios (1.0.2)
-  - ZelloSDK (2.0.5):
-    - CocoaAsyncSocket (~> 7.6)
+  - ZelloSDK (3.1.0):
     - CocoaLumberjack/Swift (= 3.9.0)
     - OpenSSL-Universal (~> 1.1)
     - PhoneNumberKit/PhoneNumberKitCore (~> 3.7)
@@ -2160,11 +2158,10 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
-  - ZelloSDK (~> 2.0.0)
+  - ZelloSDK (~> 3.0)
 
 SPEC REPOS:
   trunk:
-    - CocoaAsyncSocket
     - CocoaLumberjack
     - OpenSSL-Universal
     - PhoneNumberKit
@@ -2343,10 +2340,9 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
 SPEC CHECKSUMS:
-  CocoaAsyncSocket: 065fd1e645c7abab64f7a6a2007a48038fdc6a99
   CocoaLumberjack: 5644158777912b7de7469fa881f8a3f259c2512a
   FBLazyVector: b3e7ad108f0d882e30445c5527d774e3fd432f3d
-  hermes-engine: 2c98b64fb7537b3885acbaa34683d2eb4742efc1
+  hermes-engine: 71cd3eb8bd439999c4fc9f3457288c8689ecf322
   OpenSSL-Universal: ca89c20240633a77c776082ba76b7d90f992bf77
   PhoneNumberKit: 460b1ae0347f2447af12749fc42f27fc3eb743b1
   PromisesObjC: 752c3227f599e3467650e47ea36f433eeb10c273
@@ -2389,7 +2385,7 @@ SPEC CHECKSUMS:
   React-microtasksnativemodule: 354ab193a7ed66e42869c8a0c2c0d844e8e22f67
   React-mutationobservernativemodule: f53ad06cbe4b44d2a33df6aa3f01ca8e9b57e83b
   react-native-safe-area-context: 0bbcdfba5c4a1b3203276f1ed9128e3239fdf199
-  react-native-zello-sdk: 493c437345442d26ad1ff09fea939f7e49ce4b8e
+  react-native-zello-sdk: 7a7a580842c708745cc6f77f6a2422cf19c1388d
   React-NativeModulesApple: a092d89b58f635ebfab88048b0eda9fb516819fd
   React-networking: ee8e1504d7c1c73a3655bf545ca1184bebae4c7f
   React-oscompat: 0b72a7e926954a0415ccd83e0748b6561fe45367
@@ -2431,11 +2427,11 @@ SPEC CHECKSUMS:
   RNScreens: 8d318eb8905fa1d3439a1ce5d567f82ae8245657
   RNVectorIcons: bd88db8836a8611aff4b44f061364c07002a6c2a
   SDWebImage: e9fc87c1aab89a8ab1bbd74eba378c6f53be8abf
-  SnowplowTracker: f0eb448f72fb1a283fc4af447cdb9006fe96a896
+  SnowplowTracker: 4db85a7a11ec37635adbde2d7706f0bd4ef5d8e4
   Yoga: c30c859b7e9b75e547b600b486fe33165f60de00
   zello-opus-ios: 2c22467bba9a102886f1d84fe035b469a3b27f08
-  ZelloSDK: 4b885be1069fdf677077753ef5f8c1edf8be3db3
+  ZelloSDK: 8bafdcecbe69c61ab423759b5a817282953e9d9b
 
-PODFILE CHECKSUM: 941cdee8f96aa6704cf1f1d1af53d5549846207e
+PODFILE CHECKSUM: 883f2079384cf3ed3bc6696eee969c761ad553cb
 
 COCOAPODS: 1.16.2
