@@ -379,13 +379,7 @@ export class Zello extends EventEmitter {
    * @param incomingEmergency The incoming emergency to stop. Must be one of the entries currently in {@link incomingEmergencies}.
    */
   public stopIncomingEmergency(incomingEmergency: ZelloIncomingEmergency) {
-    if (isAndroid) {
-      ZelloAndroidSdkModule.stopIncomingEmergency(
-        incomingEmergency.emergencyId
-      );
-    } else {
-      ZelloIOSSdkModule.stopIncomingEmergency(incomingEmergency.emergencyId);
-    }
+    NativeZelloSdk.stopIncomingEmergency(incomingEmergency.emergencyId);
   }
 
   /**

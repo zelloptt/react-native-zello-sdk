@@ -115,9 +115,7 @@ repositories {
 
 def kotlin_version = getExtOrDefault("kotlinVersion")
 
-// Channel type, translation flags, transcriptions, and emergency end-others require
-// the first Zello Android SDK release after 2.0.2.
-def zelloSdkVersion = "2.+"
+def zelloSdkVersion = "3.+"
 
 dependencies {
   // For < 0.71, this will be from the local maven repo
