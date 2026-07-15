@@ -2065,7 +2065,7 @@ PODS:
   - SnowplowTracker (6.2.5)
   - Yoga (0.0.0)
   - zello-opus-ios (1.0.2)
-  - ZelloSDK (3.1.0):
+  - ZelloSDK (3.2.0):
     - CocoaLumberjack/Swift (= 3.9.0)
     - OpenSSL-Universal (~> 1.1)
     - PhoneNumberKit/PhoneNumberKitCore (~> 3.7)
@@ -2430,7 +2430,7 @@ SPEC CHECKSUMS:
   SnowplowTracker: 4db85a7a11ec37635adbde2d7706f0bd4ef5d8e4
   Yoga: c30c859b7e9b75e547b600b486fe33165f60de00
   zello-opus-ios: 2c22467bba9a102886f1d84fe035b469a3b27f08
-  ZelloSDK: 8bafdcecbe69c61ab423759b5a817282953e9d9b
+  ZelloSDK: b35d9524cee86ddeac73ebddb530803445bfe4fb
 
 PODFILE CHECKSUM: 883f2079384cf3ed3bc6696eee969c761ad553cb
 
