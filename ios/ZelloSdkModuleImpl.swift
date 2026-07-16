@@ -158,6 +158,18 @@ public class ZelloSdkModuleImpl: NSObject {
     }
   }
 
+  @objc public func stopIncomingEmergency(_ emergencyId: String) {
+    DispatchQueue.main.async { [weak self] in
+      guard
+        let self,
+        let incomingEmergency = self.zello.incomingEmergencies.first(where: { $0.id == emergencyId })
+      else {
+        return
+      }
+      self.zello.stopIncomingEmergency(incomingEmergency)
+    }
+  }
+
   @objc public func getHistory(
     _ name: String,
     contactType: String,

@@ -4,6 +4,7 @@ extension ZelloIncomingEmergency {
   var jsonDictionary: [AnyHashable: Any] {
     var body: [AnyHashable: Any] = [
       "channel": channel.jsonDictionary,
+      "channelUser": channelUser.jsonDictionary,
       "channelUserName": channelUser.name,
       "emergencyId": id,
       "startTimestamp": startTimestamp.bridgeTimestamp

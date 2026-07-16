@@ -34,7 +34,7 @@ extension ZelloChannel {
         "allowEmergencyEndOwn": channelOptions.allowEmergencyEndOwn,
         "allowEmergencyEndOthers": channelOptions.allowEmergencyEndOthers
       ],
-      "isDispatchChannel": dispatchInfo != nil
+      "isDispatchChannel": type == .dispatch || dispatchInfo != nil
     ]
     if let currentCall = dispatchInfo?.currentCall {
       body["currentCall"] = currentCall.jsonDictionary
