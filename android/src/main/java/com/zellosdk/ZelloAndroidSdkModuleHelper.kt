@@ -19,6 +19,7 @@ import com.zello.sdk.ZelloHistoryTextMessage
 import com.zello.sdk.ZelloHistoryVoiceMessage
 import com.zello.sdk.ZelloIncomingEmergency
 import com.zello.sdk.ZelloRecentEntry
+import com.zello.sdk.ZelloTranscription
 import com.zello.sdk.ZelloUser
 import java.io.ByteArrayOutputStream
 
@@ -66,6 +67,8 @@ object ZelloAndroidSdkModuleHelper {
 				putBoolean("isConnected", contact.status == ZelloChannel.ConnectionStatus.CONNECTED)
 				putBoolean("isConnecting", contact.status == ZelloChannel.ConnectionStatus.CONNECTING)
 				putInt("usersOnline", contact.usersOnline)
+				putString("channelType", contact.type.toString())
+				putBoolean("translationsEnabled", contact.translationsEnabled)
 				putMap("options", WritableNativeMap().apply {
 					val options = contact.options
 					putBoolean("noDisconnect", options.noDisconnect)
@@ -74,6 +77,8 @@ object ZelloAndroidSdkModuleHelper {
 					putBoolean("allowAlerts", options.allowAlerts)
 					putBoolean("allowTextMessages", options.allowTextMessages)
 					putBoolean("allowLocations", options.allowLocations)
+					putBoolean("allowEmergencyEndOwn", options.allowEmergencyEndOwn)
+					putBoolean("allowEmergencyEndOthers", options.allowEmergencyEndOthers)
 				})
 				if (contact is ZelloDispatchChannel) {
 					putBoolean("isDispatchChannel", true)
@@ -173,6 +178,26 @@ object ZelloAndroidSdkModuleHelper {
 			putString("historyId", message.historyId)
 			putBoolean("incoming", message.incoming)
 			putInt("durationMs", message.durationMs.toInt())
+			message.transcription?.let {
+				putMap("transcription", transcriptionToWritableMap(it))
+			}
+		}
+	}
+
+	fun transcriptionToWritableMap(transcription: ZelloTranscription): WritableMap {
+		return Arguments.createMap().apply {
+			putString("text", transcription.text)
+			putString("language", transcription.language)
+			putBoolean("isTruncated", transcription.isTruncated)
+			putDouble("confidence", transcription.confidence)
+			putArray("translations", WritableNativeArray().apply {
+				transcription.translations.forEach { translation ->
+					pushMap(Arguments.createMap().apply {
+						putString("text", translation.text)
+						putString("language", translation.language)
+					})
+				}
+			})
 		}
 	}
 

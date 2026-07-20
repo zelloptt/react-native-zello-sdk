@@ -84,6 +84,9 @@ const HistoryVoiceMessage = ({ item }: { item: ZelloHistoryVoiceMessage }) => {
   return (
     <View style={styles.voiceMessageContainer}>
       <Text style={styles.historyText}>{`${item.durationMs} ms`}</Text>
+      {item.transcription?.text && (
+        <Text style={styles.transcriptionText}>{item.transcription.text}</Text>
+      )}
       <TouchableOpacity onPress={handlePress}>
         <Ionicons
           name={
@@ -218,6 +221,11 @@ const styles = StyleSheet.create({
   voiceMessageContainer: {
     flexDirection: 'column',
     alignItems: 'flex-start',
+  },
+  transcriptionText: {
+    fontSize: 14,
+    fontStyle: 'italic',
+    color: '#555',
   },
 });
 

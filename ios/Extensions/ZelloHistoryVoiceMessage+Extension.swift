@@ -13,6 +13,9 @@ extension ZelloHistoryVoiceMessage {
     if let channelUserName = channelUser?.name {
       body["channelUserName"] = channelUserName
     }
+    if let transcription {
+      body["transcription"] = transcription.jsonDictionary
+    }
     return body
   }
 }

@@ -35,6 +35,7 @@ RCT_EXTERN_METHOD(unmuteContact:(NSString *)name contactType:(NSString *)contact
 
 RCT_EXTERN_METHOD(startEmergency)
 RCT_EXTERN_METHOD(stopEmergency)
+RCT_EXTERN_METHOD(stopIncomingEmergency:(NSString *)emergencyId)
 
 RCT_EXTERN_METHOD(getHistory:(NSString *)name contactType:(NSString *)contactType maxMessages:(NSInteger)maxMessages callback:(RCTResponseSenderBlock)callback)
 

@@ -176,7 +176,9 @@ export default function App() {
 
   useEffect(() => {
     if (Platform.OS === 'android') {
-      request(PERMISSIONS.ANDROID.POST_NOTIFICATIONS).then(() => {
+      // react-native-permissions v5 removed PERMISSIONS.ANDROID.POST_NOTIFICATIONS;
+      // notification permission is handled via the dedicated requestNotifications API.
+      requestNotifications(['alert', 'sound']).then(() => {
         request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(() => {
           request(PERMISSIONS.ANDROID.RECORD_AUDIO);
         });
@@ -332,6 +334,19 @@ export default function App() {
         setHistory({ contact: historyRef.current.contact, messages: messages });
       }
     });
+
+    sdk.addListener(
+      ZelloEvent.HISTORY_VOICE_MESSAGE_TRANSCRIPTION_AVAILABLE,
+      async () => {
+        if (historyRef.current) {
+          const messages = await sdk.getHistory(historyRef.current.contact);
+          setHistory({
+            contact: historyRef.current.contact,
+            messages: messages,
+          });
+        }
+      }
+    );
 
     // Removes the listener once unmounted
     return () => {

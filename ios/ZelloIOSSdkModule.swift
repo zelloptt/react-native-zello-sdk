@@ -1,9 +1,14 @@
 import ZelloSDK
 
-@objc(ZelloIOSSdkModule) class ZelloIOSSdkModule: RCTEventEmitter {
+@objc(ZelloIOSSdkModule) class ZelloIOSSdkModule: NSObject {
 
   private let bridgeEventName = "zellosdk"
   private let eventName = "eventName"
+
+  // Injected by React Native. The bridgeless-safe way to call a JS module
+  // (here RCTDeviceEventEmitter) from native; RCTEventEmitter's sendEvent path
+  // is not callable under the bridgeless New Architecture.
+  @objc var callableJSModules: RCTCallableJSModules?
 
   let zello = Zello.shared
 
@@ -160,6 +165,18 @@ import ZelloSDK
     }
   }
 
+  @objc func stopIncomingEmergency(_ emergencyId: String) {
+    DispatchQueue.main.async { [weak self] in
+      guard
+        let self,
+        let incomingEmergency = self.zello.incomingEmergencies.first(where: { $0.id == emergencyId })
+      else {
+        return
+      }
+      self.zello.stopIncomingEmergency(incomingEmergency)
+    }
+  }
+
   @objc func getHistory(_ name: String, contactType: String, maxMessages: Int, callback: RCTResponseSenderBlock) {
     guard let contact = contactFromType(contactType, name: name) else {
       callback(nil)
@@ -271,14 +288,14 @@ extension ZelloIOSSdkModule {
   func sendSdkEvent(withName name: String, body: [AnyHashable: Any]?) {
     var eventBody = body ?? [:]
     eventBody[eventName] = name
-    sendEvent(withName: bridgeEventName, body: eventBody)
+    callableJSModules?.invokeModule(
+      "RCTDeviceEventEmitter",
+      method: "emit",
+      withArgs: [bridgeEventName, eventBody]
+    )
   }
 
-  override func supportedEvents() -> [String]! {
-    return [bridgeEventName]
-  }
-
-  override class func requiresMainQueueSetup() -> Bool {
+  @objc static func requiresMainQueueSetup() -> Bool {
     return true
   }
 }

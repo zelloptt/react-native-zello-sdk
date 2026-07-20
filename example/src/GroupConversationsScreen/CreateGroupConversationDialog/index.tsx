@@ -60,7 +60,10 @@ const CreateGroupConversationDialog: React.FC<
                 onPress={() => toggleUserSelection(item.name)}
               >
                 <Text style={styles.userName}>{item.displayName}</Text>
-                <Checkbox
+                {/* Checkbox.Android renders a visible box in both states on
+                    every platform; the adaptive Checkbox uses Checkbox.IOS on
+                    iOS, which shows nothing when unchecked. */}
+                <Checkbox.Android
                   status={
                     selectedUserIds.includes(item.name)
                       ? 'checked'
@@ -111,6 +114,8 @@ const styles = StyleSheet.create({
   },
   userName: {
     fontSize: 16,
+    // Cap the name width so a long displayName can't push the checkbox off the row.
+    width: '70%',
   },
   buttonContainer: {
     flexDirection: 'row',
