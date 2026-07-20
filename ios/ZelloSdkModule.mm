@@ -121,6 +121,10 @@ RCT_EXPORT_MODULE(NativeZelloSdk)
   [_impl stopEmergency];
 }
 
+- (void)stopIncomingEmergency:(NSString *)emergencyId {
+  [_impl stopIncomingEmergency:emergencyId];
+}
+
 - (void)getHistory:(NSString *)name
        contactType:(NSString *)contactType
        maxMessages:(double)maxMessages

@@ -17,6 +17,7 @@ interface ContextMenuButtonProps {
   showSendTextOption?: boolean;
   showSendAlertOption?: boolean;
   showEmergencyOption?: boolean;
+  showStopIncomingEmergencyOption?: boolean;
   showEndCallOption?: boolean;
   showAddUsersToGroupConversationOption?: boolean;
   showLeaveGroupConversationOption?: boolean;
@@ -25,6 +26,7 @@ interface ContextMenuButtonProps {
   onSendTextSelected: () => void;
   onSendAlertSelected: () => void;
   onShowHistorySelected: () => void;
+  onStopIncomingEmergencySelected?: () => void;
   onEndCallSelected?: () => void;
   onAddUsersToGroupConversationSelected?: () => void;
   onLeaveGroupConversationSelected?: () => void;
@@ -38,6 +40,7 @@ const ContextMenuButton = ({
   showSendTextOption = true,
   showSendAlertOption = true,
   showEmergencyOption = false,
+  showStopIncomingEmergencyOption = false,
   showEndCallOption = false,
   showAddUsersToGroupConversationOption,
   showLeaveGroupConversationOption,
@@ -46,6 +49,7 @@ const ContextMenuButton = ({
   onSendTextSelected,
   onSendAlertSelected,
   onShowHistorySelected,
+  onStopIncomingEmergencySelected,
   onEndCallSelected,
   onAddUsersToGroupConversationSelected,
   onLeaveGroupConversationSelected,
@@ -112,6 +116,12 @@ const ContextMenuButton = ({
               text={
                 isInOutgoingEmergency ? 'Stop Emergency' : 'Start Emergency'
               }
+            />
+          )}
+          {showStopIncomingEmergencyOption && (
+            <MenuOption
+              onSelect={() => onStopIncomingEmergencySelected?.()}
+              text="Stop Incoming Emergency"
             />
           )}
           {showEndCallOption && (

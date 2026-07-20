@@ -183,11 +183,22 @@ const ChannelView = React.memo(
               channel.options.allowLocationMessages
             }
             showEmergencyOption={isEmergencyChannel()}
+            showStopIncomingEmergencyOption={
+              isConnected &&
+              getIncomingEmergency() !== undefined &&
+              channel.options.allowEmergencyEndOthers
+            }
             isInOutgoingEmergency={isOutgoingEmergency()}
             showEndCallOption={canEndCall()}
             onSendTextSelected={() => openSendTextDialog(channel)}
             onSendAlertSelected={() => openSendAlertDialog(channel)}
             onShowHistorySelected={() => openHistoryDialog(channel)}
+            onStopIncomingEmergencySelected={() => {
+              const incomingEmergency = getIncomingEmergency();
+              if (incomingEmergency) {
+                sdk.stopIncomingEmergency(incomingEmergency);
+              }
+            }}
             onEndCallSelected={endCall}
           />
           <Switch

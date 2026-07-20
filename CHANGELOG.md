@@ -9,8 +9,18 @@
 
 ### Features
 
+* Expose channel type via `ZelloChannel.channelType` (`ZelloChannelType`: dynamic, dispatch, team, groupConversation)
+* Add translation flags: `ZelloChannel.translationsEnabled` and `ZelloIncomingVoiceMessage.isTranslation`
+* Expose voice message transcriptions via `ZelloHistoryVoiceMessage.transcription` (`ZelloTranscription`, `ZelloTranslation`) and the new `ZelloEvent.HISTORY_VOICE_MESSAGE_TRANSCRIPTION_AVAILABLE` event
+* Add `Zello.stopIncomingEmergency()` to end another user's incoming emergency, plus `allowEmergencyEndOwn` / `allowEmergencyEndOthers` on `ZelloChannelOptions`
+
 * Converted the native module to the New Architecture (Turbo Native Module) behind a single shared codegen spec, replacing the legacy bridge modules.
 * **iOS:** the native ZelloSDK can be installed via Swift Package Manager — opt in with `ZELLO_USE_SPM=1` (see the README). CocoaPods remains the default.
+
+### Dependencies
+
+* Android: `com.zello:sdk` bumped to `2.+` (requires the first release after 2.0.2, which includes ANDROID-3816, ANDROID-3706, ANDROID-3685, and ANDROID-3683)
+* iOS: `ZelloSDK` bumped to `~> 3.0` (transcriptions and translation flags require 3.0.2; channel type and emergency end-others require the first release after 3.0.2, which includes IOS-4385 and IOS-4251)
 
 ### Notes
 

@@ -166,6 +166,11 @@ class ZelloAndroidSdkModule(
     zello.stopEmergency()
   }
 
+  override fun stopIncomingEmergency(emergencyId: String) {
+    val incomingEmergency = zello.incomingEmergencies.firstOrNull { it.emergencyId == emergencyId } ?: return
+    zello.stopIncomingEmergency(incomingEmergency)
+  }
+
   override fun getHistory(name: String, contactType: String, maxMessages: Double, promise: Promise) {
     val contact = contactFrom(name, contactType)
     if (contact == null) {
@@ -377,6 +382,7 @@ class ZelloAndroidSdkModule(
       putMap("contact", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(contact = message.contact))
       putMap("channelUser", ZelloAndroidSdkModuleHelper.channelUserToWritableMap(message.channelUser))
       putString("timestamp", message.timestamp.toString())
+      putBoolean("isTranslation", message.isTranslation)
     })
   }
 
@@ -385,6 +391,7 @@ class ZelloAndroidSdkModule(
       putMap("contact", ZelloAndroidSdkModuleHelper.sdkContactToWritableMap(contact = message.contact))
       putMap("channelUser", ZelloAndroidSdkModuleHelper.channelUserToWritableMap(message.channelUser))
       putString("timestamp", message.timestamp.toString())
+      putBoolean("isTranslation", message.isTranslation)
     })
   }
 
@@ -482,6 +489,10 @@ class ZelloAndroidSdkModule(
 
   override fun onHistoryUpdated(zello: Zello) {
     sendEvent(reactApplicationContext, "onHistoryUpdated", null)
+  }
+
+  override fun onHistoryVoiceMessageTranscriptionAvailable(zello: Zello, message: ZelloHistoryVoiceMessage) {
+    sendEvent(reactApplicationContext, "onHistoryVoiceMessageTranscriptionAvailable", ZelloAndroidSdkModuleHelper.historyVoiceMessageToWritableMap(message))
   }
 
   override fun onConsoleSettingsChanged(zello: Zello, settings: ZelloConsoleSettings) {

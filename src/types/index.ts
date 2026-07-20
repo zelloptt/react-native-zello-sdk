@@ -31,6 +31,28 @@ export enum ZelloContactType {
 }
 
 /**
+ * The type of a {@link ZelloChannel}.
+ */
+export enum ZelloChannelType {
+  /**
+   * A standard, dynamic Zello channel.
+   */
+  Dynamic = 'dynamic',
+  /**
+   * A dispatch channel. Dispatch channels carry calls between users and dispatchers and are surfaced as a {@link ZelloDispatchChannel}.
+   */
+  Dispatch = 'dispatch',
+  /**
+   * A team channel. Team channels allow private one-to-one direct messaging between users.
+   */
+  Team = 'team',
+  /**
+   * An ad-hoc group conversation provisioned by the end user, surfaced as a {@link ZelloGroupConversation}.
+   */
+  GroupConversation = 'groupConversation',
+}
+
+/**
  * The status of a {@link ZelloUser}.
  */
 export enum ZelloUserStatus {
@@ -133,13 +155,25 @@ export class ZelloChannel implements ZelloContact {
    * The options of the channel.
    */
   public options: ZelloChannelOptions;
+  /**
+   * The type of the channel.
+   */
+  public channelType: ZelloChannelType;
+  /**
+   * Whether this channel has translations enabled.
+   * When true, incoming voice messages on this channel may be played as TTS in the listener's language.
+   * See {@link ZelloIncomingVoiceMessage#isTranslation} for the per-message signal.
+   */
+  public translationsEnabled: boolean;
 
   constructor(
     name: string,
     isMuted: boolean,
     connectionStatus: ZelloChannelConnectionStatus,
     usersOnline: number,
-    options: ZelloChannelOptions
+    options: ZelloChannelOptions,
+    channelType: ZelloChannelType = ZelloChannelType.Dynamic,
+    translationsEnabled: boolean = false
   ) {
     this.name = name;
     this.type = ZelloContactType.Channel;
@@ -147,6 +181,8 @@ export class ZelloChannel implements ZelloContact {
     this.connectionStatus = connectionStatus;
     this.usersOnline = usersOnline;
     this.options = options;
+    this.channelType = channelType;
+    this.translationsEnabled = translationsEnabled;
   }
 }
 
@@ -165,9 +201,18 @@ export class ZelloDispatchChannel extends ZelloChannel {
     connectionStatus: ZelloChannelConnectionStatus,
     usersOnline: number,
     options: ZelloChannelOptions,
-    currentCall: ZelloDispatchCall | undefined
+    currentCall: ZelloDispatchCall | undefined,
+    translationsEnabled: boolean = false
   ) {
-    super(name, isMuted, connectionStatus, usersOnline, options);
+    super(
+      name,
+      isMuted,
+      connectionStatus,
+      usersOnline,
+      options,
+      ZelloChannelType.Dispatch,
+      translationsEnabled
+    );
     this.type = ZelloContactType.DispatchChannel;
     this.currentCall = currentCall;
   }
@@ -231,7 +276,15 @@ export class ZelloGroupConversation extends ZelloChannel {
     users: ZelloChannelUser[],
     onlineUsers: ZelloChannelUser[]
   ) {
-    super(name, isMuted, connectionStatus, usersOnline, options);
+    super(
+      name,
+      isMuted,
+      connectionStatus,
+      usersOnline,
+      options,
+      ZelloChannelType.GroupConversation,
+      false
+    );
     this.type = ZelloContactType.GroupConversation;
     this.displayName = displayName;
     this.users = users;
@@ -282,6 +335,16 @@ export type ZelloChannelOptions = {
    * When this is true, you should not show any UI to allow the user to send location messages to the channel.
    */
   allowLocationMessages: boolean;
+  /**
+   * Whether the user is allowed to end their own outgoing emergency on this channel.
+   * When this is false, you should not show any UI to allow the user to end their own emergency.
+   */
+  allowEmergencyEndOwn: boolean;
+  /**
+   * Whether the user is allowed to end another user's incoming emergency on this channel.
+   * When this is false, you should not show any UI to allow the user to end another user's emergency.
+   */
+  allowEmergencyEndOthers: boolean;
 };
 
 /**
@@ -389,15 +452,23 @@ export class ZelloIncomingVoiceMessage implements ZelloMessage {
   public channelUser: ZelloChannelUser | undefined;
   public timestamp: number;
   public incoming = true;
+  /**
+   * Whether this is a translation message.
+   * When true, the message will play as TTS in the listener's language as long as a valid translation arrives;
+   * if the translation fails, is empty, or TTS cannot be initiated, the original audio is played instead.
+   */
+  public isTranslation: boolean;
 
   constructor(
     contact: ZelloContact,
     channelUser: ZelloChannelUser | undefined,
-    timestamp: number
+    timestamp: number,
+    isTranslation: boolean = false
   ) {
     this.contact = contact;
     this.channelUser = channelUser;
     this.timestamp = timestamp;
+    this.isTranslation = isTranslation;
   }
 }
 
@@ -737,6 +808,70 @@ export type ZelloHistoryMessage = {
 };
 
 /**
+ * A translation of a {@link ZelloTranscription} into another language.
+ */
+export class ZelloTranslation {
+  /**
+   * The translated text.
+   */
+  public readonly text: string;
+  /**
+   * Language tag of {@link text} as reported by the server (for example "en", "en-US", or "zh-Hans").
+   */
+  public readonly language: string;
+
+  constructor(text: string, language: string) {
+    this.text = text;
+    this.language = language;
+  }
+}
+
+/**
+ * A successful transcription for a Zello voice history message.
+ *
+ * Transcriptions are produced asynchronously by the Zello server after a voice message
+ * has finished sending or receiving, so this object may not be available immediately when
+ * the history message is created. Surfaced on {@link ZelloHistoryVoiceMessage#transcription} and
+ * delivered via the {@link events.ZelloEvent.HISTORY_VOICE_MESSAGE_TRANSCRIPTION_AVAILABLE | HISTORY_VOICE_MESSAGE_TRANSCRIPTION_AVAILABLE} event.
+ */
+export class ZelloTranscription {
+  /**
+   * The transcribed text, in the language of the sender.
+   */
+  public readonly text: string | undefined;
+  /**
+   * Language tag of {@link text} as reported by the server (for example "en", "en-US", or "zh-Hans"), or undefined if unknown.
+   */
+  public readonly language: string | undefined;
+  /**
+   * Whether the server truncated {@link text} because the original audio was too long.
+   */
+  public readonly isTruncated: boolean;
+  /**
+   * Server-reported confidence in {@link text}, in the range 0.0 to 1.0.
+   */
+  public readonly confidence: number;
+  /**
+   * Available translations of {@link text} into other languages, or an empty array if none.
+   */
+  public readonly translations: ZelloTranslation[];
+
+  constructor(
+    text: string | undefined,
+    language: string | undefined,
+    isTruncated: boolean,
+    confidence: number,
+    translations: ZelloTranslation[]
+  ) {
+    this.text = text;
+    this.language = language;
+    this.isTruncated = isTruncated;
+    this.confidence = confidence;
+    this.translations = translations;
+  }
+}
+
+/**
  * A Zello history voice message.
  * To play the message, use the {@link sdk.Zello#playHistoryMessage | Zello#playHistoryMessage} function.
  */
@@ -750,6 +885,16 @@ export class ZelloHistoryVoiceMessage implements ZelloHistoryMessage {
    * The duration of the voice message in milliseconds.
    */
   public durationMs: number;
+  /**
+   * The successful transcription for this voice message, or undefined if no transcription has been
+   * received yet or the server reported a transcription error.
+   *
+   * Transcriptions are produced asynchronously by the Zello server after a voice message finishes
+   * sending or receiving, so this may be undefined when the message first appears in history and
+   * populated later. Subscribe to the {@link events.ZelloEvent.HISTORY_VOICE_MESSAGE_TRANSCRIPTION_AVAILABLE | HISTORY_VOICE_MESSAGE_TRANSCRIPTION_AVAILABLE}
+   * event to be notified when a transcription arrives.
+   */
+  public transcription: ZelloTranscription | undefined;
 
   constructor(
     contact: ZelloContact,
@@ -757,7 +902,8 @@ export class ZelloHistoryVoiceMessage implements ZelloHistoryMessage {
     timestamp: number,
     historyId: string,
     incoming: boolean,
-    durationMs: number
+    durationMs: number,
+    transcription: ZelloTranscription | undefined = undefined
   ) {
     this.contact = contact;
     this.channelUser = channelUser;
@@ -765,6 +911,7 @@ export class ZelloHistoryVoiceMessage implements ZelloHistoryMessage {
     this.historyId = historyId;
     this.incoming = incoming;
     this.durationMs = durationMs;
+    this.transcription = transcription;
   }
 }
 

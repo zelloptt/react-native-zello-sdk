@@ -22,20 +22,39 @@ extension ZelloChannel {
       "isConnected": status == .connected,
       "isConnecting": status == .connecting,
       "usersOnline": usersOnline,
+      "channelType": type.bridgeString,
+      "translationsEnabled": translationsEnabled,
       "options": [
         "noDisconnect": channelOptions.noDisconnect,
         "hidePowerButton": channelOptions.hidePowerButton,
         "listenOnly": channelOptions.listenOnly,
         "allowAlerts": channelOptions.allowAlerts,
         "allowTextMessages": channelOptions.allowTextMessages,
-        "allowLocations": channelOptions.allowLocations
+        "allowLocations": channelOptions.allowLocations,
+        "allowEmergencyEndOwn": channelOptions.allowEmergencyEndOwn,
+        "allowEmergencyEndOthers": channelOptions.allowEmergencyEndOthers
       ],
-      "isDispatchChannel": dispatchInfo != nil
+      "isDispatchChannel": type == .dispatch || dispatchInfo != nil
     ]
     if let currentCall = dispatchInfo?.currentCall {
       body["currentCall"] = currentCall.jsonDictionary
     }
     return body
+  }
+}
+
+extension ZelloChannel.ChannelType {
+  var bridgeString: String {
+    switch self {
+    case .dispatch:
+      return "DISPATCH"
+    case .team:
+      return "TEAM"
+    case .dynamic:
+      return "DYNAMIC"
+    @unknown default:
+      return "DYNAMIC"
+    }
   }
 }
 
@@ -70,13 +89,17 @@ extension ZelloGroupConversation {
       "isConnected": status == .connected,
       "isConnecting": status == .connecting,
       "usersOnline": onlineUsers.count,
+      "channelType": "GROUP_CONVERSATION",
+      "translationsEnabled": false,
       "options": [
         "noDisconnect": false,
         "hidePowerButton": false,
         "listenOnly": false,
         "allowAlerts": true,
         "allowTextMessages": true,
-        "allowLocations": true
+        "allowLocations": true,
+        "allowEmergencyEndOwn": false,
+        "allowEmergencyEndOthers": false
       ],
       "isGroupConversation": true,
       "displayName": displayName,

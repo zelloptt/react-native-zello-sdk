@@ -56,6 +56,7 @@ export interface Spec extends TurboModule {
 
   startEmergency(): void;
   stopEmergency(): void;
+  stopIncomingEmergency(emergencyId: string): void;
 
   getHistory(
     name: string,

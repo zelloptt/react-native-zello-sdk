@@ -190,6 +190,15 @@ export enum ZelloEvent {
    */
   HISTORY_PLAYBACK_STOPPED = 'onHistoryPlaybackStopped',
   /**
+   * A successful transcription has been received for a voice history message.
+   *
+   * Transcriptions are produced asynchronously by the Zello server after a voice message has
+   * finished sending or receiving, so this event may arrive seconds or longer after the original
+   * voice message appears in the history.
+   * @param {@link types.ZelloHistoryVoiceMessage | ZelloHistoryVoiceMessage} voiceMessage The voice history message whose transcription was just received.
+   */
+  HISTORY_VOICE_MESSAGE_TRANSCRIPTION_AVAILABLE = 'onHistoryVoiceMessageTranscriptionAvailable',
+  /**
    * A dispatch call has been received by the server and is pending acceptance by a dispatcher.
    * @param {@link types.ZelloDispatchCall | ZelloDispatchCall} call The pending dispatch call.
    */
