@@ -34,7 +34,7 @@ Pod::Spec.new do |s|
   if ENV['ZELLO_USE_SPM'] == '1' && respond_to?(:spm_dependency, true)
     spm_dependency(s,
       url: 'https://github.com/zelloptt/ios-mobile-sdk',
-      requirement: { kind: 'upToNextMajorVersion', minimumVersion: '2.0.0' },
+      requirement: { kind: 'upToNextMajorVersion', minimumVersion: '3.0.0' },
       products: ['ZelloSDKUmbrella']
     )
   else
