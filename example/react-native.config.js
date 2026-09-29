@@ -4,7 +4,8 @@ const pkg = require('../package.json');
 module.exports = {
   project: {
     ios: {
-      automaticPodsInstallation: true,
+      // SPM, not CocoaPods: never run `pod install` from `react-native run-ios`.
+      automaticPodsInstallation: false,
     },
   },
   dependencies: {

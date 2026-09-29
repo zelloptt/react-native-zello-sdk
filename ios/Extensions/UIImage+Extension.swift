@@ -1,3 +1,5 @@
+import UIKit
+
 extension UIImage {
   var base64String: String? {
     guard let string = self.jpegData(compressionQuality: 1.0)?

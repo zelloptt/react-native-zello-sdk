@@ -35,10 +35,12 @@ let package = Package(
   targets: [
     // The prebuilt module. Produced by scripts/build-xcframework.sh, hosted per
     // release; url + checksum patched by the pipeline.
+    // Local path for validation (scripts/build-xcframework.sh output). The
+    // release pipeline swaps this for `url:`/`checksum:` (hosted zip) — see the
+    // `version`/`binaryChecksum` above and release_sdk.sh.
     .binaryTarget(
       name: "ReactNativeZelloSdkBinary",
-      url: "https://zello.com/sdk/dist/ios/react-native/spm/\(version)/react_native_zello_sdk.xcframework.zip",
-      checksum: binaryChecksum
+      path: "build/xcframework/react_native_zello_sdk.xcframework"
     ),
 
     // Thin umbrella: links the native SDK + RN headers and keeps the binary in

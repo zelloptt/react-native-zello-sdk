@@ -4,27 +4,16 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
-    "ios": "react-native run-ios",
+    "ios": "bash scripts/run-ios-spm.sh",
     "start": "react-native start",
     "build:android": "react-native build-android --extra-params \"--no-daemon --console=plain -PreactNativeArchitectures=arm64-v8a\"",
     "build:ios": "react-native build-ios --scheme ZelloSdkExample --mode Debug --extra-params \"-sdk iphonesimulator CC=clang CPLUSPLUS=clang++ LD=clang LDPLUSPLUS=clang++ GCC_OPTIMIZATION_LEVEL=0 GCC_PRECOMPILE_PREFIX_HEADER=YES ASSETCATALOG_COMPILER_OPTIMIZATION=time DEBUG_INFORMATION_FORMAT=dwarf COMPILER_INDEX_STORE_ENABLE=NO\""
   },
   "dependencies": {
-    "@react-native-picker/picker": "2.11.4",
-    "@react-navigation/bottom-tabs": "7.18.2",
-    "@react-navigation/native": "7.3.3",
     "@zelloptt/react-native-zello-sdk": "link:..",
     "lodash": "4.17.21",
     "react": "19.2.3",
-    "react-native": "0.87.1",
-    "react-native-gesture-handler": "3.0.1",
-    "react-native-paper": "5.15.3",
-    "react-native-permissions": "5.5.3",
-    "react-native-popup-menu": "0.19.0",
-    "react-native-safe-area-context": "5.8.0",
-    "react-native-screens": "4.25.2",
-    "react-native-toast-message": "2.3.3",
-    "react-native-vector-icons": "10.3.0"
+    "react-native": "0.87.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
