@@ -8,37 +8,21 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* ZelloSdkExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ZelloSdkExampleTests.m */; };
+		1037754A3C812B8D4BC7B787 /* ZelloSDKUmbrella in Frameworks */ = {isa = PBXBuildFile; productRef = 526361BAE6ACEB428AE57E63 /* ZelloSDKUmbrella */; };
 		139E2A1EB986C214E50620AA /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 60623BAC5C5FFD1D3AC075E7 /* SceneDelegate.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		322AED2E5639B7CDB376BC1F /* Pods_NotificationServiceExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53896F44490B8625A3A92587 /* Pods_NotificationServiceExtension.framework */; };
-		3BC7329669CB0AE47816D19F /* Pods_ZelloSdkExample_ZelloSdkExampleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B863F59140B7EFF5ECD483C /* Pods_ZelloSdkExample_ZelloSdkExampleTests.framework */; };
 		4112F6E32C73DA910069FD98 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4112F6E22C73DA910069FD98 /* NotificationService.swift */; };
 		4112F6E72C73DA910069FD98 /* NotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 4112F6E02C73DA910069FD98 /* NotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
-		41466F362C6663E00016C47B /* AntDesign.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F222C6663E00016C47B /* AntDesign.ttf */; };
-		41466F372C6663E00016C47B /* Entypo.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F232C6663E00016C47B /* Entypo.ttf */; };
-		41466F382C6663E00016C47B /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F242C6663E00016C47B /* EvilIcons.ttf */; };
-		41466F392C6663E00016C47B /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F252C6663E00016C47B /* Feather.ttf */; };
-		41466F3A2C6663E00016C47B /* FontAwesome.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F262C6663E00016C47B /* FontAwesome.ttf */; };
-		41466F3B2C6663E00016C47B /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F272C6663E00016C47B /* FontAwesome5_Brands.ttf */; };
-		41466F3C2C6663E00016C47B /* FontAwesome5_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F282C6663E00016C47B /* FontAwesome5_Regular.ttf */; };
-		41466F3D2C6663E00016C47B /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F292C6663E00016C47B /* FontAwesome5_Solid.ttf */; };
-		41466F3E2C6663E00016C47B /* FontAwesome6_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F2A2C6663E00016C47B /* FontAwesome6_Brands.ttf */; };
-		41466F3F2C6663E00016C47B /* FontAwesome6_Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F2B2C6663E00016C47B /* FontAwesome6_Regular.ttf */; };
-		41466F402C6663E00016C47B /* FontAwesome6_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F2C2C6663E00016C47B /* FontAwesome6_Solid.ttf */; };
-		41466F412C6663E00016C47B /* Fontisto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F2D2C6663E00016C47B /* Fontisto.ttf */; };
-		41466F422C6663E00016C47B /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F2E2C6663E00016C47B /* Foundation.ttf */; };
-		41466F432C6663E00016C47B /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F2F2C6663E00016C47B /* Ionicons.ttf */; };
-		41466F442C6663E00016C47B /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F302C6663E00016C47B /* MaterialCommunityIcons.ttf */; };
-		41466F452C6663E00016C47B /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F312C6663E00016C47B /* MaterialIcons.ttf */; };
-		41466F462C6663E00016C47B /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F322C6663E00016C47B /* Octicons.ttf */; };
-		41466F472C6663E00016C47B /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F332C6663E00016C47B /* SimpleLineIcons.ttf */; };
-		41466F482C6663E00016C47B /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41466F342C6663E00016C47B /* Zocial.ttf */; };
 		41C6B5A32C74DD0100791319 /* AppDelegate+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41C6B5A22C74DD0100791319 /* AppDelegate+Extension.swift */; };
+		539FE64143F44169DFE94A9E /* libPods-ZelloSdkExample-ZelloSdkExampleTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9274151108C3C912AE195C51 /* libPods-ZelloSdkExample-ZelloSdkExampleTests.a */; };
+		71D88D33350AC2D20CA4CAEC /* libPods-ZelloSdkExample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F16533A33057A644975D653 /* libPods-ZelloSdkExample.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		B6175878855E94EE4C6BD610 /* ZelloSDKUmbrella in Frameworks */ = {isa = PBXBuildFile; productRef = DE4A518F70801BB106DC50A1 /* ZelloSDKUmbrella */; };
+		CE45967E47C5C08F8D5A14C5 /* ZelloSDKUmbrella in Embed Frameworks */ = {isa = PBXBuildFile; productRef = DE4A518F70801BB106DC50A1 /* ZelloSDKUmbrella */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		D45B62C2F0E9B795F1A482C5 /* libPods-NotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 3029C9E1419C0B17F0A9D02C /* libPods-NotificationServiceExtension.a */; };
 		E4A66491B8F687055C023C4D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 4BC4415504ED621A999F7FF4 /* PrivacyInfo.xcprivacy */; };
-		E5FDCB1798BF8610E553FFE6 /* Pods_ZelloSdkExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5FECA32BE85198CA5179AAF1 /* Pods_ZelloSdkExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,13 +54,23 @@
 			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		88784744B87375537768CD56 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				CE45967E47C5C08F8D5A14C5 /* ZelloSDKUmbrella in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		00E356EE1AD99517003FC87E /* ZelloSdkExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ZelloSdkExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* ZelloSdkExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ZelloSdkExampleTests.m; sourceTree = "<group>"; };
-		0B863F59140B7EFF5ECD483C /* Pods_ZelloSdkExample_ZelloSdkExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZelloSdkExample_ZelloSdkExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0FAACFBAD424A8914098C04B /* Pods-ZelloSdkExample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZelloSdkExample.debug.xcconfig"; path = "Target Support Files/Pods-ZelloSdkExample/Pods-ZelloSdkExample.debug.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* ZelloSdkExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ZelloSdkExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = ZelloSdkExample/AppDelegate.h; sourceTree = "<group>"; };
@@ -87,6 +81,7 @@
 		13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = PrivacyInfo.xcprivacy; path = ZelloSdkExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		1AB79B51C080BAE83D9AD7E6 /* Pods-NotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-NotificationServiceExtension/Pods-NotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		246787DB66C6DCD93B362567 /* Pods-NotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-NotificationServiceExtension/Pods-NotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		3029C9E1419C0B17F0A9D02C /* libPods-NotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-NotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		4112F6E02C73DA910069FD98 /* NotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		4112F6E22C73DA910069FD98 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		4112F6E42C73DA910069FD98 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -114,12 +109,12 @@
 		41C6B59F2C74DCD900791319 /* ZelloSdkExample-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ZelloSdkExample-Bridging-Header.h"; sourceTree = "<group>"; };
 		41C6B5A22C74DD0100791319 /* AppDelegate+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "AppDelegate+Extension.swift"; path = "ZelloSdkExample/AppDelegate+Extension.swift"; sourceTree = "<group>"; };
 		4BC4415504ED621A999F7FF4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = ZelloSdkExample/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		53896F44490B8625A3A92587 /* Pods_NotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5515907B8C7AAE5643805473 /* Pods-ZelloSdkExample-ZelloSdkExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZelloSdkExample-ZelloSdkExampleTests.release.xcconfig"; path = "Target Support Files/Pods-ZelloSdkExample-ZelloSdkExampleTests/Pods-ZelloSdkExample-ZelloSdkExampleTests.release.xcconfig"; sourceTree = "<group>"; };
-		5FECA32BE85198CA5179AAF1 /* Pods_ZelloSdkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZelloSdkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		60623BAC5C5FFD1D3AC075E7 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SceneDelegate.m; path = ZelloSdkExample/SceneDelegate.m; sourceTree = "<group>"; };
 		7F4DC0B7A63A55142F7D9BAB /* Pods-ZelloSdkExample-ZelloSdkExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZelloSdkExample-ZelloSdkExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-ZelloSdkExample-ZelloSdkExampleTests/Pods-ZelloSdkExample-ZelloSdkExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ZelloSdkExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		8F16533A33057A644975D653 /* libPods-ZelloSdkExample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZelloSdkExample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		9274151108C3C912AE195C51 /* libPods-ZelloSdkExample-ZelloSdkExampleTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ZelloSdkExample-ZelloSdkExampleTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AEDBD194D1867C722D4BA230 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneDelegate.h; path = ZelloSdkExample/SceneDelegate.h; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F76E812E59F7C2A78AAC2A53 /* Pods-ZelloSdkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZelloSdkExample.release.xcconfig"; path = "Target Support Files/Pods-ZelloSdkExample/Pods-ZelloSdkExample.release.xcconfig"; sourceTree = "<group>"; };
@@ -130,7 +125,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3BC7329669CB0AE47816D19F /* Pods_ZelloSdkExample_ZelloSdkExampleTests.framework in Frameworks */,
+				539FE64143F44169DFE94A9E /* libPods-ZelloSdkExample-ZelloSdkExampleTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,7 +133,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5FDCB1798BF8610E553FFE6 /* Pods_ZelloSdkExample.framework in Frameworks */,
+				B6175878855E94EE4C6BD610 /* ZelloSDKUmbrella in Frameworks */,
+				71D88D33350AC2D20CA4CAEC /* libPods-ZelloSdkExample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -146,7 +142,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				322AED2E5639B7CDB376BC1F /* Pods_NotificationServiceExtension.framework in Frameworks */,
+				1037754A3C812B8D4BC7B787 /* ZelloSDKUmbrella in Frameworks */,
+				D45B62C2F0E9B795F1A482C5 /* libPods-NotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -194,9 +191,9 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				5FECA32BE85198CA5179AAF1 /* Pods_ZelloSdkExample.framework */,
-				0B863F59140B7EFF5ECD483C /* Pods_ZelloSdkExample_ZelloSdkExampleTests.framework */,
-				53896F44490B8625A3A92587 /* Pods_NotificationServiceExtension.framework */,
+				3029C9E1419C0B17F0A9D02C /* libPods-NotificationServiceExtension.a */,
+				8F16533A33057A644975D653 /* libPods-ZelloSdkExample.a */,
+				9274151108C3C912AE195C51 /* libPods-ZelloSdkExample-ZelloSdkExampleTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -321,6 +318,7 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				FF0BAB8C9F0AFB237A659426 /* [CP] Embed Pods Frameworks */,
 				A1DD4FBAFFD48FF8606AFC81 /* [CP] Copy Pods Resources */,
+				88784744B87375537768CD56 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -328,6 +326,9 @@
 				4112F6E62C73DA910069FD98 /* PBXTargetDependency */,
 			);
 			name = ZelloSdkExample;
+			packageProductDependencies = (
+				DE4A518F70801BB106DC50A1 /* ZelloSDKUmbrella */,
+			);
 			productName = ZelloSdkExample;
 			productReference = 13B07F961A680F5B00A75B9A /* ZelloSdkExample.app */;
 			productType = "com.apple.product-type.application";
@@ -346,6 +347,9 @@
 			dependencies = (
 			);
 			name = NotificationServiceExtension;
+			packageProductDependencies = (
+				526361BAE6ACEB428AE57E63 /* ZelloSDKUmbrella */,
+			);
 			productName = NotificationServiceExtension;
 			productReference = 4112F6E02C73DA910069FD98 /* NotificationServiceExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -380,6 +384,9 @@
 				Base,
 			);
 			mainGroup = 83CBB9F61A601CBA00E9B192;
+			packageReferences = (
+				B458D02CC5D741BA943F5A4E /* XCRemoteSwiftPackageReference "ios-mobile-sdk" */,
+			);
 			productRefGroup = 83CBBA001A601CBA00E9B192 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -404,26 +411,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				41466F422C6663E00016C47B /* Foundation.ttf in Resources */,
-				41466F392C6663E00016C47B /* Feather.ttf in Resources */,
-				41466F3F2C6663E00016C47B /* FontAwesome6_Regular.ttf in Resources */,
-				41466F452C6663E00016C47B /* MaterialIcons.ttf in Resources */,
-				41466F472C6663E00016C47B /* SimpleLineIcons.ttf in Resources */,
-				41466F482C6663E00016C47B /* Zocial.ttf in Resources */,
-				41466F432C6663E00016C47B /* Ionicons.ttf in Resources */,
-				41466F3C2C6663E00016C47B /* FontAwesome5_Regular.ttf in Resources */,
-				41466F382C6663E00016C47B /* EvilIcons.ttf in Resources */,
-				41466F3B2C6663E00016C47B /* FontAwesome5_Brands.ttf in Resources */,
-				41466F402C6663E00016C47B /* FontAwesome6_Solid.ttf in Resources */,
-				41466F462C6663E00016C47B /* Octicons.ttf in Resources */,
-				41466F3A2C6663E00016C47B /* FontAwesome.ttf in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
-				41466F362C6663E00016C47B /* AntDesign.ttf in Resources */,
-				41466F372C6663E00016C47B /* Entypo.ttf in Resources */,
-				41466F3D2C6663E00016C47B /* FontAwesome5_Solid.ttf in Resources */,
-				41466F412C6663E00016C47B /* Fontisto.ttf in Resources */,
-				41466F3E2C6663E00016C47B /* FontAwesome6_Brands.ttf in Resources */,
-				41466F442C6663E00016C47B /* MaterialCommunityIcons.ttf in Resources */,
 				E4A66491B8F687055C023C4D /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -698,6 +686,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = ZelloSdkExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -729,6 +718,7 @@
 				CODE_SIGN_ENTITLEMENTS = ZelloSdkExample/ZelloSdkExample.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				INFOPLIST_FILE = ZelloSdkExample/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -765,7 +755,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = "";
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
@@ -809,7 +799,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = "";
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = NotificationServiceExtension/Info.plist;
@@ -1094,6 +1084,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B458D02CC5D741BA943F5A4E /* XCRemoteSwiftPackageReference "ios-mobile-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/zelloptt/ios-mobile-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.3.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		526361BAE6ACEB428AE57E63 /* ZelloSDKUmbrella */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B458D02CC5D741BA943F5A4E /* XCRemoteSwiftPackageReference "ios-mobile-sdk" */;
+			productName = ZelloSDKUmbrella;
+		};
+		DE4A518F70801BB106DC50A1 /* ZelloSDKUmbrella */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B458D02CC5D741BA943F5A4E /* XCRemoteSwiftPackageReference "ios-mobile-sdk" */;
+			productName = ZelloSDKUmbrella;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 83CBB9F71A601CBA00E9B192 /* Project object */;
 }

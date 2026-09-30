@@ -202,6 +202,8 @@ export default function App() {
         appGroup: 'group.com.companyname.ZelloSDKReactNativeSampleApp.shared',
       },
     });
+    // CI launch smoke (.github/scripts/ios-launch-smoke.sh) waits for this line.
+    console.log('[zello-smoke] configured');
 
     sdk.addListener(
       ZelloEvent.CONNECT_FAILED,
