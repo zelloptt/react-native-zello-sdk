@@ -1,0 +1,13 @@
+platform :ios, '17.0'
+prepare_react_native_project!
+
+target 'HelloWorld' do
+  use_react_native!(:path => '../node_modules/react-native')
+  post_install do |installer|
+    installer.pods_project.targets.each do |t|
+      t.build_configurations.each do |c|
+        c.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES' if t.name == 'PhoneNumberKit' || t.name == 'CocoaLumberjack'
+      end
+    end
+  end
+end
