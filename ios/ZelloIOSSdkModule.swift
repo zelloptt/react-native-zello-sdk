@@ -1,3 +1,5 @@
+import Foundation
+import React
 import ZelloSDK
 
 @objc(ZelloIOSSdkModule) class ZelloIOSSdkModule: NSObject {

@@ -1,6 +1,5 @@
-import type { TurboModule } from 'react-native';
+import type { CodegenTypes, TurboModule } from 'react-native';
 import { TurboModuleRegistry } from 'react-native';
-import type { UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes';
 
 /**
  * Codegen spec for the unified Zello TurboModule.
@@ -21,7 +20,7 @@ import type { UnsafeObject } from 'react-native/Libraries/Types/CodegenTypes';
  *   that is normalized in the JS layer (`src/sdk`).
  */
 export interface Spec extends TurboModule {
-  configure(config: UnsafeObject): void;
+  configure(config: CodegenTypes.UnsafeObject): void;
 
   connect(network: string, username: string, password: string): void;
   disconnect(): void;
@@ -62,7 +61,7 @@ export interface Spec extends TurboModule {
     name: string,
     contactType: string,
     maxMessages: number
-  ): Promise<UnsafeObject>;
+  ): Promise<CodegenTypes.UnsafeObject>;
   playHistoryMessage(
     historyId: string,
     contactName: string,
@@ -73,7 +72,7 @@ export interface Spec extends TurboModule {
     historyId: string,
     contactName: string,
     contactType: string
-  ): Promise<UnsafeObject>;
+  ): Promise<CodegenTypes.UnsafeObject>;
 
   endDispatchCall(channelName: string): void;
 

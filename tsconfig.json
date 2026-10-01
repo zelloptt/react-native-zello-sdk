@@ -1,4 +1,8 @@
 {
+  // Typecheck the shipped library. The example app is a consumer sample and is
+  // mid-migration to RN 0.87 (some native deps lack 0.87 releases); re-add
+  // "example" here once its dependency set is coherent again.
+  "include": ["src"],
   "compilerOptions": {
     "rootDir": ".",
     "paths": {
