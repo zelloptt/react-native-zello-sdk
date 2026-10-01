@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* ZelloSdkExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* ZelloSdkExampleTests.m */; };
+		139E2A1EB986C214E50620AA /* SceneDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 60623BAC5C5FFD1D3AC075E7 /* SceneDelegate.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -116,8 +117,10 @@
 		53896F44490B8625A3A92587 /* Pods_NotificationServiceExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationServiceExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		5515907B8C7AAE5643805473 /* Pods-ZelloSdkExample-ZelloSdkExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZelloSdkExample-ZelloSdkExampleTests.release.xcconfig"; path = "Target Support Files/Pods-ZelloSdkExample-ZelloSdkExampleTests/Pods-ZelloSdkExample-ZelloSdkExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		5FECA32BE85198CA5179AAF1 /* Pods_ZelloSdkExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ZelloSdkExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		60623BAC5C5FFD1D3AC075E7 /* SceneDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SceneDelegate.m; path = ZelloSdkExample/SceneDelegate.m; sourceTree = "<group>"; };
 		7F4DC0B7A63A55142F7D9BAB /* Pods-ZelloSdkExample-ZelloSdkExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZelloSdkExample-ZelloSdkExampleTests.debug.xcconfig"; path = "Target Support Files/Pods-ZelloSdkExample-ZelloSdkExampleTests/Pods-ZelloSdkExample-ZelloSdkExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = ZelloSdkExample/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		AEDBD194D1867C722D4BA230 /* SceneDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SceneDelegate.h; path = ZelloSdkExample/SceneDelegate.h; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		F76E812E59F7C2A78AAC2A53 /* Pods-ZelloSdkExample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ZelloSdkExample.release.xcconfig"; path = "Target Support Files/Pods-ZelloSdkExample/Pods-ZelloSdkExample.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -174,6 +177,8 @@
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
 				41C6B5A22C74DD0100791319 /* AppDelegate+Extension.swift */,
+				AEDBD194D1867C722D4BA230 /* SceneDelegate.h */,
+				60623BAC5C5FFD1D3AC075E7 /* SceneDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -601,6 +606,7 @@
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				41C6B5A32C74DD0100791319 /* AppDelegate+Extension.swift in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				139E2A1EB986C214E50620AA /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
