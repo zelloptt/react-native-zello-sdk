@@ -30,38 +30,80 @@ npm install @zelloptt/react-native-zello-sdk
 
 Before getting started, please reference the [iOS Installation Guide](https://developers.zello.com/sdk/latest/ios/documentation/zellosdk/getting-started). There is no need to add the native `ZelloSDK` to your project directly — this library declares it for you.
 
-#### Native ZelloSDK: CocoaPods (default) or Swift Package Manager
+The native ZelloSDK is consumed through **Swift Package Manager only** (product `ZelloSDKUmbrella` from [`github.com/zelloptt/ios-mobile-sdk`](https://github.com/zelloptt/ios-mobile-sdk)); it is no longer available through CocoaPods. React Native itself still requires CocoaPods, so the React Native layer of this library stays a CocoaPod and a small Podfile helper wires the Swift package into your app.
 
-The native ZelloSDK can be consumed two ways. **Full CocoaPods removal is not yet possible** because React Native itself still requires CocoaPods for its core (Swift-Package-Manager-only React Native is an [in-progress RN proposal](https://github.com/react-native-community/discussions-and-proposals/pull/994)). So, like [`sentry-react-native`](https://github.com/getsentry/sentry-react-native/issues/5780), the React Native layer stays on CocoaPods while the native ZelloSDK can opt into SPM.
+Requirements:
 
-> [!NOTE]
-> CocoaPods support for the native ZelloSDK is **deprecated** (still supported); Swift Package Manager is the recommended path going forward.
+- **React Native 0.86 or later**: the podspec uses React Native's `spm_dependency` and raises during `pod install` on older versions.
+- **iOS 17.0 or later**, in **both** places: `platform :ios, '17.0'` in your `Podfile`, and the `IPHONEOS_DEPLOYMENT_TARGET` of your app target and of any app extension (for example the Notification Service Extension).
+- Native ZelloSDK `3.3.2` or later, below `4.0.0`. The requirement is `upToNextMajorVersion` from `3.3.2`; a fresh resolve picks the newest `3.x`, while a committed `Package.resolved` keeps its pin until you use *File > Packages > Update to Latest Package Versions*.
 
-- **CocoaPods (default):** just `bundle exec pod install` — the `ZelloSDK` pod is pulled automatically.
-- **Swift Package Manager (recommended):** set `ZELLO_USE_SPM=1` before installing pods:
-  ```sh
-  ZELLO_USE_SPM=1 bundle exec pod install
-  ```
-  This pulls ZelloSDK from [`github.com/zelloptt/ios-mobile-sdk`](https://github.com/zelloptt/ios-mobile-sdk) (product `ZelloSDKUmbrella`, up to the next major from `2.0.0`) as prebuilt XCFrameworks. Also add the `ZelloSDKUmbrella` package product to your **Notification Service Extension** target.
+#### Setup
 
-#### CocoaPods: required build setting (Xcode 16/26+)
+```sh
+npm install @zelloptt/react-native-zello-sdk@4
+npx @zelloptt/react-native-zello-sdk setup-ios
+cd ios && bundle exec pod install
+```
 
-When using the **CocoaPods** path, ZelloSDK's prebuilt binary links library-evolution ("resilient") symbols from its Swift dependencies. You must build those pods for distribution in your `Podfile` `post_install`, or the app will crash at launch with `dyld: Symbol not found`:
+`setup-ios` edits only your `Podfile` (it never touches the `.xcodeproj`): it prints a diff and asks for confirmation. Options: `--dry-run` (print the diff only), `--yes` (non-interactive), `--project-root <dir>` / `--podfile <path>` (monorepos), `--app-target <name>` and `--extension-target <name>` (repeatable) when the targets cannot be detected. Only top-level `Podfile` targets whose name contains `Extension`, `NSE` or `Widget` are detected as extensions; list any other extension with `--extension-target`. It exits with code `2` and changes nothing when it needs a manual step.
+
+Or make the changes yourself:
 
 ```ruby
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    if %w[PhoneNumberKit SnowplowTracker CocoaLumberjack PromisesSwift].include?(target.name)
-      target.build_configurations.each do |config|
-        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-      end
-    end
+# Podfile — before `prepare_react_native_project!`
+require Pod::Executable.execute_command('node', ['-p',
+  "require.resolve('@zelloptt/react-native-zello-sdk/scripts/zello_pods.rb', {paths: [process.argv[1]]})",
+  __dir__]).strip
+
+platform :ios, '17.0'
+
+target 'MyApp' do
+  # ...
+  post_install do |installer|
+    zello_post_install(installer, app_target: 'MyApp', extension_targets: ['NotificationServiceExtension'])
+    react_native_post_install(installer, config[:reactNativePath])
   end
-  # ...your existing react_native_post_install(...) call...
 end
 ```
 
-The **SPM** path does not need this — its XCFrameworks are already built resiliently.
+`zello_post_install` adds the package to your Xcode project, links `ZelloSDKUmbrella` into the app and embeds it, and links it (without embedding) into the listed extension targets. It is idempotent, and raises with an explanation if the deployment target is below 17.0 or a `ZelloSDK` pod is still present. Open the `.xcworkspace` afterwards; Xcode resolves the package on first build.
+
+If your app project already references `github.com/zelloptt/ios-mobile-sdk`, `zello_post_install` keeps your version requirement unless it is an *Up to Next Major Version* rule with a lower minimum than `3.3.2`; then it raises the minimum to `3.3.2`. The bridge pod always requires `3.3.2` up to the next major, and Xcode resolves one version that satisfies both.
+
+Static and dynamic `use_frameworks!` as well as no `use_frameworks!` are all supported. With static or no `use_frameworks!`, `pod install` prints `[SPM] WARNING!!! Pod react-native-zello-sdk is using swift package(s) ZelloSDKUmbrella with static linking, this might cause linker errors`; this is expected, because `zello_post_install` links the dynamic `ZelloSDKUmbrella` into the app.
+
+#### Upgrading from 3.x
+
+1. Run the three commands above. `setup-ios` removes `pod 'ZelloSDK'`, the CocoaPods resilient-pods `post_install` workaround (`BUILD_LIBRARY_FOR_DISTRIBUTION` for `PhoneNumberKit`, `SnowplowTracker`, `CocoaLumberjack`, `PromisesSwift`) and raises `platform :ios` to `17.0`. If you did it by hand, remove those as well as any `ZELLO_USE_SPM` setting and any manually added `ZelloSDKUmbrella` package reference in your extension targets.
+2. Raise the app and extension deployment targets to 17.0 if they are lower.
+3. Do a **Clean Build Folder** in Xcode (or `rm -rf ios/build`) once: frameworks previously embedded by CocoaPods can linger in an incremental build and clash with the new ones.
+
+#### Troubleshooting (Swift Package Manager)
+
+- `[CP] Copy Pods Resources ... Operation not permitted` with static or no `use_frameworks!`: set `ENABLE_USER_SCRIPT_SANDBOXING = NO` on the app and extension targets.
+- `Multiple commands produce '*.ttf'` with static or no `use_frameworks!`: remove the duplicated font files from the app target's *Copy Bundle Resources* phase (keep them in `UIAppFonts`); CocoaPods already copies them.
+- **PhoneNumberKit:** ZelloSDK pulls PhoneNumberKit via Swift Package Manager — the `marmelroy/PhoneNumberKit` 3.x on native `3.3.2`, the 5.x from the PhoneNumberKit organization's repository on `3.3.3` and later. These are two different repositories sharing one package identity, so:
+  - an app that depends on `marmelroy/PhoneNumberKit` itself gets *package 'phonenumberkit' is required using two different URLs* once `3.3.3` resolves — switch your dependency to the PhoneNumberKit organization repository, or drop it;
+  - builds that disable automatic resolution (`-onlyUsePackageVersionsFromResolvedFile`) fail until their `Package.resolved` is updated;
+  - a PhoneNumberKit **pod** next to the Swift package duplicates classes — remove the pod.
+
+#### Expo
+
+Add the config plugin, plus `expo-build-properties` to raise the app's deployment target, to `app.json`:
+
+```json
+{
+  "expo": {
+    "plugins": [
+      ["expo-build-properties", { "ios": { "deploymentTarget": "17.0" } }],
+      ["@zelloptt/react-native-zello-sdk", { "extensionTargets": ["NotificationServiceExtension"] }]
+    ]
+  }
+}
+```
+
+The plugin applies the same Podfile changes as `setup-ios` on `expo prebuild`, and sets the deployment target of the listed `extensionTargets` to 17.0. Expo applies plugin mods in reverse order, so list it **before** any plugin that creates the extension target; prebuild fails if a listed extension target is not in the Xcode project. Expo apps use no `use_frameworks!` unless `ios.useFrameworks` is set.
 
 #### Troubleshooting
 

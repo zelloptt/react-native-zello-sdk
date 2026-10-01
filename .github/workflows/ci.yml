@@ -109,13 +109,14 @@ jobs:
   build-ios:
     # macos-26 provides the Xcode 26 toolchain required by the example app.
     runs-on: macos-26
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
-        # Verify both supported native-ZelloSDK install paths.
-        variant: [cocoapods, spm]
+        # Pod linkage of the example app; the native ZelloSDK comes from SwiftPM in every leg.
+        linkage: [dynamic, static, none]
     env:
-      TURBO_CACHE_DIR: .turbo/ios-${{ matrix.variant }}
+      TURBO_CACHE_DIR: .turbo/ios-${{ matrix.linkage }}
     steps:
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v3.6.0
@@ -123,43 +124,71 @@ jobs:
       - name: Setup
         uses: ./.github/actions/setup
 
+      - name: Select pod linkage (${{ matrix.linkage }})
+        # `none` must leave USE_FRAMEWORKS undefined (not empty), as a plain local `pod install` does.
+        run: |
+          if [[ "${{ matrix.linkage }}" != "none" ]]; then
+            echo "USE_FRAMEWORKS=${{ matrix.linkage }}" >> $GITHUB_ENV
+          fi
+
       - name: Cache turborepo for iOS
         uses: actions/cache@2f8e54208210a422b2efd51efaa6bd6d7ca8920f # v3.4.3
         with:
           path: ${{ env.TURBO_CACHE_DIR }}
-          key: ${{ runner.os }}-turborepo-ios-${{ hashFiles('yarn.lock') }}
+          key: ${{ runner.os }}-turborepo-ios-${{ matrix.linkage }}-${{ hashFiles('yarn.lock') }}
           restore-keys: |
-            ${{ runner.os }}-turborepo-ios-
-
-      - name: Check turborepo cache for iOS
-        run: |
-          TURBO_CACHE_STATUS=$(node -p "($(yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}" --dry=json)).tasks.find(t => t.task === 'build:ios').cache.status")
-
-          if [[ $TURBO_CACHE_STATUS == "HIT" ]]; then
-            echo "turbo_cache_hit=1" >> $GITHUB_ENV
-          fi
+            ${{ runner.os }}-turborepo-ios-${{ matrix.linkage }}-
 
       - name: Cache cocoapods
-        if: env.turbo_cache_hit != 1
         id: cocoapods-cache
         uses: actions/cache@2f8e54208210a422b2efd51efaa6bd6d7ca8920f # v3.4.3
         with:
           path: |
             **/ios/Pods
-          key: ${{ runner.os }}-cocoapods-${{ matrix.variant }}-${{ hashFiles('example/ios/Podfile.lock') }}
+          key: ${{ runner.os }}-cocoapods-${{ matrix.linkage }}-${{ hashFiles('example/ios/Podfile.lock') }}
           restore-keys: |
-            ${{ runner.os }}-cocoapods-${{ matrix.variant }}-
+            ${{ runner.os }}-cocoapods-${{ matrix.linkage }}-
 
-      - name: Install pods (${{ matrix.variant }})
-        if: env.turbo_cache_hit != 1 && steps.cocoapods-cache.outputs.cache-hit != 'true'
+      # Always runs (the cache only saves downloads): the example's Xcode project is integrated per
+      # linkage, and the launch smoke below needs a built app even when the turbo build is cached.
+      - name: Install pods (${{ matrix.linkage }})
         run: |
           cd example && bundle install
           cd ios && BUNDLE_GEMFILE=../Gemfile bundle exec pod install
         env:
           NO_FLIPPER: 1
           RCT_NEW_ARCH_ENABLED: 1
-          ZELLO_USE_SPM: ${{ matrix.variant == 'spm' && '1' || '0' }}
+
+      # zello_post_install must be idempotent: a second install leaves the Xcode project unchanged.
+      - name: Check Podfile helper idempotency
+        if: matrix.linkage == 'none'
+        run: |
+          cd example/ios && BUNDLE_GEMFILE=../Gemfile bundle exec pod install
+          git diff --exit-code -- *.xcodeproj
+        env:
+          NO_FLIPPER: 1
+          RCT_NEW_ARCH_ENABLED: 1
+
+      # Same (default) DerivedData as `build:ios`, which passes no -derivedDataPath.
+      - name: Resolve Swift packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -workspace example/ios/ZelloSdkExample.xcworkspace \
+            -scheme ZelloSdkExample
 
       - name: Build example for iOS
         run: |
           yarn turbo run build:ios --cache-dir="${{ env.TURBO_CACHE_DIR }}"
+
+      # A build alone does not catch a missing app-level link of the dynamic ZelloSDKUmbrella
+      # (static/none linkage build fine, then crash on the first SDK call), so launch the app.
+      - name: Launch smoke
+        run: |
+          APP=$(.github/scripts/ios-app-path.sh)
+          .github/scripts/ios-launch-smoke.sh "$APP"
+
+      # Runs after the smoke: it relinks the same app without Debug dylib stubs.
+      - name: Bundle check
+        run: |
+          APP=$(.github/scripts/ios-app-path.sh --no-debug-dylib)
+          .github/scripts/ios-bundle-check.sh "$APP"
