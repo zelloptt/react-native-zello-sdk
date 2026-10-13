@@ -3437,6 +3437,8 @@ __metadata:
   peerDependencies:
     react: "*"
     react-native: "*"
+  bin:
+    react-native-zello-sdk: ./scripts/setup-ios.js
   languageName: unknown
   linkType: soft
 

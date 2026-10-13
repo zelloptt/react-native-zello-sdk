@@ -1,5 +1,23 @@
 # Changelog
 
+# 4.0.0
+
+### BREAKING CHANGES
+
+* **iOS: the native ZelloSDK is no longer installed through CocoaPods.** It is consumed through Swift Package Manager only (product `ZelloSDKUmbrella` of `github.com/zelloptt/ios-mobile-sdk`, `3.3.2` up to the next major). The `pod 'ZelloSDK'` dependency and the `ZELLO_USE_SPM` opt-in are gone.
+* **iOS: the minimum deployment target is now iOS 17.0** (podspec, `platform :ios` in the `Podfile`, and the app and extension targets).
+* **iOS: a Podfile helper is required.** Add `zello_post_install(installer, app_target:, extension_targets:)` to your `post_install`; it links and embeds `ZelloSDKUmbrella` in your app project. Run `npx @zelloptt/react-native-zello-sdk setup-ios` to apply the Podfile changes automatically, then `pod install` (see the README). Expo apps use the new config plugin (`@zelloptt/react-native-zello-sdk` in `plugins`).
+* **iOS: remove the CocoaPods workarounds.** Delete `pod 'ZelloSDK'`, the resilient-pods `BUILD_LIBRARY_FOR_DISTRIBUTION` `post_install` block, `ZELLO_USE_SPM`, and any manually added `ZelloSDKUmbrella` package reference in extension targets. Do a Clean Build Folder once after upgrading.
+
+### Features
+
+* Setup command `npx @zelloptt/react-native-zello-sdk setup-ios` and Expo config plugin (`app.plugin.js`).
+* iOS now works with dynamic, static and no `use_frameworks!` linkage.
+
+### Dependencies
+
+* iOS: native `ZelloSDK` `3.3.2` (Swift Package Manager), up to the next major.
+
 # 3.0.0
 
 ### BREAKING CHANGES

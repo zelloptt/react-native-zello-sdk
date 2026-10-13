@@ -1,0 +1,12 @@
+platform :ios, '17.0'
+prepare_react_native_project!
+
+target 'AppOne' do
+  use_react_native!(:path => '../node_modules/react-native')
+  post_install do |installer|
+  end
+end
+
+target 'AppTwo' do
+  use_react_native!(:path => '../node_modules/react-native')
+end
