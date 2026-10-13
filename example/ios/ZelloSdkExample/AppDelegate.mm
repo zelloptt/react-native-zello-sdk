@@ -1,25 +1,14 @@
 #import "AppDelegate.h"
 #import "ZelloSdkExample-Swift.h"
 
+#import <RCTDefaultReactNativeFactoryDelegate.h>
 #import <React/RCTBundleURLProvider.h>
 #import <ReactAppDependencyProvider/RCTAppDependencyProvider.h>
 
-@implementation AppDelegate
+@interface ZelloSdkExampleReactNativeDelegate : RCTDefaultReactNativeFactoryDelegate
+@end
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
-{
-  self.moduleName = @"ZelloSdkExample";
-  self.dependencyProvider = [RCTAppDependencyProvider new];
-  // You can add your custom initial props in the dictionary below.
-  // They will be passed down to the ViewController used by React Native.
-  self.initialProps = @{};
-
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
-}
-
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-  [self registerForRemoteNotificationsWithDeviceToken:deviceToken];
-}
+@implementation ZelloSdkExampleReactNativeDelegate
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
@@ -33,6 +22,30 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+@end
+
+@interface AppDelegate ()
+
+// RCTReactNativeFactory holds its delegate weakly.
+@property (nonatomic, strong) ZelloSdkExampleReactNativeDelegate *reactNativeDelegate;
+
+@end
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
+  self.reactNativeDelegate = [ZelloSdkExampleReactNativeDelegate new];
+  self.reactNativeDelegate.dependencyProvider = [RCTAppDependencyProvider new];
+  _reactNativeFactory = [[RCTReactNativeFactory alloc] initWithDelegate:self.reactNativeDelegate];
+
+  return YES;
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+  [self registerForRemoteNotificationsWithDeviceToken:deviceToken];
 }
 
 @end
