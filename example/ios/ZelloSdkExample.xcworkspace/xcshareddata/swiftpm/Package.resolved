@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/zelloptt/ios-mobile-sdk",
       "state" : {
-        "revision" : "42f358a0c7ee549026f1f28861f111ebc3fd4e8f",
-        "version" : "3.3.2"
+        "revision" : "09270a99e524b09ac53ff09c6110483c4d15b41a",
+        "version" : "3.4.1"
       }
     },
     {
@@ -40,10 +40,10 @@
     {
       "identity" : "phonenumberkit",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/marmelroy/PhoneNumberKit",
+      "location" : "https://github.com/PhoneNumberKit/PhoneNumberKit",
       "state" : {
-        "revision" : "c107075aa8d394be7aced273a46e944afe8b321b",
-        "version" : "3.8.0"
+        "revision" : "df3bcccd1d88ba96fb89cccf51b84b7b6f7f53fe",
+        "version" : "5.0.12"
       }
     },
     {
